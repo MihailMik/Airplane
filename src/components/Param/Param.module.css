@@ -1,0 +1,32 @@
+.startGame {
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+.buttonNewGame {
+    width: 145px;
+    height: 30px;
+    font-size: 20px;
+
+}
+.buttonEndGame {
+    width: 145px;
+    height: 30px;
+    font-size: 20px;
+    margin-left: 10px;
+}
+.paramTitle{
+    text-align: left;
+    font-style: italic;
+}
+.paramName {
+    text-align: left;
+    margin-left: 10px;
+}
+
+.paramValue {
+    width: 30px;
+    text-align: left;
+    margin-left: 5px;
+}
+

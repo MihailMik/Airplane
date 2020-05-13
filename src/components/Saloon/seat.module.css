@@ -1,0 +1,33 @@
+.title{
+    text-align: left;
+    font-style: oblique;
+}
+.buttonGeneral {
+    border-radius: 10px;
+    width: 60px;
+    height: 40px;
+    text-align: center;
+}
+
+.buttonEnabled {
+    border-width: 5px;
+    border-color: cyan;
+}
+.answerNothing {
+    background-color: white;
+}
+.answerTrue {
+    background-color: greenyellow;
+}
+.answerFalse {
+    background-color: red;
+    color: white;
+}
+.answerHalfTrue {
+    background-color: yellow;
+}
+.answerWater {
+    background-color: black;
+    color: white;
+}
+

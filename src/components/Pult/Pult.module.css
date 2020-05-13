@@ -1,0 +1,31 @@
+.title{
+    text-align: left;
+    font-style: oblique;
+}
+.buttonGeneral {
+    width: 100px;
+    height: 30px;
+    text-align: center;
+}
+
+.buttonAsk {
+    width: 300px;
+    height: 30px;
+    text-align: center;
+    color: red;
+}
+
+.buttonActive {
+    color: red;
+}
+.buttonNonActive {
+    color: black;
+}
+.pultEmpty {
+    visibility: hidden;
+}
+.pult {
+    visibility: visible;
+    width: 300px;
+}
+

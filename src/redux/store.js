@@ -1,0 +1,252 @@
+import React from "react";
+
+let constData = {
+    nRow: 6,
+    nCol: 4,
+
+    nPreferTea: 12,
+    nPreferCoffee: 4,
+    nPreferWater: 8,
+
+    prizeTea: 1,
+    prizeCoffee: 3,
+    prizeTeaCoffee: 0.5,
+}
+
+let game = {
+    onClickHint () {
+        game.hintChecked = !game.hintChecked
+        game.rerender ()
+    },
+
+    isSeatEnabled  (row, col)  {
+        let ind = this.getIndex(row, col)
+
+        let result = false
+        if (!this.seats[ind].served &&
+            (row === this.activeRow) ||
+            (row === (this.activeRow+1) && (this.nCol-this.nServedInRow) <= 2)) result = true
+
+        if (this.gameEnded) result = false
+        return result
+    },
+
+    seatOffer (ind) {
+        let row = game.getRow (ind)
+        let col = game.getCol (ind)
+        let seat = game.seats[ind]
+
+        if (seat.served || !game.isSeatEnabled (row, col)) {
+            return
+        }
+
+        seat.served = true
+        seat.isQuestionTea = game.isQuestionTea
+        seat.isQuestionCoffee = game.isQuestionCoffee
+        seat.isQuestionTeaCoffee = game.isQuestionTeaCoffee
+
+        if (seat.given === 'Water') game.prize = 0
+        else if (seat.isQuestionTeaCoffee) game.prize += game.prizeTeaCoffee
+        else if (seat.isQuestionTea && seat.given === 'Tea') game.prize += game.prizeTea
+        else if (seat.isQuestionCoffee && seat.given === 'Coffee') game.prize += game.prizeCoffee
+        else game.prize += 0
+
+        if (row !== game.activeRow) {
+            game.activeRow = row
+            game.nServedInRow = 0
+        }
+        game.nServedInRow++
+        if (game.nServedInRow === game.nCol) {
+            game.nServedInRow = 0
+            game.activeRow++
+        }
+        game.nextServed = undefined
+        game.rerender()
+    },
+
+    onClickSeat (ind) {
+        game.nextServed = ind
+        game.rerender()
+    },
+
+    onClickNewGame() {
+        let prizeTea = Number (this.prizeTeaStr)
+        let prizeCoffee = Number (this.prizeCoffeeStr)
+        let prizeTeaCoffee = Number (this.prizeTeaCoffeeStr)
+        let nPreferTea = Number (this.nPreferTeaStr)
+        let nPreferCoffee = Number (this.nPreferCoffeeStr)
+        let nPreferWater = Number (this.nPreferWaterStr)
+        let nRow = Number (this.nRowStr)
+        let nCol = Number (this.nColStr)
+
+        //Error analizing
+        if (nPreferTea + nPreferCoffee + nPreferWater !== nRow * nCol) {
+            alert ('Sum of prefers must be equal number of seats')
+            return
+        }
+        if (nCol > 12) {alert ('Number of seats in row is too large'); return}
+        if (nRow > 100) {alert ('Number of rows is too large'); return}
+        if (nCol <=0 || nRow <= 0) {alert ('The parameter must be positive'); return}
+
+        this.initialize ({
+            nRow: nRow,
+            nCol: nCol,
+
+            nPreferTea: nPreferTea,
+            nPreferCoffee: nPreferCoffee,
+            nPreferWater: nPreferWater,
+
+            prizeTea: prizeTea,
+            prizeCoffee: prizeCoffee,
+            prizeTeaCoffee: prizeTeaCoffee,
+        })
+        this.rerender ()
+    },
+
+    onClickEndGame () {
+        game.hintChecked = true
+        game.gameEnded = true
+
+        this.rerender ()
+    },
+
+    onClickQuestionTea () {
+        this.isQuestionTea = true;
+        this.isQuestionCoffee = false;
+        this.isQuestionTeaCoffee = false;
+        this.rerender ()
+    },
+    onClickQuestionCoffee () {
+        this.isQuestionTea = false;
+        this.isQuestionCoffee = true;
+        this.isQuestionTeaCoffee = false;
+        this.rerender ()
+    },
+    onClickQuestionTeaCoffee() {
+        this.isQuestionTea = false;
+        this.isQuestionCoffee = false;
+        this.isQuestionTeaCoffee = true;
+        this.rerender()
+    },
+
+    onChangeRow(body)           {this.nRowStr = body;           this.rerender()},
+    onChangeCol(body)           {this.nColStr = body;           this.rerender()},
+    onChangePreferTea(body)     {this.nPreferTeaStr = body;     this.rerender()},
+    onChangePreferCoffee(body)  {this.nPreferCoffeeStr = body;  this.rerender()},
+    onChangePreferWater(body)   {this.nPreferWaterStr = body;   this.rerender()},
+    onChangePrizeTea(body)      {this.prizeTeaStr = body;       this.rerender()},
+    onChangePrizeCoffee(body)   {this.prizeCoffeeStr = body;    this.rerender()},
+    onChangePrizeTeaCoffee(body){this.prizeTeaCoffeeStr = body; this.rerender()},
+
+    create (rerender) {
+        this.rerender = rerender
+        this.initialize (constData)
+    },
+
+    initialize(data) {
+        let nRow = data.nRow
+        let nCol = data.nCol
+
+        this.nRow = nRow
+        this.nCol = nCol
+
+        this.nPreferTea = data.nPreferTea
+        this.nPreferCoffee = data.nPreferCoffee
+        this.nPreferWater = data.nPreferWater
+
+        this.prizeTea = data.prizeTea
+        this.prizeCoffee = data.prizeCoffee
+        this.prizeTeaCoffee = data.prizeTeaCoffee
+
+        this.isQuestionTea = true
+        this.isQuestionCoffee = false
+        this.isQuestionTeaCoffee = false
+
+        this.gameEnded = false
+        this.hintChecked = false
+        this.nSize = nRow * nCol
+        this.nextServed = undefined
+        this.prize = 0
+        this.activeRow = 0
+        this.nServedInRow = 0
+
+        //for Param Dialog
+        this.nRowStr = this.nRow
+        this.nColStr = this.nCol
+
+        this.nPreferTeaStr = this.nPreferTea
+        this.nPreferCoffeeStr = this.nPreferCoffee
+        this.nPreferWaterStr = this.nPreferWater
+
+        this.prizeTeaStr = this.prizeTea
+        this.prizeCoffeeStr = this.prizeCoffee
+        this.prizeTeaCoffeeStr = this.prizeTeaCoffee
+        //End Param Dialog
+
+        //Calculate random value for 'given' property
+        let prefer = []
+        for (let i = 0; i < this.nPreferTea; i++)    prefer.push('Tea')
+        for (let i = 0; i < this.nPreferCoffee; i++) prefer.push('Coffee')
+        for (let i = 0; i < this.nPreferWater; i++)  prefer.push('Water')
+        let indexes = []
+        for (let i = 0; i < this.nSize; i++) indexes.push(i)
+        let givenArray = []
+        while (indexes.length) {
+            let ind = Math.floor(Math.random() * indexes.length)
+            givenArray.push(prefer[indexes[ind]])
+            indexes.splice(ind, 1)          //delete element from array
+        }
+
+        this.seats = []
+        for (let j = 0; j < nRow; j++) {
+            for (let i = 0; i < nCol; i++) {
+                let seat = this.createSeat (j, i, givenArray[j * nCol + i])
+                this.seats.push (seat)
+            }
+        }
+    },
+
+    createSeat (row, col, given) {
+        let index = this.getIndex (row, col)
+
+        return {
+            row: row,
+            col: col,
+            given: given,               //drink that seat prefer, can be 'Tea', 'Coffee', 'TeaCoffee'
+
+            index: index,               //index of cell in cells array
+            served: false,              //seat was served
+            isQuestionTea: false,       //was ordered tea
+            isQuestionCoffee: false,    //was ordered coffee
+            isQuestionTeaCoffee: false  //was ordered tea-coffee
+        }
+    },
+
+    getIndex(j, i)  {return j * game.nCol + i},
+    getRow (ind)    {return Math.floor(ind / game.nCol)},
+    getCol (ind)    {return ind % game.nCol},
+
+    getSeatName (ind) {
+        let row = this.getRow (ind)
+        let col = this.getCol (ind)
+        let text = row + 1
+        switch (col) {
+            case 0:text += 'A';break
+            case 1:text += 'B';break
+            case 2:text += 'C';break
+            case 3:text += 'D';break
+            case 4:text += 'E';break
+            case 5:text += 'F';break
+            case 6:text += 'G';break
+            case 7:text += 'H';break
+            case 8:text += 'I';break
+            case 9:text += 'J';break
+            case 10:text += 'K';break
+            case 11:text += 'L';break
+            case 12:text += 'M';break
+        }
+        return text
+    }
+}
+
+export default game
