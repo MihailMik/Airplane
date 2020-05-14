@@ -23,7 +23,7 @@ let getAskedIndex = () => {
     //нет ли в последней строке необслуженных мест
     if (ind === game.nSize) {
         ind -= game.nCol
-        while (ind != game.nSize  && game.seats[ind].served) ind++
+        while (ind !== game.nSize  && game.seats[ind].served) ind++
     }
     return ind
 }
@@ -51,10 +51,6 @@ const Pult = (props) => {
     let stateTeaCoffee = (game.isQuestionTeaCoffee ? s.buttonActive : s.buttonNonActive) + ' ' + s.buttonGeneral
     return (
         <div className={statePult}>
-            <div>
-                <text className={s.title}>Your Question:</text>
-            </div>
-
             <div>
             <button className={stateTea} onClick={onClickQuestionTea}>
                 Tea?

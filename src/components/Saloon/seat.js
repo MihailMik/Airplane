@@ -1,35 +1,32 @@
 import React from "react"
 import s from './seat.module.css'
-import game from "../../redux/store";
 
 
 const Seat = (props) => {
-    let game = props.game
-    let row = props.row
-    let col = props.col
+    const game = props.game
+    const row = props.row
+    const col = props.col
 
-    let ind = game.getIndex (row, col)
-    let activeRow = game.activeRow
-    let nCol = game.nCol
-    let nServedInRow = game.nServedInRow
+    const ind = game.getIndex (row, col)
+    const seat = game.seats[ind]
+    const given = seat.given
+    const served = seat.served
+    const isQuestionTea = seat.isQuestionTea
+    const isQuestionCoffee = seat.isQuestionCoffee
+    const index = seat.index
+    const nextServed = game.nextServed
 
-    let seat = game.seats[ind]
-    let given = seat.given
-    let served = seat.served
-    let isQuestionTea = seat.isQuestionTea
-    let isQuestionCoffee = seat.isQuestionCoffee
-    let isQuestionTeaCoffee = seat.isQuestionTeaCoffee
-    let index = seat.index
+    const onClickSeat = () => game.onClickSeat (ind)
 
-    let onClickSeat = () => game.onClickSeat (ind)
     //Text in button
     let text = given
     if (!game.hintChecked && !served) {
-        text = game.getSeatName (ind)
+        // text = game.getSeatName (ind)
+        text = ''
     }
 
     //Is button enabled for clicking
-    let enabled = game.isSeatEnabled (row, col)
+    const enabled = game.isSeatEnabled (row, col)
 
     //BackgroundColor in dependence of answer
     let answer = s.answerNothing
@@ -50,11 +47,21 @@ const Seat = (props) => {
         }
     }
 
+    if (game.hintChecked) {
+        switch (given) {
+            case 'Tea': text = "T"; answer = s.Tea; break
+            case 'Coffee': text = "C"; answer = s.Coffee; break
+            case 'Water': text = "W"; answer = s.Water; break
+        }
+    }
+
     let clas = answer + ' ' + s.buttonGeneral
     if (enabled) clas += ' ' + s.buttonEnabled
+    if (ind === nextServed) clas += ' ' + s.nextServed
     return (
         <button id = {index} disabled={!enabled} className={clas} onClick={onClickSeat}>
-            {text}
+            {text}<br />
+            {game.getSeatName (ind)}
         </button>
     )
 }

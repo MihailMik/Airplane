@@ -1,7 +1,3 @@
-.title{
-    text-align: left;
-    font-style: oblique;
-}
 .buttonGeneral {
     width: 100px;
     height: 30px;
@@ -25,6 +21,7 @@
     visibility: hidden;
 }
 .pult {
+    margin-top: 10px;
     visibility: visible;
     width: 300px;
 }

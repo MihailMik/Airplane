@@ -1,6 +1,4 @@
 import React from "react"
-import s from './saloon.module.css'
-import game from "../../redux/store";
 import Row from "./row";
 
 const Saloon = (props) => {

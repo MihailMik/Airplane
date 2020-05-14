@@ -1,5 +1,3 @@
-import React from "react";
-
 let constData = {
     nRow: 6,
     nCol: 4,
@@ -188,6 +186,20 @@ let game = {
         for (let i = 0; i < this.nPreferTea; i++)    prefer.push('Tea')
         for (let i = 0; i < this.nPreferCoffee; i++) prefer.push('Coffee')
         for (let i = 0; i < this.nPreferWater; i++)  prefer.push('Water')
+
+        this.seats = []
+        for (let j = 0; j < nRow; j++) {
+            for (let i = 0; i < nCol; i++) {
+                let ind = Math.floor(Math.random() * prefer.length)
+                let given = prefer[ind]
+                prefer.splice(ind, 1)          //delete element from array
+
+                let seat = this.createSeat (j, i, given)
+                this.seats.push (seat)
+            }
+        }
+
+/*
         let indexes = []
         for (let i = 0; i < this.nSize; i++) indexes.push(i)
         let givenArray = []
@@ -204,6 +216,7 @@ let game = {
                 this.seats.push (seat)
             }
         }
+*/
     },
 
     createSeat (row, col, given) {
@@ -244,6 +257,7 @@ let game = {
             case 10:text += 'K';break
             case 11:text += 'L';break
             case 12:text += 'M';break
+            default:text += ''
         }
         return text
     }

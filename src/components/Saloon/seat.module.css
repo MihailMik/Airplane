@@ -1,12 +1,9 @@
-.title{
-    text-align: left;
-    font-style: oblique;
-}
 .buttonGeneral {
     border-radius: 10px;
     width: 60px;
     height: 40px;
-    text-align: center;
+    text-align: justify-all;
+    font-size: 12px
 }
 
 .buttonEnabled {
@@ -30,4 +27,22 @@
     background-color: black;
     color: white;
 }
-
+.Tea {
+    background-color: #ffd700;
+    color: white;
+    font-weight: bold;
+}
+.Coffee {
+    background-color: sandybrown;
+    color: white;
+    font-weight: bold;
+}
+.Water {
+    background-color: #5b92e5;
+    color: white;
+    font-weight: bold;
+}
+.nextServed {
+    color: red;
+    font-weight: bold;
+}
