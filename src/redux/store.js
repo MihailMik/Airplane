@@ -1,10 +1,10 @@
 let constData = {
-    nRow: 6,
-    nCol: 4,
+    nRow: 12,
+    nCol: 6,
 
-    nPreferTea: 12,
-    nPreferCoffee: 4,
-    nPreferWater: 8,
+    nPreferTea: 36,
+    nPreferCoffee: 18,
+    nPreferWater: 18,
 
     prizeTea: 2,
     prizeCoffee: 4,
@@ -178,7 +178,6 @@ let game = {
     },
 
     initialize(data) {
-        debugger
         let nRow = data.nRow
         let nCol = data.nCol
 
@@ -219,10 +218,73 @@ let game = {
         //End Param Dialog
 
         //Calculate random value for 'given' property
+
+        //Вариант случайной выборки из массива prefer с ограничением:
+        //в одном ряду равновероятно одна или две воды так, что в сумме они дадут nRow*1.5 воды
+        //
+        this.seats = []
+
+        let prefer = []
+        for (let i = 0; i < this.nPreferTea; i++)    prefer.push('Tea')
+        for (let i = 0; i < this.nPreferCoffee; i++) prefer.push('Coffee')
+
+        //0. Проверяем корректность данных
+        if (this.nPreferWater !== nRow*1.5) alert('Improper number of Water Answers')
+
+        //1. Создаем массив one-two: сначала nRow/2 единиц, потом nRow двоек
+        let one_two = []
+        for (let i = 0; i < nRow/2; i++) one_two.push (1)
+        for (let i = 0; i < nRow/2; i++) one_two.push (2)
+        //2. Создаем массив one_two_rand - случайно перемешанный one_two
+        let one_two_rand = []
+        for (let i = 0; i < nRow; i++) {
+            let ind = Math.floor(Math.random() * one_two.length)
+            let val = one_two[ind]
+            one_two_rand.push(val)
+            one_two.splice(ind, 1)          //delete element from array
+        }
+        //3. Создаем массив preferRand - случайно перемешанный массив prefer с
+        //требуемыми ограничениями
+        let preferRand = []
+        //3.1. Заполняем ряды
+        for (let j = 0; j < nRow; j++) {
+            let rowRand = []
+            //Сначала заполним места с Water
+            for (let i = 0; i < one_two_rand[j]; i++) {
+                let ind
+                do {
+                    ind = Math.floor(Math.random() * nCol)
+                } while (rowRand[ind] !== undefined)
+                rowRand[ind] = 'Water'
+            }
+            //Остальные места заполним из массива prefer
+            let p = 0
+            for (let i = one_two_rand[j]; i < nCol; i++) {
+                let ind = Math.floor(Math.random() * prefer.length)
+                let given = prefer[ind]
+                prefer.splice(ind, 1)          //delete element from array
+
+                while (rowRand[p] !== undefined) p++      //пропускаем уже заполненные места
+                rowRand[p++] = given
+            }
+            //Создаем Seat в соответствии с данными из массива rowRand
+            for (let i = 0; i < nCol; i++) {
+                let seat = this.createSeat (j, i, rowRand[i])
+                this.seats.push (seat)
+            }
+        }
+
+/*
+        //Вариант случайной выборки из массива prefer с ограничением:
+        //в одной секции кресел (между проходами) не допускаются 2 воды рядом.
+        //
+        this.seats = []
+
         let prefer = []
         for (let i = 0; i < this.nPreferTea; i++)    prefer.push('Tea')
         for (let i = 0; i < this.nPreferCoffee; i++) prefer.push('Coffee')
         for (let i = 0; i < this.nPreferWater; i++)  prefer.push('Water')
+
         const maxCount = 100
         while (true) {
             let preferRand = prefer.slice()
@@ -252,9 +314,18 @@ let game = {
             }
             if (count !== maxCount) break
         }
+*/
 
 /*
+        //Вавриант абсолютно случайной выборки из массива prefer[]
+        //
         this.seats = []
+
+        let prefer = []
+        for (let i = 0; i < this.nPreferTea; i++)    prefer.push('Tea')
+        for (let i = 0; i < this.nPreferCoffee; i++) prefer.push('Coffee')
+        for (let i = 0; i < this.nPreferWater; i++)  prefer.push('Water')
+
         for (let j = 0; j < nRow; j++) {
             for (let i = 0; i < nCol; i++) {
                 let ind = Math.floor(Math.random() * prefer.length)
