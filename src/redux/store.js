@@ -6,9 +6,9 @@ let constData = {
     nPreferCoffee: 4,
     nPreferWater: 8,
 
-    prizeTea: 1,
-    prizeCoffee: 3,
-    prizeTeaCoffee: 0.5,
+    prizeTea: 2,
+    prizeCoffee: 4,
+    prizeTeaCoffee: 1,
 }
 
 let game = {
@@ -17,13 +17,33 @@ let game = {
         game.rerender ()
     },
 
+    isPass (col, nCol) {
+        const passes = [
+        [1, 1],     //nCol = 0
+        [1, 1],     //nCol = 1
+        [1, 1],     //nCol = 2
+        [1, 1],     //nCol = 3
+        [2, 2],     //nCol = 4
+        [3, 3],     //nCol = 5
+        [3, 3],     //nCol = 6
+        [2, 5],     //nCol = 7
+        [2, 6],     //nCol = 8
+        [3, 6],     //nCol = 9
+        [3, 7],     //nCol = 10
+        [3, 8],     //nCol = 11
+        [3, 9],    //nCol = 12
+         ]
+        if (passes[nCol][0] === col ||
+            passes[nCol][1] === col) return true
+        else return false
+    },
     isSeatEnabled  (row, col)  {
         let ind = this.getIndex(row, col)
 
         let result = false
         if (!this.seats[ind].served &&
-            (row === this.activeRow) ||
-            (row === (this.activeRow+1) && (this.nCol-this.nServedInRow) <= 2)) result = true
+            (row === this.activeRow ||
+             (row === (this.activeRow+1) && (this.nCol-this.nServedInRow) <= 2))) result = true
 
         if (this.gameEnded) result = false
         return result
@@ -85,6 +105,22 @@ let game = {
         if (nCol > 12) {alert ('Number of seats in row is too large'); return}
         if (nRow > 100) {alert ('Number of rows is too large'); return}
         if (nCol <=0 || nRow <= 0) {alert ('The parameter must be positive'); return}
+        if (nCol <=0 || nRow <= 0) {alert ('The parameter must be positive'); return}
+        const maxWaterInRow = [0,
+            1,  //for 1 seat in raw
+            2,
+            2,
+            2,
+            3,  //for 5 seat in raw
+            4,  //for 6 seat in raw
+            4,
+            4,
+            6,
+            6,  //for 10 seat in raw
+            7,  //for 11 seat in raw
+            7,  //for 7 seat in raw
+        ]
+        if (nPreferWater >= maxWaterInRow[nCol]*nRow) {alert ('The number of Water Answers is too large'); return}
 
         this.initialize ({
             nRow: nRow,
@@ -142,6 +178,7 @@ let game = {
     },
 
     initialize(data) {
+        debugger
         let nRow = data.nRow
         let nCol = data.nCol
 
@@ -186,7 +223,37 @@ let game = {
         for (let i = 0; i < this.nPreferTea; i++)    prefer.push('Tea')
         for (let i = 0; i < this.nPreferCoffee; i++) prefer.push('Coffee')
         for (let i = 0; i < this.nPreferWater; i++)  prefer.push('Water')
+        const maxCount = 100
+        while (true) {
+            let preferRand = prefer.slice()
+            this.seats = []
+            let count
+            for (let j = 0; j < nRow; j++) {
+                let prev = false
+                for (let i = 0; i < nCol; i++) {
+                    let given, ind
+                    count = 0
+                    do {
+                        ind = Math.floor(Math.random() * preferRand.length)
+                        given = preferRand[ind]
+                        count++
+                        if (count === maxCount) break
+                    } while (given === 'Water' && prev)
+                    if (count === maxCount) break
+                    preferRand.splice(ind, 1)          //delete element from array
+                    if (given === 'Water') prev = true
+                    else prev = false
+                    if (this.isPass(i + 1, nCol)) prev = false
 
+                    let seat = this.createSeat(j, i, given)
+                    this.seats.push(seat)
+                }
+                if (count === maxCount) break
+            }
+            if (count !== maxCount) break
+        }
+
+/*
         this.seats = []
         for (let j = 0; j < nRow; j++) {
             for (let i = 0; i < nCol; i++) {
@@ -195,24 +262,6 @@ let game = {
                 prefer.splice(ind, 1)          //delete element from array
 
                 let seat = this.createSeat (j, i, given)
-                this.seats.push (seat)
-            }
-        }
-
-/*
-        let indexes = []
-        for (let i = 0; i < this.nSize; i++) indexes.push(i)
-        let givenArray = []
-        while (indexes.length) {
-            let ind = Math.floor(Math.random() * indexes.length)
-            givenArray.push(prefer[indexes[ind]])
-            indexes.splice(ind, 1)          //delete element from array
-        }
-
-        this.seats = []
-        for (let j = 0; j < nRow; j++) {
-            for (let i = 0; i < nCol; i++) {
-                let seat = this.createSeat (j, i, givenArray[j * nCol + i])
                 this.seats.push (seat)
             }
         }

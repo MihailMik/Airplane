@@ -28,17 +28,17 @@
     color: white;
 }
 .Tea {
-    background-color: #ffd700;
+    background-color: orange;
     color: white;
     font-weight: bold;
 }
 .Coffee {
-    background-color: sandybrown;
+    background-color: brown;
     color: white;
     font-weight: bold;
 }
 .Water {
-    background-color: #5b92e5;
+    background-color: deepskyblue;
     color: white;
     font-weight: bold;
 }

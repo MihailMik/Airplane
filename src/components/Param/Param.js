@@ -43,7 +43,7 @@ const Param = (props) => {
         <div>
             {/*Салон*/}
             <div>
-                <text className={s.paramTitle}>Saloon</text>
+                <text className={s.paramTitle}>Cabin</text>
                 <div>
                     <text className={s.paramName}>Rows:</text>
                     <input className={s.paramValue} value={game.nRowStr} onChange={onChangeRow}></input>
@@ -55,7 +55,7 @@ const Param = (props) => {
 
             {/*Предпочтения*/}
             <div>
-                <text className={s.paramTitle}>Prefer</text>
+                <text className={s.paramTitle}>Answers</text>
                 <div>
                     <text className={s.paramName}>Tea:</text>
                     <input className={s.paramValue} value={game.nPreferTeaStr} onChange={onChangePreferTea}></input>

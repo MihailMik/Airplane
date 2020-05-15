@@ -1,7 +1,7 @@
 import React from "react"
 import Row from "./row";
 
-const Saloon = (props) => {
+const Cabin = (props) => {
     let game = props.game
     let nRow =  game.nRow
 
@@ -16,5 +16,5 @@ const Saloon = (props) => {
         </div>
     )
 }
-export default Saloon
+export default Cabin
 

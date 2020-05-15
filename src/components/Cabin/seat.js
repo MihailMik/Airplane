@@ -34,12 +34,12 @@ const Seat = (props) => {
         if (given === 'Water') {
             answer = s.answerWater
         }
-        else if (isQuestionTea && given === 'Tea' ||
-            isQuestionCoffee && given === 'Coffee') {
+        else if ((isQuestionTea && given === 'Tea') ||
+            (isQuestionCoffee && given === 'Coffee')) {
             answer = s.answerTrue
         }
-        else if (isQuestionTea && given === 'Coffee' ||
-            isQuestionCoffee && given === 'Tea') {
+        else if ((isQuestionTea && given === 'Coffee') ||
+            (isQuestionCoffee && given === 'Tea')) {
             answer = s.answerFalse
         }
         else {
@@ -52,6 +52,7 @@ const Seat = (props) => {
             case 'Tea': text = "T"; answer = s.Tea; break
             case 'Coffee': text = "C"; answer = s.Coffee; break
             case 'Water': text = "W"; answer = s.Water; break
+            default:text = 'err'; break
         }
     }
 
