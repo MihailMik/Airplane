@@ -15,12 +15,13 @@ const Seat = (props) => {
     const isQuestionCoffee = seat.isQuestionCoffee
     const index = seat.index
     const nextServed = game.nextServed
+    const gameEnded = game.gameEnded
 
     const onClickSeat = () => game.onClickSeat (ind)
 
     //Text in button
     let text = given
-    if (!game.hintChecked && !served) {
+    if (!game.hintChecked && !served && !gameEnded) {
         // text = game.getSeatName (ind)
         text = ''
     }

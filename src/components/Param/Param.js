@@ -6,7 +6,10 @@ let onClickNewGame = () => {
     game.onClickNewGame()
 }
 let onClickEndGame = () => {
-    game.onClickEndGame()
+    if (!game.gameEnded)
+        game.onClickEndGame()
+    else
+        game.onClickHint()
 }
 let onClickHint = () => {
     game.onClickHint()
@@ -39,6 +42,19 @@ let onChangePrizeTeaCoffee = (e) => {
 }
 
 const Param = (props) => {
+    let classHint = s.classHint
+    let textGame = 'End Game'
+    if (game.gameEnded) {
+        classHint = s.empty
+
+        if (game.hintChecked){
+            textGame = 'Game History'
+        }
+        else {
+            textGame = 'Check Game'
+        }
+    }
+
     return (
         <div>
             {/*Салон*/}
@@ -85,14 +101,13 @@ const Param = (props) => {
                 </div>
             </div>
 
-
             {/*Кнопка старта игры*/}
             <div className={s.startGame}>
                 <button className={s.buttonNewGame} onClick={onClickNewGame}>New Game</button>
-                <button className={s.buttonEndGame} onClick={onClickEndGame}>End Game</button>
+                <button className={s.buttonEndGame} onClick={onClickEndGame}>{textGame}</button>
 
                 {/*Подсказка*/}
-                <div>
+                <div className={classHint}>
                     <text>Hint:</text>
                     <input type="checkbox" checked={game.hintChecked} onClick={onClickHint}></input>
                 </div>

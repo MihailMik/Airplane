@@ -1,5 +1,4 @@
 import React from 'react';
-import s from './App.css';
 import Cabin from "./components/Cabin/cabin";
 import Param from "./components/Param/Param";
 import Pult from "./components/Pult/Pult";

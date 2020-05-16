@@ -19,20 +19,20 @@ let game = {
 
     isPass (col, nCol) {
         const passes = [
-        [1, 1],     //nCol = 0
-        [1, 1],     //nCol = 1
-        [1, 1],     //nCol = 2
-        [1, 1],     //nCol = 3
-        [2, 2],     //nCol = 4
-        [3, 3],     //nCol = 5
-        [3, 3],     //nCol = 6
-        [2, 5],     //nCol = 7
-        [2, 6],     //nCol = 8
-        [3, 6],     //nCol = 9
-        [3, 7],     //nCol = 10
-        [3, 8],     //nCol = 11
-        [3, 9],    //nCol = 12
-         ]
+            [1, 1],     //nCol = 1
+            [1, 1],     //nCol = 0
+            [1, 1],     //nCol = 2
+            [1, 1],     //nCol = 3
+            [2, 2],     //nCol = 4
+            [3, 3],     //nCol = 5
+            [3, 3],     //nCol = 6
+            [2, 5],     //nCol = 7
+            [2, 6],     //nCol = 8
+            [3, 6],     //nCol = 9
+            [3, 7],     //nCol = 10
+            [3, 8],     //nCol = 11
+            [3, 9],     //nCol = 12
+        ]
         if (passes[nCol][0] === col ||
             passes[nCol][1] === col) return true
         else return false
@@ -103,10 +103,15 @@ let game = {
             return
         }
         if (nCol > 12) {alert ('Number of seats in row is too large'); return}
-        if (nRow > 100) {alert ('Number of rows is too large'); return}
+        if (nRow > 100)
+        {alert ('Number of rows is too large'); return}
         if (nCol <=0 || nRow <= 0) {alert ('The parameter must be positive'); return}
         if (nCol <=0 || nRow <= 0) {alert ('The parameter must be positive'); return}
-        const maxWaterInRow = [0,
+
+/*
+        //Вариант запрета соседей-Water
+        const maxWaterInRow = [
+            0,
             1,  //for 1 seat in raw
             2,
             2,
@@ -118,9 +123,14 @@ let game = {
             6,
             6,  //for 10 seat in raw
             7,  //for 11 seat in raw
-            7,  //for 7 seat in raw
+            7,  //for 12 seat in raw
         ]
         if (nPreferWater >= maxWaterInRow[nCol]*nRow) {alert ('The number of Water Answers is too large'); return}
+*/
+        //Вариант 2: в ряду 1-2 Water (равновероятно)
+        let nWater = Math.floor(nRow*1.5)
+        if (nPreferWater !== nWater) {alert (`The number of Water Answers must be equal ${nWater}`); return}
+
 
         this.initialize ({
             nRow: nRow,
@@ -163,11 +173,15 @@ let game = {
         this.rerender()
     },
 
-    onChangeRow(body)           {this.nRowStr = body;           this.rerender()},
+    correctWater () {
+        let nRow =  Number (this.nRowStr)
+        this.nPreferWaterStr =  Math.floor(nRow*1.5)
+    },
+    onChangeRow(body)           {this.nRowStr = body; this.correctWater ();          this.rerender()},
     onChangeCol(body)           {this.nColStr = body;           this.rerender()},
     onChangePreferTea(body)     {this.nPreferTeaStr = body;     this.rerender()},
     onChangePreferCoffee(body)  {this.nPreferCoffeeStr = body;  this.rerender()},
-    onChangePreferWater(body)   {this.nPreferWaterStr = body;   this.rerender()},
+    onChangePreferWater(body)   {this.nPreferWaterStr = body;  this.correctWater (); this.rerender()},
     onChangePrizeTea(body)      {this.prizeTeaStr = body;       this.rerender()},
     onChangePrizeCoffee(body)   {this.prizeCoffeeStr = body;    this.rerender()},
     onChangePrizeTeaCoffee(body){this.prizeTeaCoffeeStr = body; this.rerender()},
@@ -229,12 +243,13 @@ let game = {
         for (let i = 0; i < this.nPreferCoffee; i++) prefer.push('Coffee')
 
         //0. Проверяем корректность данных
-        if (this.nPreferWater !== nRow*1.5) alert('Improper number of Water Answers')
+        //if (this.nPreferWater !== nRow*1.5) alert('Improper number of Water Answers')
 
-        //1. Создаем массив one-two: сначала nRow/2 единиц, потом nRow двоек
-        let one_two = []
-        for (let i = 0; i < nRow/2; i++) one_two.push (1)
-        for (let i = 0; i < nRow/2; i++) one_two.push (2)
+        //1. Создаем массив one-two: сначала nRow/2 единиц, потом nRow/2 двоек
+        let
+            one_two = []
+        for (let i = 0; i < Math.floor((nRow+1)/2); i++) one_two.push (1)   //(nRow+1) - for odd nRow
+        for (let i = 0; i < Math.floor(nRow/2); i++) one_two.push (2)
         //2. Создаем массив one_two_rand - случайно перемешанный one_two
         let one_two_rand = []
         for (let i = 0; i < nRow; i++) {
@@ -245,7 +260,6 @@ let game = {
         }
         //3. Создаем массив preferRand - случайно перемешанный массив prefer с
         //требуемыми ограничениями
-        let preferRand = []
         //3.1. Заполняем ряды
         for (let j = 0; j < nRow; j++) {
             let rowRand = []
