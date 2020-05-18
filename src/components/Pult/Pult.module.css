@@ -1,18 +1,30 @@
 .buttonGeneral {
-    width: 100px;
+    margin-left: 0px;
+    margin-right: 0px;
+    width: 105px;
     height: 30px;
     text-align: center;
 }
 
 .buttonAsk {
-    width: 300px;
+    width: 315px;
     height: 30px;
     text-align: center;
-    color: red;
+    color: white;
+    background-color: red;
+}
+.buttonAskDisable {
+    width: 315px;
+    height: 30px;
+    text-align: center;
+    color: white;
+    background-color: #ffc0c0;
 }
 
+
 .buttonActive {
-    color: red;
+    background-color: yellow;
+    color: green;
 }
 .buttonNonActive {
     color: black;
@@ -20,9 +32,13 @@
 .pultEmpty {
     visibility: hidden;
 }
+.pultEmpty {
+    visibility: hidden;
+    height: 0px;
+}
 .pult {
-    margin-top: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     visibility: visible;
-    width: 300px;
 }
 

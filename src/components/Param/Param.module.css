@@ -4,16 +4,23 @@
 
 }
 .buttonNewGame {
-    width: 145px;
+    width: 150px;
     height: 30px;
     font-size: 20px;
 
 }
 .buttonEndGame {
-    width: 145px;
+    width: 150px;
     height: 30px;
     font-size: 20px;
-    margin-left: 10px;
+    margin-left: 15px;
+}
+.buttonEndGameDisable {
+    width: 150px;
+    height: 30px;
+    font-size: 20px;
+    margin-left: 15px;
+    color: #d0d0d0;
 }
 .paramTitle{
     text-align: left;
@@ -30,7 +37,6 @@
     margin-left: 5px;
 }
 .classHint {
-
 }
 .empty {
     visibility: hidden;

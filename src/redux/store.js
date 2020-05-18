@@ -3,8 +3,8 @@ let constData = {
     nCol: 6,
 
     nPreferTea: 36,
-    nPreferCoffee: 18,
-    nPreferWater: 18,
+    nPreferCoffee: 12,
+    nPreferWater: 24,
 
     prizeTea: 2,
     prizeCoffee: 4,
@@ -43,7 +43,7 @@ let game = {
         let result = false
         if (!this.seats[ind].served &&
             (row === this.activeRow ||
-             (row === (this.activeRow+1) && (this.nCol-this.nServedInRow) <= 2))) result = true
+             (row === (this.activeRow+1) && this.nServedInRow >= this.nCol/2))) result = true
 
         if (this.gameEnded) result = false
         return result
@@ -79,6 +79,9 @@ let game = {
             game.activeRow++
         }
         game.nextServed = undefined
+        if (game.activeRow == game.nRow)
+            game.onClickEndGame()
+        else
         game.rerender()
     },
 
@@ -126,11 +129,10 @@ let game = {
             7,  //for 12 seat in raw
         ]
         if (nPreferWater >= maxWaterInRow[nCol]*nRow) {alert ('The number of Water Answers is too large'); return}
-*/
         //Вариант 2: в ряду 1-2 Water (равновероятно)
         let nWater = Math.floor(nRow*1.5)
         if (nPreferWater !== nWater) {alert (`The number of Water Answers must be equal ${nWater}`); return}
-
+*/
 
         this.initialize ({
             nRow: nRow,
@@ -233,6 +235,7 @@ let game = {
 
         //Calculate random value for 'given' property
 
+/*
         //Вариант случайной выборки из массива prefer с ограничением:
         //в одном ряду равновероятно одна или две воды так, что в сумме они дадут nRow*1.5 воды
         //
@@ -287,6 +290,7 @@ let game = {
                 this.seats.push (seat)
             }
         }
+*/
 
 /*
         //Вариант случайной выборки из массива prefer с ограничением:
@@ -351,6 +355,31 @@ let game = {
             }
         }
 */
+        //Вавриант блока из 3-х рядов
+        //
+        const T = 0
+        const C = 1
+        const W = 2
+        const preferInThreeRow = [
+            [W,T,T,T,T,C],
+            [W,W,T,T,T,C],
+            [W,W,W,T,T,C]
+        ]
+
+
+        this.seats = []
+        for (let j = 0; j < nRow; j++) {
+            let prefer = preferInThreeRow[j%3].slice()
+            prefer = prefer.map ((e) => e===T ? 'Tea' : (e===C)? 'Coffee':'Water')
+            for (let i = 0; i < nCol; i++) {
+                let ind = Math.floor(Math.random() * prefer.length)
+                let given = prefer[ind]
+                prefer.splice(ind, 1)          //delete element from array
+
+                let seat = this.createSeat (j, i, given)
+                this.seats.push (seat)
+            }
+        }
     },
 
     createSeat (row, col, given) {

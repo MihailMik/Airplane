@@ -43,7 +43,7 @@ let onChangePrizeTeaCoffee = (e) => {
 
 const Param = (props) => {
     let classHint = s.classHint
-    let textGame = 'End Game'
+    let textGame = 'Take Prize'
     if (game.gameEnded) {
         classHint = s.empty
 
@@ -55,9 +55,20 @@ const Param = (props) => {
         }
     }
 
+    let endGameDisabled = false
+    let sButtonEndGame = s.buttonEndGame
+    if ((game.activeRow && game.activeRow%3 == 0 && game.nServedInRow == 0) ||
+        (game.activeRow%3 == 2 && game.nServedInRow >= 3) ||
+        game.gameEnded) {
+    }
+    else {
+        endGameDisabled = true;
+        sButtonEndGame = s.buttonEndGameDisable
+    }
     return (
         <div>
-            {/*Салон*/}
+{/*
+            Салон
             <div>
                 <text className={s.paramTitle}>Cabin</text>
                 <div>
@@ -68,8 +79,10 @@ const Param = (props) => {
                     <input className={s.paramValue} value={game.nColStr} onChange={onChangeCol}></input>
                 </div>
             </div>
+*/}
 
-            {/*Предпочтения*/}
+{/*
+            Предпочтения
             <div>
                 <text className={s.paramTitle}>Answers</text>
                 <div>
@@ -84,6 +97,7 @@ const Param = (props) => {
                     <input className={s.paramValue} value={game.nPreferWaterStr} onChange={onChangePreferWater}></input>
                 </div>
             </div>
+*/}
 
             {/*Призы*/}
             <div>
@@ -101,16 +115,16 @@ const Param = (props) => {
                 </div>
             </div>
 
+            {/*Подсказка*/}
+            <div className={classHint}>
+                <text>Hint:</text>
+                <input type="checkbox" checked={game.hintChecked} onClick={onClickHint}></input>
+            </div>
+
             {/*Кнопка старта игры*/}
             <div className={s.startGame}>
                 <button className={s.buttonNewGame} onClick={onClickNewGame}>New Game</button>
-                <button className={s.buttonEndGame} onClick={onClickEndGame}>{textGame}</button>
-
-                {/*Подсказка*/}
-                <div className={classHint}>
-                    <text>Hint:</text>
-                    <input type="checkbox" checked={game.hintChecked} onClick={onClickHint}></input>
-                </div>
+                <button disabled={endGameDisabled} className={sButtonEndGame} onClick={onClickEndGame}>{textGame}</button>
             </div>
         </div>
     )

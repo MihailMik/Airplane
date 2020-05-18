@@ -21,10 +21,19 @@ const Seat = (props) => {
 
     //Text in button
     let text = given
-    if (!game.hintChecked && !served && !gameEnded) {
-        // text = game.getSeatName (ind)
-        text = ''
+    switch (given) {
+        case 'Tea': text = "T"; break
+        case 'Coffee': text = "C"; break
+        case 'Water': text = "W"; break
+        default:text = 'err'; break
     }
+    if (!game.hintChecked && !served && !gameEnded) {
+        text = ''
+        if (ind === nextServed)
+            text = game.isQuestionTea ? 'Tea?' : (game.isQuestionCoffee ? 'Coffee?' : 'Te-Co?')
+    }
+
+
 
     //Is button enabled for clicking
     const enabled = game.isSeatEnabled (row, col)
@@ -50,16 +59,16 @@ const Seat = (props) => {
 
     if (game.hintChecked) {
         switch (given) {
-            case 'Tea': text = "T"; answer = s.Tea; break
-            case 'Coffee': text = "C"; answer = s.Coffee; break
-            case 'Water': text = "W"; answer = s.Water; break
+            case 'Tea':     text = "T"; answer = s.Tea;     break
+            case 'Coffee':  text = "C"; answer = s.Coffee;  break
+            case 'Water':   text = "W"; answer = s.Water;   break
             default:text = 'err'; break
         }
     }
 
     let clas = answer + ' ' + s.buttonGeneral
     if (enabled) clas += ' ' + s.buttonEnabled
-    if (ind === nextServed) clas += ' ' + s.nextServed
+    if (ind === nextServed && !gameEnded) clas += ' ' + s.nextServed
     return (
         <button id = {index} disabled={!enabled} className={clas} onClick={onClickSeat}>
             {text}<br />
