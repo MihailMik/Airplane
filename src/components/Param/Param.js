@@ -14,6 +14,7 @@ let onClickEndGame = () => {
 let onClickHint = () => {
     game.onClickHint()
 }
+/*
 let onChangeRow = (e) => {
     game.onChangeRow(e.target.value)
 }
@@ -30,6 +31,7 @@ let onChangePreferCoffee = (e) => {
 let onChangePreferWater = (e) => {
     game.onChangePreferWater(e.target.value)
 }
+*/
 
 let onChangePrizeTea = (e) => {
     game.onChangePrizeTea(e.target.value)
@@ -43,7 +45,8 @@ let onChangePrizeTeaCoffee = (e) => {
 
 const Param = (props) => {
     let classHint = s.classHint
-    let textGame = 'Take Prize'
+    // let textGame = 'Take Prize'
+    let textGame = 'End Game'
     if (game.gameEnded) {
         classHint = s.empty
 
@@ -57,14 +60,17 @@ const Param = (props) => {
 
     let endGameDisabled = false
     let sButtonEndGame = s.buttonEndGame
-    if ((game.activeRow && game.activeRow%3 == 0 && game.nServedInRow == 0) ||
-        (game.activeRow%3 == 2 && game.nServedInRow >= 3) ||
+/*
+    if ((game.activeRow && game.activeRow%3 === 0 && game.nServedInRow === 0) ||
+        (game.activeRow%3 === 2 && game.nServedInRow >= 3) ||
         game.gameEnded) {
     }
     else {
         endGameDisabled = true;
         sButtonEndGame = s.buttonEndGameDisable
     }
+*/
+
     return (
         <div>
 {/*

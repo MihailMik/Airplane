@@ -9,8 +9,8 @@ function App(props) {
         <div>
             <Param game={props.game}/>
             <Result game={props.game}/>
-            <Pult game = {props.game}/>
             <Cabin game={props.game}/>
+            <Pult game = {props.game}/>
         </div>
     )
 }

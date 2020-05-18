@@ -16,6 +16,7 @@ const Seat = (props) => {
     const index = seat.index
     const nextServed = game.nextServed
     const gameEnded = game.gameEnded
+    const hintChecked = game.hintChecked
 
     const onClickSeat = () => game.onClickSeat (ind)
 
@@ -27,13 +28,12 @@ const Seat = (props) => {
         case 'Water': text = "W"; break
         default:text = 'err'; break
     }
-    if (!game.hintChecked && !served && !gameEnded) {
-        text = ''
-        if (ind === nextServed)
-            text = game.isQuestionTea ? 'Tea?' : (game.isQuestionCoffee ? 'Coffee?' : 'Te-Co?')
+    if (!hintChecked) {
+        if (served) text = given
+        else if (!gameEnded) text = ''
     }
-
-
+    if (ind === nextServed)
+        text = game.isQuestionTea ? 'Tea?' : (game.isQuestionCoffee ? 'Coffee?' : 'Te-Co?')
 
     //Is button enabled for clicking
     const enabled = game.isSeatEnabled (row, col)
@@ -57,11 +57,11 @@ const Seat = (props) => {
         }
     }
 
-    if (game.hintChecked) {
+    if (hintChecked || (gameEnded && !served)) {
         switch (given) {
-            case 'Tea':     text = "T"; answer = s.Tea;     break
-            case 'Coffee':  text = "C"; answer = s.Coffee;  break
-            case 'Water':   text = "W"; answer = s.Water;   break
+            case 'Tea':     answer = s.Tea;     break
+            case 'Coffee':  answer = s.Coffee;  break
+            case 'Water':   answer = s.Water;   break
             default:text = 'err'; break
         }
     }

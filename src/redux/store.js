@@ -1,10 +1,10 @@
 let constData = {
-    nRow: 12,
+    nRow: 9,
     nCol: 6,
 
-    nPreferTea: 36,
-    nPreferCoffee: 12,
-    nPreferWater: 24,
+    nPreferTea: 27,
+    nPreferCoffee: 9,
+    nPreferWater: 18,
 
     prizeTea: 2,
     prizeCoffee: 4,
@@ -79,10 +79,12 @@ let game = {
             game.activeRow++
         }
         game.nextServed = undefined
-        if (game.activeRow == game.nRow)
+        if (game.activeRow === game.nRow) {
             game.onClickEndGame()
+            game.onClickEndGame()
+        }
         else
-        game.rerender()
+            game.rerender()
     },
 
     onClickSeat (ind) {
@@ -150,7 +152,7 @@ let game = {
     },
 
     onClickEndGame () {
-        game.hintChecked = true
+        // game.hintChecked = true
         game.gameEnded = true
 
         this.rerender ()
