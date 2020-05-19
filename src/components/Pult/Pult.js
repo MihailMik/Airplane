@@ -11,6 +11,10 @@ let onClickAsk = () => {
     }
 }
 
+let onClickTake = () => {
+    game.onClickTake ()
+}
+
 let getAskedIndex = () => {
     //Find next served seat
     let ind = game.nSize
@@ -27,13 +31,27 @@ let getAskedIndex = () => {
 }
 const Pult = (props) => {
     let textAsk = ""
+    let textTake = "Take Prize"
 
     //Find next served seat
     let ind = getAskedIndex();
     let stateButtonAsk = s.buttonAsk
-    if (game.nextServed === undefined)
+    let disabledAsk = false
+    if (game.nextServed === undefined) {
         stateButtonAsk = s.buttonAskDisable
+        disabledAsk = true
+    }
     else ind = game.nextServed
+
+    let stateButtonTake = s.buttonTake
+    let disabledTake = false
+    if ((game.activeRow && game.activeRow % 3 === 0 && game.nServedInRow === 0) ||
+        (game.activeRow % 3 === 2 && game.nServedInRow >= game.nCol/2) ||
+        game.gameEnded) {
+    } else {
+        disabledTake = true;
+        stateButtonTake = s.buttonTakeDisable
+    }
 
     let ask = game.isQuestionTea ? 'Tea?' : game.isQuestionCoffee ? 'Coffee?' : 'Tea-Coffee?'
 
@@ -65,7 +83,11 @@ const Pult = (props) => {
             </div>
 
             <div>
-                <button className={stateButtonAsk} onClick={onClickAsk}>
+                <button className={stateButtonTake} onClick={onClickTake} disabled={disabledTake}>
+                    {textTake}
+                </button>
+
+                <button className={stateButtonAsk} onClick={onClickAsk} disabled={disabledAsk}>
                     {textAsk}
                 </button>
             </div>

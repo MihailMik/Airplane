@@ -14,7 +14,6 @@ let onClickEndGame = () => {
 let onClickHint = () => {
     game.onClickHint()
 }
-
 /*
 let onChangeRow = (e) => {
     game.onChangeRow(e.target.value)
@@ -31,8 +30,7 @@ let onChangePreferCoffee = (e) => {
 }
 let onChangePreferWater = (e) => {
     game.onChangePreferWater(e.target.value)
-}
-*/
+}*/
 
 let onChangePrizeTea = (e) => {
     game.onChangePrizeTea(e.target.value)
@@ -46,7 +44,6 @@ let onChangePrizeTeaCoffee = (e) => {
 
 const Param = (props) => {
     let classHint = s.classHint
-    // let textGame = 'Take Prize'
     let textGame = 'End Game'
     if (game.gameEnded) {
         classHint = s.empty
@@ -61,24 +58,15 @@ const Param = (props) => {
 
     let endGameDisabled = false
     let sButtonEndGame = s.buttonEndGame
-/*
-    if ((game.activeRow && game.activeRow%3 === 0 && game.nServedInRow === 0) ||
-        (game.activeRow%3 === 2 && game.nServedInRow >= 3) ||
-        game.gameEnded) {
-    }
-    else {
-        endGameDisabled = true;
-        sButtonEndGame = s.buttonEndGameDisable
-    }
-*/
 
     return (
         <div>
+
 {/*
             Салон
             <div>
-                <label className={s.paramTitle}>Cabin</label>
                 <div>
+                    <label className={s.paramTitle}>Cabin</label>
                     <text className={s.paramName}>Rows:</text>
                     <input className={s.paramValue} value={game.nRowStr} onChange={onChangeRow}></input>
 
@@ -89,8 +77,8 @@ const Param = (props) => {
 
             Предпочтения
             <div>
-                <text className={s.paramTitle}>Answers</text>
                 <div>
+                    <text className={s.paramTitle}>Answers</text>
                     <label className={s.paramName}>Tea:</label>
                     <input className={s.paramValue} value={game.nPreferTeaStr} onChange={onChangePreferTea}></input>
 
@@ -104,10 +92,10 @@ const Param = (props) => {
             </div>
 */}
 
+
             {/*Призы*/}
             <div>
                 <text className={s.paramTitle}>Prize</text>
-                {/*<div>*/}
                     <label className={s.paramName}>Tea:</label>
                     <input className={s.paramValue} value={game.prizeTeaStr} onChange={onChangePrizeTea}></input>
 
@@ -117,7 +105,6 @@ const Param = (props) => {
                     <text className={s.paramName}>Tea-Coffee:</text>
                     <input className={s.paramValue} value={game.prizeTeaCoffeeStr}
                            onChange={onChangePrizeTeaCoffee}></input>
-                {/*</div>*/}
             </div>
 
             {/*Подсказка*/}

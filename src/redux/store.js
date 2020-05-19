@@ -81,10 +81,15 @@ let game = {
         game.nextServed = undefined
         if (game.activeRow === game.nRow) {
             game.onClickEndGame()
-            game.onClickEndGame()
+            game.onClickEndGame()   //!! Doubled call to changed hint in proper state
         }
         else
             game.rerender()
+    },
+
+
+    onClickTake (ind) {
+        game.onClickEndGame()
     },
 
     onClickSeat (ind) {
