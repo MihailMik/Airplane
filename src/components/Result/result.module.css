@@ -1,34 +1,25 @@
-.forma {
-    margin-top: 0px;
-    margin-bottom: 10px;
-    margin-left: 0px;
-    width:315px;
-    text-align: center;
-}
-
 .Game {
-    width:315px;
-    text-align: center;
-    font-family: Arial;
+    width:200px;
+    text-align: left;
+    font-family: sans-serif;
 }
 
 .Prize {
-    width:315px;
+    width:115px;
     text-align: right;
-    font-family: Arial;
+    font-family: sans-serif;
 }
 
 .PrizeWhite {
-    width:315px;
-    text-align: right;
-    font-family: Arial;
+    width:115px;
     color: white;
 }
 
 .text {
-    font-family: Arial;
+    font-family: sans-serif;
 }
 
 .empty  {
-    visibility: hidden  ;
+    width:200px;
+    color: white;
 }

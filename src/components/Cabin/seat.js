@@ -32,7 +32,7 @@ const Seat = (props) => {
         if (served) text = given
         else if (!gameEnded) text = ''
     }
-    if (ind === nextServed)
+    if (ind === nextServed && !gameEnded)
         text = game.isQuestionTea ? 'Tea?' : (game.isQuestionCoffee ? 'Coffee?' : 'Te-Co?')
 
     //Is button enabled for clicking

@@ -14,6 +14,7 @@ let onClickEndGame = () => {
 let onClickHint = () => {
     game.onClickHint()
 }
+
 /*
 let onChangeRow = (e) => {
     game.onChangeRow(e.target.value)
@@ -76,7 +77,7 @@ const Param = (props) => {
 {/*
             Салон
             <div>
-                <text className={s.paramTitle}>Cabin</text>
+                <label className={s.paramTitle}>Cabin</label>
                 <div>
                     <text className={s.paramName}>Rows:</text>
                     <input className={s.paramValue} value={game.nRowStr} onChange={onChangeRow}></input>
@@ -85,14 +86,12 @@ const Param = (props) => {
                     <input className={s.paramValue} value={game.nColStr} onChange={onChangeCol}></input>
                 </div>
             </div>
-*/}
 
-{/*
             Предпочтения
             <div>
                 <text className={s.paramTitle}>Answers</text>
                 <div>
-                    <text className={s.paramName}>Tea:</text>
+                    <label className={s.paramName}>Tea:</label>
                     <input className={s.paramValue} value={game.nPreferTeaStr} onChange={onChangePreferTea}></input>
 
                     <text className={s.paramName}>Coffee:</text>
@@ -108,8 +107,8 @@ const Param = (props) => {
             {/*Призы*/}
             <div>
                 <text className={s.paramTitle}>Prize</text>
-                <div>
-                    <text className={s.paramName}>Tea:</text>
+                {/*<div>*/}
+                    <label className={s.paramName}>Tea:</label>
                     <input className={s.paramValue} value={game.prizeTeaStr} onChange={onChangePrizeTea}></input>
 
                     <text className={s.paramName}>Coffee:</text>
@@ -118,7 +117,7 @@ const Param = (props) => {
                     <text className={s.paramName}>Tea-Coffee:</text>
                     <input className={s.paramValue} value={game.prizeTeaCoffeeStr}
                            onChange={onChangePrizeTeaCoffee}></input>
-                </div>
+                {/*</div>*/}
             </div>
 
             {/*Подсказка*/}

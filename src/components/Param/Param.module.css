@@ -23,6 +23,7 @@
     color: #d0d0d0;
 }
 .paramTitle{
+    width: 50px;
     text-align: left;
     font-style: italic;
 }
