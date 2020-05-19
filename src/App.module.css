@@ -19,5 +19,7 @@
     color: white;
 }
 
-.general {
+.GameField {
+    max-width: 800px;
+    min-width: 482px;
 }

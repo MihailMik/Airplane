@@ -18,14 +18,16 @@ const Result = (props) => {
     }
 
     return (
-        <tr>
-            <td className={sGame}>
-                <text>{textGame}</text>
-            </td>
-            <td className={sPrize}>
-                <text>{textPrize}</text>
-            </td>
-        </tr>
+        <table className={s.Row}>
+            <tr className={s.Row}>
+                <td className={sGame}>
+                    <text>{textGame}</text>
+                </td>
+                <td className={sPrize}>
+                    <text>{textPrize}</text>
+                </td>
+            </tr>
+        </table>
     )
 }
 export default Result

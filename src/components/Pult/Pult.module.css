@@ -1,38 +1,38 @@
 .buttonGeneral {
     margin-left: 0px;
     margin-right: 0px;
-    width: 105px;
+    width: 33.3%;
     height: 30px;
     text-align: center;
 }
 
 .buttonTake {
-    width: 150px;
+    width: 45%;
     height: 30px;
     text-align: center;
-    margin-right: 15px;
+    margin-right: 10%;
     color: white;
     background-color: red;
 
 }
 .buttonTakeDisable {
-    width: 150px;
+    width: 45%;
     height: 30px;
     text-align: center;
-    margin-right: 15px;
+    margin-right: 10%;
     color: white;
     background-color: #ffc0c0;
 }
 
 .buttonAsk {
-    width: 150px;
+    width: 45%;
     height: 30px;
     text-align: center;
     color: white;
     background-color: red;
 }
 .buttonAskDisable {
-    width: 150px;
+    width: 45%;
     height: 30px;
     text-align: center;
     color: white;
