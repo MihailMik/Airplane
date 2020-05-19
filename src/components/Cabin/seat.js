@@ -33,7 +33,7 @@ const Seat = (props) => {
         else if (!gameEnded) text = ''
     }
     if (ind === nextServed && !gameEnded)
-        text = game.isQuestionTea ? 'Tea?' : (game.isQuestionCoffee ? 'Coffee?' : 'Tee-Coffee?')
+        text = game.isQuestionTea ? 'Tea?' : (game.isQuestionCoffee ? 'Coffee?' : 'Tea-Coffee?')
 
     //Is button enabled for clicking
     const enabled = game.isSeatEnabled (row, col)
@@ -69,10 +69,11 @@ const Seat = (props) => {
     let clas = answer + ' ' + s.buttonGeneral
     if (enabled) clas += ' ' + s.buttonEnabled
     if (ind === nextServed && !gameEnded) clas += ' ' + s.nextServed
+    let secondLine = (text==='Tea-Coffee?') ? '':game.getSeatName (ind)
     return (
         <button id = {index} disabled={!enabled} className={clas} onClick={onClickSeat}>
             {text}<br />
-            {game.getSeatName (ind)}
+            {secondLine}
         </button>
     )
 }
