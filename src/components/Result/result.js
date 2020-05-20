@@ -3,13 +3,16 @@ import s from './result.module.css';
 import game from "../../redux/store";
 
 const Result = (props) => {
-    let textPrize = `Prize: ${props.game.prize}`
+    let textPrizeMax = `Max Prize: ${props.game.prizeMax}`
+    let textPrize = `Your Prize: ${props.game.prize}`
     let textGame = ''
 
+    let sPrizeMax = s.PrizeMax
     let sPrize = s.Prize
     let sGame = s.emptyGame
 
     if (game.gameEnded) {
+        sPrizeMax = s.emptyPrize
         if (game.hintChecked) {
             textGame = 'Initial Secret State'
             sPrize = s.emptyPrize
@@ -21,9 +24,8 @@ const Result = (props) => {
     return (
         <table className={s.Row}>
             <tr className={s.Row}>
-                {/*dummy element for symmetry*/}
-                <td className={sPrize}>
-                    <text>{}</text>
+                <td className={sPrizeMax}>
+                    <text>{textPrizeMax}</text>
                 </td>
 
                 <td className={sGame}>

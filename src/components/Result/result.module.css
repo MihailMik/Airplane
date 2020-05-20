@@ -4,24 +4,30 @@
     /*border: 1px solid black;*/
 }
 .Game {
-    width: 60%;
+    width: 40%;
     text-align: center;
     /*border: 1px solid black;*/
 }
 .emptyGame  {
-    width: 60%;
+    width: 40%;
     color: white;
     text-align: center;
     /*border: 1px solid black;*/
 }
 .Prize {
-    width: 20%;
+    width: 30%;
     text-align: right;
     /*border: 1px solid black;*/
 }
 
+.PrizeMax {
+    width: 30%;
+    text-align: left;
+    /*border: 1px solid black;*/
+}
+
 .emptyPrize {
-    width: 20%;
+    width: 30%;
     color: white;
     /*border: 1px solid black;*/
 }

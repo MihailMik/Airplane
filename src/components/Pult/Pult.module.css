@@ -1,9 +1,26 @@
 .buttonGeneral {
     margin-left: 0px;
     margin-right: 0px;
-    width: 33.3%;
+    width: 32%;
     height: 30px;
     text-align: center;
+}
+.buttonCoffee {
+    margin-left: 2%;
+    margin-right: 2%;
+    width: 32%;
+    height: 30px;
+    text-align: center;
+}
+
+
+.dummy {
+    width: 0.0%;
+    visibility: hidden;
+}
+.openCode {
+font-size: 12px;
+    color: darkblue;
 }
 
 .buttonTake {

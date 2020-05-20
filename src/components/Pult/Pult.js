@@ -64,14 +64,16 @@ const Pult = (props) => {
     }
 
     let stateTea = (game.isQuestionTea ? s.buttonActive : s.buttonNonActive) + ' ' + s.buttonGeneral
-    let stateCoffee = (game.isQuestionCoffee ? s.buttonActive : s.buttonNonActive) + ' ' + s.buttonGeneral
+    let stateCoffee = (game.isQuestionCoffee ? s.buttonActive : s.buttonNonActive) + ' ' + s.buttonCoffee
     let stateTeaCoffee = (game.isQuestionTeaCoffee ? s.buttonActive : s.buttonNonActive) + ' ' + s.buttonGeneral
+
     return (
         <div className={statePult}>
             <div>
                 <button className={stateTea} onClick={onClickQuestionTea}>
                     Tea?
                 </button>
+
 
                 <button className={stateCoffee} onClick={onClickQuestionCoffee}>
                     Coffee?
@@ -81,6 +83,11 @@ const Pult = (props) => {
                     Tea-Coffee?
                 </button>
             </div>
+
+            <div className={s.openCode}>
+                <p><span className={s.openCodeTitle}>Open Code: </span>{game.openCodeStr}</p>
+            </div>
+
 
             <div>
                 <button className={stateButtonTake} onClick={onClickTake} disabled={disabledTake}>

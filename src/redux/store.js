@@ -12,6 +12,13 @@ let constData = {
 }
 
 let game = {
+    calcPrizeMax () {
+        this.prizeMax = this.prize
+        for (let ind = this.activeRow * this.nCol; ind < this.nSize; ind++) {
+            if (!this.seats[ind].served && this.seats[ind].given !== 'Water')
+                this.prizeMax += (this.seats[ind].given === 'Tea') ? this.prizeTea : this.prizeCoffee
+        }
+    },
     randomString (length) {
         const chars = 'abcdef0123456789'
         let charsLen = chars.length
@@ -47,14 +54,16 @@ let game = {
     },
     isSeatEnabled  (row, col)  {
         let ind = this.getIndex(row, col)
+        if (this.gameEnded || this.seats[ind].served) return false
 
-        let result = false
-        if (!this.seats[ind].served &&
-            (row === this.activeRow ||
-             (row === (this.activeRow+1) && this.nServedInRow >= this.nCol/2))) result = true
-
-        if (this.gameEnded) result = false
-        return result
+/*
+        //Вариант 1: второй ряд открываем, когда в первом больше половины мест обслужены
+        return (row === this.activeRow) ||
+              (row === (this.activeRow+1) && this.nServedInRow >= this.nCol/2)
+*/
+        //Вариант 2: второй ряд открываем, когда открыт хотя бы один в текущем ряду
+        return (row === this.activeRow) ||
+               (row === (this.activeRow+1) && this.nServedInRow >= 1)
     },
 
     seatOffer (ind) {
@@ -71,29 +80,37 @@ let game = {
         seat.isQuestionCoffee = game.isQuestionCoffee
         seat.isQuestionTeaCoffee = game.isQuestionTeaCoffee
 
-        if (seat.given === 'Water') {
-            game.prize = 0
-        }
+        if (seat.given === 'Water')  game.prize = 0
         else if (seat.isQuestionTeaCoffee) game.prize += game.prizeTeaCoffee
         else if (seat.isQuestionTea && seat.given === 'Tea') game.prize += game.prizeTea
         else if (seat.isQuestionCoffee && seat.given === 'Coffee') game.prize += game.prizeCoffee
-        else game.prize += 0
+        else game.prize += 0    //not correct answer
 
-        game.nServedInRow++
-        if (game.nServedInRow === game.nCol) {
-            game.nServedInRow = 0
-            game.activeRow++
+        //Вычисляем новое значение activeRow и nServedInRow
+        if (row === game.activeRow) {
+            if (seat.given === 'Water' || game.nServedInRow === (game.nCol-1)) {
+                game.activeRow++
+                game.nServedInRow = 0
+            }
+            else {
+                game.nServedInRow++
+            }
+        }
+        else {  //row === (game.activeRow+1)
+            if (seat.given === 'Water') {
+                game.activeRow += 2
+                game.nServedInRow = 0
+            }
+            else {
+                game.activeRow += 1
+                game.nServedInRow = 1
+            }
         }
 
-        if (row !== game.activeRow) {
-            game.activeRow = row
-            game.nServedInRow = 0
-        }
-        else if (seat.given === 'Water') {
-            game.activeRow = row + 1
-            game.nServedInRow = 0
-        }
+        // console.log(game.activeRow, game.nServedInRow)
         game.nextServed = undefined
+        game.calcPrizeMax ()
+
         if (game.activeRow === game.nRow) {
             game.onClickEndGame()
             game.onClickEndGame()   //!! Doubled call to changed hint in proper state
@@ -416,6 +433,7 @@ let game = {
                 }
             }
         }
+        this.calcPrizeMax ()
     },
 
     createSeat (row, col, given) {
