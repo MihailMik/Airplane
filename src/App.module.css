@@ -21,5 +21,6 @@
 
 .GameField {
     max-width: 800px;
+    font-family: sans-serif;
     /*min-width: 482px;*/
 }

@@ -12,6 +12,14 @@ let constData = {
 }
 
 let game = {
+    randomString (length) {
+        const chars = 'abcdef0123456789'
+        let charsLen = chars.length
+        let result = ''
+        for (let i = 0; i < length; i++)
+            result += chars.charAt(Math.random()*charsLen)
+        return result
+    },
     onClickHint () {
         game.hintChecked = !game.hintChecked
         game.rerender ()
@@ -63,20 +71,27 @@ let game = {
         seat.isQuestionCoffee = game.isQuestionCoffee
         seat.isQuestionTeaCoffee = game.isQuestionTeaCoffee
 
-        if (seat.given === 'Water') game.prize = 0
+        if (seat.given === 'Water') {
+            game.prize = 0
+        }
         else if (seat.isQuestionTeaCoffee) game.prize += game.prizeTeaCoffee
         else if (seat.isQuestionTea && seat.given === 'Tea') game.prize += game.prizeTea
         else if (seat.isQuestionCoffee && seat.given === 'Coffee') game.prize += game.prizeCoffee
         else game.prize += 0
 
-        if (row !== game.activeRow) {
-            game.activeRow = row
-            game.nServedInRow = 0
-        }
         game.nServedInRow++
         if (game.nServedInRow === game.nCol) {
             game.nServedInRow = 0
             game.activeRow++
+        }
+
+        if (row !== game.activeRow) {
+            game.activeRow = row
+            game.nServedInRow = 0
+        }
+        else if (seat.given === 'Water') {
+            game.activeRow = row + 1
+            game.nServedInRow = 0
         }
         game.nextServed = undefined
         if (game.activeRow === game.nRow) {
@@ -385,6 +400,20 @@ let game = {
 
                 let seat = this.createSeat (j, i, given)
                 this.seats.push (seat)
+            }
+        }
+        this.openCodeStr = this.randomString (32)
+        this.secretKeyStr = this.randomString (20)
+        this.drinksStr = []
+        for (let j = 0, k = 0; j < nRow; j++) {
+            this.drinksStr += " " + (j+1)
+            for (let i = 0; i < nCol; i++) {
+                switch (this.seats[k++].given) {
+                    case 'Tea':     this.drinksStr += 'T';break
+                    case 'Coffee':  this.drinksStr += 'C';break
+                    case 'Water':   this.drinksStr += 'W';break
+                    default: break
+                }
             }
         }
     },

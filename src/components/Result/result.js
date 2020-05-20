@@ -7,22 +7,29 @@ const Result = (props) => {
     let textGame = ''
 
     let sPrize = s.Prize
-    let sGame = s.empty
+    let sGame = s.emptyGame
 
     if (game.gameEnded) {
         if (game.hintChecked) {
             textGame = 'Initial Secret State'
-            sPrize = s.PrizeWhite
-        } else textGame = 'Final Game State'
+            sPrize = s.emptyPrize
+        }
+            else textGame = 'Final Game State'
         sGame = s.Game
     }
 
     return (
         <table className={s.Row}>
             <tr className={s.Row}>
+                {/*dummy element for symmetry*/}
+                <td className={sPrize}>
+                    <text>{}</text>
+                </td>
+
                 <td className={sGame}>
                     <text>{textGame}</text>
                 </td>
+
                 <td className={sPrize}>
                     <text>{textPrize}</text>
                 </td>

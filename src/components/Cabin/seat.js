@@ -69,11 +69,11 @@ const Seat = (props) => {
     let clas = answer + ' ' + s.buttonGeneral
     if (enabled) clas += ' ' + s.buttonEnabled
     if (ind === nextServed && !gameEnded) clas += ' ' + s.nextServed
-    let secondLine = (text==='Tea-Coffee?') ? '':game.getSeatName (ind)
+    let seatName = (text === 'Tea-Coffee?')? ' ' : game.getSeatName (ind)
     return (
         <button id = {index} disabled={!enabled} className={clas} onClick={onClickSeat}>
             {text}<br />
-            {secondLine}
+            {seatName}
         </button>
     )
 }

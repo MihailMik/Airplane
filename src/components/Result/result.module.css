@@ -1,38 +1,27 @@
 .Row {
     width: 100%;
+    font-family: sans-serif;
     /*border: 1px solid black;*/
 }
 .Game {
-    width: 70%;
+    width: 60%;
+    text-align: center;
     /*border: 1px solid black;*/
-    text-align: left;
-    font-family: sans-serif;
 }
-.empty  {
-    width: 70%;
-    /*border-style: solid;*/
+.emptyGame  {
+    width: 60%;
     color: white;
+    text-align: center;
+    /*border: 1px solid black;*/
 }
 .Prize {
-    width: 30%;
-    /*border: 1px solid black;*/
+    width: 20%;
     text-align: right;
-    font-family: sans-serif;
-    border: ;
-}
-
-.PrizeWhite {
-    width: 30%;
     /*border: 1px solid black;*/
-    color: white;
 }
 
-.text {
-    font-family: sans-serif;
-}
-
-.empty  {
-    width: 70%;
-    /*border-style: solid;*/
+.emptyPrize {
+    width: 20%;
     color: white;
+    /*border: 1px solid black;*/
 }

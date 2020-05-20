@@ -31,8 +31,6 @@ let getAskedIndex = () => {
 }
 const Pult = (props) => {
     let textAsk = ""
-    let textTake = "Take Prize"
-
     //Find next served seat
     let ind = getAskedIndex();
     let stateButtonAsk = s.buttonAsk
@@ -43,11 +41,13 @@ const Pult = (props) => {
     }
     else ind = game.nextServed
 
+    let textTake = "Take Prize"
     let stateButtonTake = s.buttonTake
     let disabledTake = false
-    if ((game.activeRow && game.activeRow % 3 === 0 && game.nServedInRow === 0) ||
+    if (game.prize &&
+        ((game.activeRow && game.activeRow % 3 === 0 && game.nServedInRow === 0) ||
         (game.activeRow % 3 === 2 && game.nServedInRow >= game.nCol/2) ||
-        game.gameEnded) {
+        game.gameEnded)) {
     } else {
         disabledTake = true;
         stateButtonTake = s.buttonTakeDisable
