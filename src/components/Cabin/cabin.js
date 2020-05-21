@@ -7,7 +7,7 @@ const Cabin = (props) => {
 
     let rows = []
     for (let row = 0; row < nRow; row++) {
-        rows[row] = <Row game = {game} row = {row}/>
+        rows[row] = <Row key = {row} game = {game} row = {row}/>
     }
 
     return (

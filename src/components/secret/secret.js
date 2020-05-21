@@ -9,7 +9,6 @@ const Secret = (props) => {
     let secretCode = (secretKeyStr === undefined || !game.gameEnded) ? s.empty : s.notEmpty
     return (
         <div className={s.secretField}>
-
             <div className={secretCode}>
                 <p className={s.secretCodeTitle}>Secret code: Key_Drinks</p>
                 <p><span className={s.secretCodeTitle}>Key: </span>{secretKeyStr}</p>

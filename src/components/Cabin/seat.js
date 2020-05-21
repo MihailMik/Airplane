@@ -17,17 +17,11 @@ const Seat = (props) => {
     const nextServed = game.nextServed
     const gameEnded = game.gameEnded
     const hintChecked = game.hintChecked
-
+    const givenToLetter = game.givenToLetter
     const onClickSeat = () => game.onClickSeat (ind)
 
     //Text in button
-    let text = given
-    switch (given) {
-        case 'Tea': text = "T"; break
-        case 'Coffee': text = "C"; break
-        case 'Water': text = "W"; break
-        default:text = 'err'; break
-    }
+    let text = givenToLetter[given]
     if (!hintChecked) {
         if (served) text = given
         else if (!gameEnded) text = ''
@@ -69,7 +63,12 @@ const Seat = (props) => {
     let clas = answer + ' ' + s.buttonGeneral
     if (enabled) clas += ' ' + s.buttonEnabled
     if (ind === nextServed && !gameEnded) clas += ' ' + s.nextServed
-    let seatName = (text === 'Tea-Coffee?')? ' ' : game.getSeatName (ind)
+
+    let seatName = game.getSeatName (ind)
+    if (text === 'Tea-Coffee?') {
+        text = 'Tea-'
+        seatName = 'Coffee?'
+    }
     return (
         <button id = {index} disabled={!enabled} className={clas} onClick={onClickSeat}>
             {text}<br />

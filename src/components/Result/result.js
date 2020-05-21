@@ -1,42 +1,41 @@
 import React from "react"
 import s from './result.module.css';
-import game from "../../redux/store";
 
 const Result = (props) => {
-    let textPrizeMax = `Max Prize: ${props.game.prizeMax}`
-    let textPrize = `Your Prize: ${props.game.prize}`
-    let textGame = ''
+    let game = props.game
 
-    let sPrizeMax = s.PrizeMax
-    let sPrize = s.Prize
-    let sGame = s.emptyGame
+    let textPrizeMax    = `Maximum Prize: ${game.prizeMax}`
+    let textPrize       = `Your Prize: ${game.prize}`
+    let textGame        = ''
+
+    let sPrizeMax   = s.PrizeMax
+    let sPrize      = s.Prize
+    let sGame       = s.empty
 
     if (game.gameEnded) {
-        sPrizeMax = s.emptyPrize
+        sPrizeMax = s.empty
         if (game.hintChecked) {
             textGame = 'Initial Secret State'
-            sPrize = s.emptyPrize
-        }
-            else textGame = 'Final Game State'
+            sPrize = s.empty
+        } else
+            textGame = 'Final Game State'
         sGame = s.Game
     }
 
     return (
-        <table className={s.Row}>
-            <tr className={s.Row}>
-                <td className={sPrizeMax}>
-                    <text>{textPrizeMax}</text>
-                </td>
+        <div className={s.Row}>
+            <div className={`${s.general} ${sPrizeMax}`}>
+                <label>{textPrizeMax}</label>
+            </div>
 
-                <td className={sGame}>
-                    <text>{textGame}</text>
-                </td>
+            <div className={`${s.general} ${sGame}`}>
+                <label>{textGame}</label>
+            </div>
 
-                <td className={sPrize}>
-                    <text>{textPrize}</text>
-                </td>
-            </tr>
-        </table>
+            <div className={`${s.general} ${sPrize}`}>
+                <label>{textPrize}</label>
+            </div>
+        </div>
     )
 }
 export default Result

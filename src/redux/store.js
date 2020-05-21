@@ -12,6 +12,8 @@ let constData = {
 }
 
 let game = {
+    givenToLetter: {Tea: 'T', Coffee: 'C', Water: 'W'},
+
     calcPrizeMax () {
         this.prizeMax = this.prize
         for (let ind = this.activeRow * this.nCol; ind < this.nSize; ind++) {
@@ -107,7 +109,6 @@ let game = {
             }
         }
 
-        // console.log(game.activeRow, game.nServedInRow)
         game.nextServed = undefined
         game.calcPrizeMax ()
 
@@ -423,14 +424,9 @@ let game = {
         this.secretKeyStr = this.randomString (20)
         this.drinksStr = []
         for (let j = 0, k = 0; j < nRow; j++) {
-            this.drinksStr += " " + (j+1)
+            this.drinksStr += (j+1)
             for (let i = 0; i < nCol; i++) {
-                switch (this.seats[k++].given) {
-                    case 'Tea':     this.drinksStr += 'T';break
-                    case 'Coffee':  this.drinksStr += 'C';break
-                    case 'Water':   this.drinksStr += 'W';break
-                    default: break
-                }
+                this.drinksStr += this.givenToLetter[this.seats[k++].given]
             }
         }
         this.calcPrizeMax ()
@@ -456,27 +452,9 @@ let game = {
     getRow (ind)    {return Math.floor(ind / game.nCol)},
     getCol (ind)    {return ind % game.nCol},
 
-    getSeatName (ind) {
-        let row = this.getRow (ind)
-        let col = this.getCol (ind)
-        let text = row + 1
-        switch (col) {
-            case 0:text += 'A';break
-            case 1:text += 'B';break
-            case 2:text += 'C';break
-            case 3:text += 'D';break
-            case 4:text += 'E';break
-            case 5:text += 'F';break
-            case 6:text += 'G';break
-            case 7:text += 'H';break
-            case 8:text += 'I';break
-            case 9:text += 'J';break
-            case 10:text += 'K';break
-            case 11:text += 'L';break
-            case 12:text += 'M';break
-            default:text += ''
-        }
-        return text
+    getSeatName (ind)  {
+        const letters = 'ABCDEFGHIJKLM'
+        return  (this.getRow (ind)+1) + letters.charAt(this.getCol (ind))
     }
 }
 

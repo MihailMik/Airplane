@@ -1,33 +1,14 @@
 .Row {
+    position: relative;
     width: 100%;
-    font-family: sans-serif;
-    /*border: 1px solid black;*/
+    height: 1em;
 }
-.Game {
-    width: 40%;
-    text-align: center;
-    /*border: 1px solid black;*/
+.general {
+    position: absolute;
+    width: 100%;
 }
-.emptyGame  {
-    width: 40%;
-    color: white;
-    text-align: center;
-    /*border: 1px solid black;*/
-}
-.Prize {
-    width: 30%;
-    text-align: right;
-    /*border: 1px solid black;*/
-}
+.Game       {text-align: center;}
+.Prize      {text-align: right;}
+.PrizeMax   {text-align: left;}
 
-.PrizeMax {
-    width: 30%;
-    text-align: left;
-    /*border: 1px solid black;*/
-}
-
-.emptyPrize {
-    width: 30%;
-    color: white;
-    /*border: 1px solid black;*/
-}
+.empty {visibility: hidden;}

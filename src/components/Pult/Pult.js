@@ -68,8 +68,8 @@ const Pult = (props) => {
     let stateTeaCoffee = (game.isQuestionTeaCoffee ? s.buttonActive : s.buttonNonActive) + ' ' + s.buttonGeneral
 
     return (
-        <div className={statePult}>
-            <div>
+        <div>
+            <div className={statePult}>
                 <button className={stateTea} onClick={onClickQuestionTea}>
                     Tea?
                 </button>
@@ -88,8 +88,7 @@ const Pult = (props) => {
                 <p><span className={s.openCodeTitle}>Open Code: </span>{game.openCodeStr}</p>
             </div>
 
-
-            <div>
+            <div className={statePult}>
                 <button className={stateButtonTake} onClick={onClickTake} disabled={disabledTake}>
                     {textTake}
                 </button>

@@ -10,9 +10,8 @@ const Row = (props) => {
 
     let cols = []
     for (let col = 0; col < nCol; col++) {
-        // if (isPass (col, nCol)) cols.push (<text className={s.empty}>ab</text>)
-        if (isPass (col, nCol)) cols.push (<button className={s.empty}></button>)
-        cols.push(<Seat game = {game} row = {row} col = {col}/>)
+        if (isPass (col, nCol)) cols.push (<button key = {'pass'}className={s.empty}></button>)
+        cols.push(<Seat key = {col} game = {game} row = {row} col = {col}/>)
     }
 
     return (

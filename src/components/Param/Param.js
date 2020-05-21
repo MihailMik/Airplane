@@ -95,22 +95,22 @@ const Param = (props) => {
 
             {/*Призы*/}
             <div>
-                <text className={s.paramTitle}>Prize</text>
+                <label className={s.paramTitle}>Prize</label>
                     <label className={s.paramName}>Tea:</label>
                     <input className={s.paramValue} value={game.prizeTeaStr} onChange={onChangePrizeTea}></input>
 
-                    <text className={s.paramName}>Coffee:</text>
+                    <label className={s.paramName}>Coffee:</label>
                     <input className={s.paramValue} value={game.prizeCoffeeStr} onChange={onChangePrizeCoffee}></input>
 
-                    <text className={s.paramName}>Tea-Coffee:</text>
+                    <label className={s.paramName}>Tea-Coffee:</label>
                     <input className={s.paramValue} value={game.prizeTeaCoffeeStr}
                            onChange={onChangePrizeTeaCoffee}></input>
             </div>
 
             {/*Подсказка*/}
             <div className={classHint}>
-                <text>Hint:</text>
-                <input type="checkbox" checked={game.hintChecked} onClick={onClickHint}></input>
+                <label>Hint:</label>
+                <input type="checkbox" checked={game.hintChecked} onChange={onClickHint}></input>
             </div>
 
             {/*Кнопка старта игры*/}
