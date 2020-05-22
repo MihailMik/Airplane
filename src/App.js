@@ -6,6 +6,8 @@ import Result from "./components/Result/result";
 import Secret from "./components/secret/secret";
 import s from './App.module.css';
 
+import './css/airplane.css'
+
 function App(props) {
     return (
         <div className={s.GameField}>

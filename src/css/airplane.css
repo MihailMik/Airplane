@@ -1,0 +1,12 @@
+.steward {
+    position: absolute;
+    transform: translate(-50%, 0);
+    left: 50%;
+    bottom: 0;
+    z-index: 3;
+    height: 4rem;
+}
+
+.row-with-steward {
+    position: relative;
+}
