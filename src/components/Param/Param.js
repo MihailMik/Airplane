@@ -2,19 +2,9 @@ import React from "react"
 import game from "../../redux/store";
 import s from './Param.module.css';
 
-let onClickNewGame = () => {
-    game.onClickNewGame()
-}
-let onClickEndGame = () => {
-    if (!game.gameEnded)
-        game.onClickEndGame()
-    else
-        game.onClickHint()
-}
 let onClickHint = () => {
     game.onClickHint()
 }
-/*
 let onChangeRow = (e) => {
     game.onChangeRow(e.target.value)
 }
@@ -30,7 +20,7 @@ let onChangePreferCoffee = (e) => {
 }
 let onChangePreferWater = (e) => {
     game.onChangePreferWater(e.target.value)
-}*/
+}
 
 let onChangePrizeTea = (e) => {
     game.onChangePrizeTea(e.target.value)
@@ -43,55 +33,37 @@ let onChangePrizeTeaCoffee = (e) => {
 }
 
 const Param = (props) => {
-    let classHint = s.classHint
-    let textGame = 'End Game'
-    if (game.gameEnded) {
-        classHint = s.empty
-
-        if (game.hintChecked){
-            textGame = 'Game History'
-        }
-        else {
-            textGame = 'Check Game'
-        }
-    }
-
-    let endGameDisabled = false
-    let sButtonEndGame = s.buttonEndGame
+    let classHint = (game.gameEnded) ? s.empty : s.classHint
 
     return (
         <div>
-
-{/*
-            Салон
+            {/*Салон*/}
             <div>
                 <div>
                     <label className={s.paramTitle}>Cabin</label>
-                    <text className={s.paramName}>Rows:</text>
+                    <label className={s.paramName}>Rows:</label>
                     <input className={s.paramValue} value={game.nRowStr} onChange={onChangeRow}></input>
 
-                    <text className={s.paramName}>Seats in row:</text>
+                    <label className={s.paramName}>Seats in row:</label>
                     <input className={s.paramValue} value={game.nColStr} onChange={onChangeCol}></input>
                 </div>
             </div>
 
-            Предпочтения
+            {/*Предпочтения*/}
             <div>
                 <div>
-                    <text className={s.paramTitle}>Answers</text>
+                    <label className={s.paramTitle}>Answers</label>
                     <label className={s.paramName}>Tea:</label>
                     <input className={s.paramValue} value={game.nPreferTeaStr} onChange={onChangePreferTea}></input>
 
-                    <text className={s.paramName}>Coffee:</text>
+                    <label className={s.paramName}>Coffee:</label>
                     <input className={s.paramValue} value={game.nPreferCoffeeStr}
                            onChange={onChangePreferCoffee}></input>
 
-                    <text className={s.paramName}>Water:</text>
+                    <label className={s.paramName}>Water:</label>
                     <input className={s.paramValue} value={game.nPreferWaterStr} onChange={onChangePreferWater}></input>
                 </div>
             </div>
-*/}
-
 
             {/*Призы*/}
             <div>
@@ -107,17 +79,18 @@ const Param = (props) => {
                            onChange={onChangePrizeTeaCoffee}></input>
             </div>
 
+            <label>Generation:</label>
+            <select onChange={(e) => {game.onChangeRandomType (e.target.value)}}>
+
+                <option value={'W123'} selected>1-2-3 Water & 1 Coffee</option>
+                <option value={'W12'}>1.5 Water</option>
+            </select>
+
             {/*Подсказка*/}
-            <div className={classHint}>
+            <span className={classHint}>
                 <label>Hint:</label>
                 <input type="checkbox" checked={game.hintChecked} onChange={onClickHint}></input>
-            </div>
-
-            {/*Кнопка старта игры*/}
-            <div className={s.startGame}>
-                <button className={s.buttonNewGame} onClick={onClickNewGame}>New Game</button>
-                <button disabled={endGameDisabled} className={sButtonEndGame} onClick={onClickEndGame}>{textGame}</button>
-            </div>
+            </span>
         </div>
     )
 }

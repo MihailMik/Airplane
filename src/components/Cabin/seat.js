@@ -61,6 +61,12 @@ const Seat = (props) => {
     }
 
     let clas = answer + ' ' + s.buttonGeneral
+    switch (game.nCol) {
+        case 3: clas += ' ' + s.buttonRow3; break
+        case 4: clas += ' ' + s.buttonRow4; break
+        case 5: clas += ' ' + s.buttonRow5; break
+        default:break
+    }
     if (enabled) clas += ' ' + s.buttonEnabled
     if (ind === nextServed && !gameEnded) clas += ' ' + s.nextServed
 

@@ -59,10 +59,36 @@
     color: black;
 }
 .pultEmpty {
-    visibility: hidden;
-    height: 0px;
+    display: none;
+    /*visibility: hidden;*/
+    /*height: 0px;*/
 }
 .pult {
     margin-top: 5px;
-    visibility: visible;
+}
+
+
+.startGame {
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+.buttonNewGame {
+    width: 45%;
+    height: 30px;
+    font-size: 20px;
+
+}
+.buttonEndGame {
+    width: 45%;
+    height: 30px;
+    font-size: 20px;
+    margin-left: 10%;
+}
+.buttonEndGameDisable {
+    width: 45%;
+    height: 30px;
+    font-size: 20px;
+    margin-left: 10%;
+    color: #d0d0d0;
 }

@@ -9,10 +9,25 @@ const Row = (props) => {
     const isPass = game.isPass
 
     const getSteward = () => {
+        let stewardRow = game.activeRow
+        let stewardPict = `/img/girl_0.png`
+
+        if (game.nextServed) {
+            let stewardCol = game.getCol (game.nextServed)
+            stewardRow = game.getRow (game.nextServed)
+            stewardPict = (stewardCol >= game.nCol/2) ?`/img/girl_right.png`:`/img/girl_left.png`
+        }
+
+        let classSteward
+        switch (nCol) {
+            case 3: classSteward = 'steward steward3'; break
+            case 5: classSteward = 'steward steward5'; break
+            default: classSteward = 'steward'; break
+        }
         return {
-            src: `/img/girl.png`
-            , classname: 'steward'
-            , row: 1
+            src: stewardPict
+            , classname: classSteward
+            , row: stewardRow
         }
     };
 
@@ -29,7 +44,7 @@ const Row = (props) => {
     }
 
     if (currentSteward.row === row) {
-        cols.push(<img src={currentSteward.src} alt={''} className={currentSteward.classname}/>);
+        cols.push(<img src={currentSteward.src} key={'steward'} alt={''} className={currentSteward.classname}/>);
     }
 
     return (

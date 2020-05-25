@@ -9,6 +9,17 @@
     font-size: 11px;
     overflow: hidden;
 }
+.buttonRow5 {
+    width: 18%
+}
+
+.buttonRow4 {
+    width: 22.5%
+}
+
+.buttonRow3 {
+    width: 30%
+}
 
 .buttonEnabled {
     border-width: 5px;
