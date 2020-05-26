@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
-import App from './App';
+gimport App from './App';
 import game from "./redux/store";
 
 const rerender = () => {

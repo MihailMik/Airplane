@@ -56,14 +56,10 @@ let game = {
 
     getDataFromURL() {
         let path = document.location.pathname
-        switch (path) {
-            case '/9x5': return constData9x5
-            case '/6x4': return constData6x4
-            case '/9x6':
-            case '/param':
-            case '/':
-            default: return constData9x6
-        }
+
+        if      (path.indexOf ('9x5') >= 0) return constData9x5
+        else if (path.indexOf ('6x4') >= 0) return constData6x4
+        else                                return constData9x6
     },
 
     calcPrizeMax () {
