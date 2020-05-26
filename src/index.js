@@ -3,14 +3,11 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import App from './App';
 import game from "./redux/store";
-import {BrowserRouter} from "react-router-dom";
 
 const rerender = () => {
     ReactDOM.render(
         <React.StrictMode>
-            <BrowserRouter>
-                <App game={game}/>
-            </BrowserRouter>
+            <App game={game}/>
         </React.StrictMode>,
         document.getElementById('root')
     );

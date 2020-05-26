@@ -6,7 +6,7 @@
     {<script type='text/javascript' src='js/CryptoJS/md5.js'></script>}
 */
 
-let constData9x6 = {
+export let constData9x6 = {
     nRow: 9,
     nCol: 6,
 
@@ -21,7 +21,7 @@ let constData9x6 = {
     randomType: 'W123'
 }
 
-let constData9x5 = {
+export let constData9x5 = {
     nRow: 9,
     nCol: 5,
 
@@ -36,7 +36,7 @@ let constData9x5 = {
     randomType: 'W123'
 }
 
-let constData6x4 = {
+export let constData6x4 = {
     nRow: 6,
     nCol: 4,
 

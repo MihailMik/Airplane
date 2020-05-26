@@ -1,35 +1,20 @@
 import React from 'react';
-import Cabin from "./components/Cabin/cabin";
-import Param from "./components/Param/Param";
-import Pult from "./components/Pult/Pult";
-import Result from "./components/Result/result";
-import Secret from "./components/secret/secret";
-import s from './App.module.css';
 import './css/airplane.css';
-import {Route, Switch} from "react-router-dom";
-import StartAndEnd from "./components/Pult/startAndEnd";
-import ParamDefault from "./components/Param/paramDefault";
+import {HashRouter, Route, Switch} from "react-router-dom";
+import {constData6x4, constData9x5, constData9x6} from "./redux/store";
+import {GameComponent} from "./components/Game";
 
 // const dial = '/#1/abc'
-function App(props) {
-    return (
-        <div className={s.GameField}>
-
-            <Switch>
-                <Route path='/param' render={() => <Param game={props.game}/>}/>
-                <Route path='/9x6' render={() => <ParamDefault game={props.game}/>}/>
-                <Route path='/9x5' render={() => <ParamDefault game={props.game}/>}/>
-                <Route path='/6x4' render={() => <ParamDefault game={props.game}/>}/>
-                <Route exact path='/' render={() => <Param game={props.game}/>}/>
-            </Switch>
-
-            <StartAndEnd game={props.game}/>
-            <Result game={props.game}/>
-            <Cabin game={props.game}/>
-            <Pult game={props.game}/>
-            <Secret game={props.game}/>
-        </div>
-    )
-}
+const App = (props) => (
+    <HashRouter>
+        <Switch>
+            <Route path='/param' render={() => <GameComponent GameParam={constData9x6} Game={props.game}/>}/>
+            <Route path='/9x6' render={() => <GameComponent GameParam={constData9x6} Game={props.game}/>}/>
+            <Route path='/9x5' render={() => <GameComponent GameParam={constData9x5} Game={props.game}/>}/>
+            <Route path='/6x4' render={() => <GameComponent GameParam={constData6x4} Game={props.game}/>}/>
+            <Route exact path='/' render={() => <GameComponent GameParam={constData9x6} Game={props.game}/>}/>
+        </Switch>
+    </HashRouter>
+);
 
 export default App;
