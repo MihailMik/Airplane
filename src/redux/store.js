@@ -60,6 +60,8 @@ let game = {
             case '/9x5': return constData9x5
             case '/6x4': return constData6x4
             case '/9x6':
+            case '/param':
+            case '/':
             default: return constData9x6
         }
     },
