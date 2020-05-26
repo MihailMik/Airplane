@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import s from "../App.module.css";
 import StartAndEnd from "./Pult/startAndEnd";
 import Result from "./Result/result";
@@ -8,7 +8,11 @@ import Secret from "./secret/secret";
 
 export const GameComponent = (props) => {
     const {Game, GameParam} = props;
-    Game.initialize(GameParam);
+
+    // монтирование
+    useEffect(() => {
+        Game.initialize(GameParam);
+    }, [props, Game, GameParam]);
 
     return (
         <div className={s.GameField}>
