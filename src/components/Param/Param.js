@@ -53,8 +53,9 @@ const Param = (props) => {
             <label>Generation:</label>
             <select onChange={(e) => {game.onChangeRandomType (e.target.value)}}>
 
-                <option value={'W123'} selected>1-2-3 Water & 1 Coffee</option>
-                <option value={'W12'}>1.5 Water</option>
+                <option value={'W123'} selected>1-2-3W & 1C in row</option>
+                <option value={'W12C1'} selected>1-2Water & 1C in row</option>
+                <option value={'W12'}>1-2W</option>
             </select>
 
         </div>

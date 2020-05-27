@@ -10,6 +10,7 @@ const GameSelect = (props) => {
             <label className={s.paramName}>Game:</label>
             <select  className={s.select} onChange={ (e) => props.game.onChangeGameSelect(e.target.value)}>
                 <option value={'9x6'}>9x6, 1-2-3W and 1C in row</option>
+                <option value={'9x6a'}>9x6, 1-2W and 1C in row</option>
                 <option value={'9x5'}>9x5, 1-2-3W and 1C in row</option>
                 <option value={'6x4'}>6x4, 1-2W in row, 5C and 9T in all</option>
                 <option value={'param'}>arbitrary params</option>

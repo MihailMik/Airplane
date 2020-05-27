@@ -21,6 +21,21 @@ export let constData9x6 = {
     randomType: 'W123'
 }
 
+export let constData9x6a = {
+    nRow: 9,
+    nCol: 6,
+
+    nPreferTea: 32,
+    nPreferCoffee: 9,
+    nPreferWater: 13,
+
+    prizeTea: 2,
+    prizeCoffee: 4,
+    prizeTeaCoffee: 1,
+
+    randomType: 'W12C1'
+}
+
 export let constData9x5 = {
     nRow: 9,
     nCol: 5,
@@ -55,14 +70,6 @@ let game = {
     givenToLetter: {Tea: 'T', Coffee: 'C', Water: 'W'},
 
     haveParamComponent () {return this.isParamComponent},
-
-    getDataFromURL() {
-        let path = document.location.pathname
-
-        if      (path.indexOf ('9x5') >= 0) return constData9x5
-        else if (path.indexOf ('6x4') >= 0) return constData6x4
-        else                                return constData9x6
-    },
 
     calcPrizeMax () {
         this.prizeMax = this.prize
@@ -294,6 +301,11 @@ let game = {
                 nPreferCoffee = Math.min (Number (this.nPreferCoffeeStr), nRow*nCol - nPreferWater)
                 nPreferTea = nRow * nCol - nPreferCoffee - nPreferWater
                 break
+            case 'W12C1':
+                nPreferWater =  Math.floor(nRow/2) * 3 + ((nRow%2 === 1) ? 1 : 0)
+                nPreferCoffee = nRow
+                nPreferTea = nRow * nCol - nPreferCoffee - nPreferWater
+                break
             default: break
         }
 
@@ -315,6 +327,7 @@ let game = {
             case 'param': this.initialize (constData9x6, true); break
             case '9x5'  : this.initialize (constData9x5, false); break
             case '6x4'  : this.initialize (constData6x4, false); break
+            case '9x6a' : this.initialize (constData9x6a,false); break
             case '9x6'  :
             default     : this.initialize (constData9x6, false); break
         }
@@ -434,6 +447,43 @@ let game = {
                 //Создаем Seat в соответствии с данными из массива rowRand
                 for (let i = 0; i < nCol; i++) {
                     let seat = this.createSeat(j, i, rowRand[i])
+                    this.seats.push(seat)
+                }
+            }
+        }
+
+        //Вариант случайной выборки из массива prefer с ограничением:
+        //в одном ряду равновероятно одна или две воды так, что в сумме они дадут nRow*1.5 воды
+        //В каждом ряду 1 кофе
+        if (data.randomType === 'W12C1') {
+            this.seats = []
+
+            //1. Создаем массив one-two: сначала nRow/2 единиц, потом nRow/2 двоек
+            let one_two = []
+            for (let i = 0; i < Math.floor((nRow + 1) / 2); i++) one_two.push(1)   //(nRow+1) - for odd nRow
+            for (let i = 0; i < Math.floor(nRow / 2); i++) one_two.push(2)
+            //2. Создаем массив one_two_rand - случайно перемешанный one_two
+            let one_two_rand = []
+            for (let i = 0; i < nRow; i++) {
+                let ind = Math.floor(Math.random() * one_two.length)
+                let val = one_two[ind]
+                one_two_rand.push(val)
+                one_two.splice(ind, 1)          //delete element from array
+            }
+
+            //3. Заполняем ряды
+            for (let j = 0; j < nRow; j++) {
+                let i = 0
+                let prefer = ['Coffee']                                 //Coffee - one
+                for (; i < one_two_rand[j]; i++) prefer.push('Water')    //Water - one_two_rand[j]
+                for (i++; i < nCol; i++) prefer.push('Tea')               //Tea - other
+
+                for (let i = 0; i < nCol; i++) {
+                    let ind = Math.floor(Math.random() * prefer.length)
+                    let given = prefer[ind]
+                    prefer.splice(ind, 1)          //delete element from array
+
+                    let seat = this.createSeat(j, i, given)
                     this.seats.push(seat)
                 }
             }
