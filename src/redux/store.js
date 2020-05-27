@@ -54,6 +54,8 @@ export let constData6x4 = {
 let game = {
     givenToLetter: {Tea: 'T', Coffee: 'C', Water: 'W'},
 
+    haveParamComponent () {return this.isParamComponent},
+
     getDataFromURL() {
         let path = document.location.pathname
 
@@ -239,7 +241,7 @@ let game = {
             prizeTeaCoffee: prizeTeaCoffee,
 
             randomType: randomType
-        })
+        }, this.haveParamComponent ())
         this.rerender ()
     },
 
@@ -308,6 +310,16 @@ let game = {
 
         this.rerender()
     },
+    onChangeGameSelect(body)           {
+        switch (body) {
+            case 'param': this.initialize (constData9x6, true); break
+            case '9x5'  : this.initialize (constData9x5, false); break
+            case '6x4'  : this.initialize (constData6x4, false); break
+            case '9x6'  :
+            default     : this.initialize (constData9x6, false); break
+        }
+        this.rerender()
+    },
     // onChangeRow(body)           {this.nRowStr = body; this.correctWater ();          this.rerender()},
     onChangeRow(body)           {this.nRowStr = body; this.correctData ();          this.rerender()},
     onChangeCol(body)           {this.nColStr = body; this.correctData ();           this.rerender()},
@@ -321,10 +333,12 @@ let game = {
 
     create (rerender) {
         this.rerender = rerender
-        this.initialize (this.getDataFromURL ())
+        this.initialize (constData9x6, false)
     },
 
-    initialize(data) {
+    initialize(data, haveParamComponent) {
+        this.isParamComponent = haveParamComponent
+
         let nRow = data.nRow
         let nCol = data.nCol
 
