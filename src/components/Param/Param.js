@@ -1,25 +1,9 @@
 import React from "react"
-import game from "../../redux/store";
 import s from './Param.module.css';
 
-let onChangeRow = (e) => {
-    game.onChangeRow(e.target.value)
-}
-let onChangeCol = (e) => {
-    game.onChangeCol(e.target.value)
-}
-
-let onChangePreferTea = (e) => {
-    game.onChangePreferTea(e.target.value)
-}
-let onChangePreferCoffee = (e) => {
-    game.onChangePreferCoffee(e.target.value)
-}
-let onChangePreferWater = (e) => {
-    game.onChangePreferWater(e.target.value)
-}
-
 const Param = (props) => {
+    let game = props.game
+    let [disabledT, disabledC, disabledW] = (game.randomType === 'W12') ? [true, false, true] : [true, true, true]
     return (
         <div>
             {/*Салон*/}
@@ -27,10 +11,13 @@ const Param = (props) => {
                 <div>
                     <label className={s.paramTitle}>Cabin</label>
                     <label className={s.paramName}>Rows:</label>
-                    <input className={s.paramValue} value={game.nRowStr} onChange={onChangeRow}></input>
+                    <input className={s.paramValue} value={game.nRowStr}
+                           on
+                           onChange={(e) => game.onChangeRow(e.target.value)}></input>
 
                     <label className={s.paramName}>Seats in row:</label>
-                    <input className={s.paramValue} value={game.nColStr} onChange={onChangeCol}></input>
+                    <input className={s.paramValue} value={game.nColStr}
+                           onChange={(e) => game.onChangeCol(e.target.value)}></input>
                 </div>
             </div>
 
@@ -39,14 +26,16 @@ const Param = (props) => {
                 <div>
                     <label className={s.paramTitle}>Answers</label>
                     <label className={s.paramName}>Tea:</label>
-                    <input className={s.paramValue} value={game.nPreferTeaStr} onChange={onChangePreferTea}></input>
+                    <input className={s.paramValue} value={game.nPreferTeaStr}  disabled={disabledT}
+                           onChange={(e) => game.onChangePreferTea(e.target.value)}></input>
 
                     <label className={s.paramName}>Coffee:</label>
-                    <input className={s.paramValue} value={game.nPreferCoffeeStr}
-                           onChange={onChangePreferCoffee}></input>
+                    <input className={s.paramValue} value={game.nPreferCoffeeStr} disabled={disabledC}
+                           onChange={(e) => game.onChangePreferCoffee(e.target.value)}></input>
 
                     <label className={s.paramName}>Water:</label>
-                    <input className={s.paramValue} value={game.nPreferWaterStr} onChange={onChangePreferWater}></input>
+                    <input className={s.paramValue} value={game.nPreferWaterStr} disabled={disabledW}
+                           onChange={(e) => game.onChangePreferWater(e.target.value)}></input>
                 </div>
             </div>
 
@@ -54,7 +43,7 @@ const Param = (props) => {
             <select onChange={(e) => {game.onChangeRandomType (e.target.value)}}>
 
                 <option value={'W123'} selected>1-2-3W & 1C in row</option>
-                <option value={'W12C1'} selected>1-2Water & 1C in row</option>
+                <option value={'W12C1'} selected>1-2W & 1C in row</option>
                 <option value={'W12'}>1-2W</option>
             </select>
 

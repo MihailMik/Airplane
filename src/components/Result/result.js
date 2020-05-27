@@ -4,7 +4,7 @@ import s from './result.module.css';
 const Result = (props) => {
     let game = props.game
 
-    let textPrizeMax    = `Maximum Prize: ${game.prizeMax}`
+    let textPrizeMax    = `Max Prize: ${game.prizeMax}`
     let textPrize       = `Your Prize: ${game.prize}`
     let textGame        = ''
 

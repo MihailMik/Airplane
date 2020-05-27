@@ -333,9 +333,17 @@ let game = {
         }
         this.rerender()
     },
-    // onChangeRow(body)           {this.nRowStr = body; this.correctWater ();          this.rerender()},
-    onChangeRow(body)           {this.nRowStr = body; this.correctData ();          this.rerender()},
-    onChangeCol(body)           {this.nColStr = body; this.correctData ();           this.rerender()},
+    onChangeRow(body) {
+        this.nRowStr = (Number (body) > 12) ? body.charAt (1) : body;
+        this.correctData ();
+        this.rerender()
+    },
+    onChangeCol(body) {
+        this.nColStr = body.charAt (body.length-1);
+        this.correctData ();
+        this.rerender()
+    },
+
     onChangePreferTea(body)     {this.nPreferTeaStr = body; this.correctData ();     this.rerender()},
     onChangePreferCoffee(body)  {this.nPreferCoffeeStr = body; this.correctData ();  this.rerender()},
     onChangePreferWater(body)   {this.nPreferWaterStr = body; this.correctData ();  this.correctWater (); this.rerender()},
