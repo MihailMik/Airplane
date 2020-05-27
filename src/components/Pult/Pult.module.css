@@ -13,9 +13,13 @@
     height: 30px;
     text-align: center;
 }
+.openCodeTitle {
+    font-size: 12px;
+    color: blue;
+}
 .openCode {
     font-size: 12px;
-    color: darkblue;
+    color: red;
 }
 
 .buttonTake {

@@ -20,8 +20,6 @@ let onChangePreferWater = (e) => {
 }
 
 const Param = (props) => {
-    let classHint = (game.gameEnded) ? s.empty : s.classHint
-
     return (
         <div>
             {/*Салон*/}

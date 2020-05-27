@@ -1,7 +1,10 @@
 import s from './gameSelect.module.css'
 import React from "react";
+import game from "../../redux/store";
 
 const GameSelect = (props) => {
+    let classHint = (game.gameEnded) ? s.empty : s.classHint
+
     return (
         <div>
             <label className={s.paramName}>Game:</label>
@@ -13,7 +16,7 @@ const GameSelect = (props) => {
             </select>
 
             {/*Подсказка*/}
-            <span className={s.classHint}>
+            <span className={classHint}>
                 <label>Hint:</label>
                 <input type="checkbox" checked={props.game.hintChecked} onChange={() => props.game.onClickHint()}></input>
             </span>
