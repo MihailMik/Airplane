@@ -589,7 +589,9 @@ let game = {
 
     getSeatName (ind)  {
         const letters = 'ABCDEFGHIJKLM'
-        return  (this.getRow (ind)+1) + letters.charAt(this.getCol (ind))
+        const lettersBuisness = 'ACDF'
+
+        return  (this.getRow (ind)+1) + ((this.nCol === 4) ? lettersBuisness : letters).charAt(this.getCol (ind))
     }
 }
 

@@ -2,9 +2,6 @@ import React from "react"
 import game from "../../redux/store";
 import s from './Param.module.css';
 
-let onClickHint = () => {
-    game.onClickHint()
-}
 let onChangeRow = (e) => {
     game.onChangeRow(e.target.value)
 }
@@ -20,16 +17,6 @@ let onChangePreferCoffee = (e) => {
 }
 let onChangePreferWater = (e) => {
     game.onChangePreferWater(e.target.value)
-}
-
-let onChangePrizeTea = (e) => {
-    game.onChangePrizeTea(e.target.value)
-}
-let onChangePrizeCoffee = (e) => {
-    game.onChangePrizeCoffee(e.target.value)
-}
-let onChangePrizeTeaCoffee = (e) => {
-    game.onChangePrizeTeaCoffee(e.target.value)
 }
 
 const Param = (props) => {
@@ -65,20 +52,6 @@ const Param = (props) => {
                 </div>
             </div>
 
-            {/*Призы*/}
-            <div>
-                <label className={s.paramTitle}>Prize</label>
-                    <label className={s.paramName}>Tea:</label>
-                    <input className={s.paramValue} value={game.prizeTeaStr} onChange={onChangePrizeTea}></input>
-
-                    <label className={s.paramName}>Coffee:</label>
-                    <input className={s.paramValue} value={game.prizeCoffeeStr} onChange={onChangePrizeCoffee}></input>
-
-                    <label className={s.paramName}>Tea-Coffee:</label>
-                    <input className={s.paramValue} value={game.prizeTeaCoffeeStr}
-                           onChange={onChangePrizeTeaCoffee}></input>
-            </div>
-
             <label>Generation:</label>
             <select onChange={(e) => {game.onChangeRandomType (e.target.value)}}>
 
@@ -86,11 +59,6 @@ const Param = (props) => {
                 <option value={'W12'}>1.5 Water</option>
             </select>
 
-            {/*Подсказка*/}
-            <span className={classHint}>
-                <label>Hint:</label>
-                <input type="checkbox" checked={game.hintChecked} onChange={onClickHint}></input>
-            </span>
         </div>
     )
 }
