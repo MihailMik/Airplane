@@ -603,42 +603,17 @@ let game = {
             const C = 1
             const W = 2
             let preferInThreeRow = [
-                [W, T, T, T, T, C],
-                [W, W, T, T, T, C],
-                [W, W, W, T, T, C]
+                [C, W, T, T, T, T],
+                [C, W, W, T, T, T],
+                [C, W, W, W, T, T]
             ]
-            switch (nCol) {
-                case 5:
-                    preferInThreeRow = [
-                        [W, T, T, T, C],
-                        [W, W, T, T, C],
-                        [W, W, W, T, C]
-                    ]
-                    break
-                case 4:
-                    preferInThreeRow = [
-                        [W, T, T, C],
-                        [W, W, T, C],
-                        [W, W, W, C]
-                    ]
-                    break
-                case 3:
-                    preferInThreeRow = [
-                        [W, T, C],
-                        [W, W, T],
-                        [W, W, W]
-                    ]
-                    break
-                default: break
-            }
-
 
             this.seats = []
             for (let j = 0; j < nRow; j++) {
                 let prefer = preferInThreeRow[j % 3].slice()
                 prefer = prefer.map((e) => e === T ? 'Tea' : (e === C) ? 'Coffee' : 'Water')
                 for (let i = 0; i < nCol; i++) {
-                    let ind = Math.floor(Math.random() * prefer.length)
+                    let ind = Math.floor(Math.random() * (nCol-i))
                     let given = prefer[ind]
                     prefer.splice(ind, 1)          //delete element from array
 
@@ -654,7 +629,6 @@ let game = {
             const T = 0
             const C = 1
             const W = 2
-
             const preferInRow = [W, C, T, T, T, T];   //NB! Now 6 seats maximum only
 
             this.seats = []
