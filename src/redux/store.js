@@ -116,11 +116,6 @@ let game = {
         let ind = this.getIndex(row, col)
         if (this.gameEnded || this.seats[ind].served) return false
 
-/*
-        //Вариант 1: второй ряд открываем, когда в первом больше половины мест обслужены
-        return (row === this.activeRow) ||
-              (row === (this.activeRow+1) && this.nServedInRow >= this.nCol/2)
-*/
         //Вариант 2: второй ряд открываем, когда открыт хотя бы один в текущем ряду
         return (row === this.activeRow) ||
                (row === (this.activeRow+1) && this.nServedInRow >= 1)
@@ -197,20 +192,7 @@ let game = {
         let nPreferWater = Number (this.nPreferWaterStr)
         let nRow = Number (this.nRowStr)
         let nCol = Number (this.nColStr)
-        let randomType = this.randomType
-
-
-        //Error analizing
-        if (nPreferTea + nPreferCoffee + nPreferWater !== nRow * nCol) {
-            alert ('Sum of prefers must be equal number of seats')
-            return
-        }
-        if (nCol > 12) {alert ('Number of seats in row is too large'); return}
-        if (nRow > 100)
-        {alert ('Number of rows is too large'); return}
-        if (nCol <=0 || nRow <= 0) {alert ('The parameter must be positive'); return}
-        if (nCol <=0 || nRow <= 0) {alert ('The parameter must be positive'); return}
-
+        let randomType = this.randomTypeStr
 
 /*
         //Вариант запрета соседей-Water
@@ -278,19 +260,18 @@ let game = {
         this.rerender()
     },
 
-    correctWater () {
-        let nRow =  Number (this.nRowStr)
-        this.nPreferWaterStr =  Math.floor(nRow*1.5)
-    },
-
     correctData () {
+        if (isNaN(this.nRowStr))         this.nRowStr = '0'
+        if (isNaN(this.nColStr))         this.nColStr = '0'
+        if (isNaN(this.nPreferCoffeeStr)) this.nPreferCoffeeStr = '0'
+
         let nRow = Math.max (1, Math.min (12, Number (this.nRowStr)))
         let nCol = Math.max (3, Math.min (6, Number (this.nColStr)))
 
         let nPreferWater
         let nPreferCoffee
         let nPreferTea
-        switch (this.randomType) {
+        switch (this.randomTypeStr) {
             case 'W123':
                 nPreferWater =  Math.floor(nRow/3) * 6 + ((nRow%3 === 1) ? 1 : (nRow%3 === 2) ? 3 : 0)
                 nPreferCoffee = nRow
@@ -316,10 +297,9 @@ let game = {
         this.nPreferCoffeeStr = nPreferCoffee
         this.nPreferTeaStr = nPreferTea
     },
-    onChangeRandomType(body)    {
-        this.randomType = body
+    onChangeRandomType(body) {
+        this.randomTypeStr = body
         this.correctData ()
-
         this.rerender()
     },
     onChangeGameSelect(body)           {
@@ -346,7 +326,7 @@ let game = {
 
     onChangePreferTea(body)     {this.nPreferTeaStr = body; this.correctData ();     this.rerender()},
     onChangePreferCoffee(body)  {this.nPreferCoffeeStr = body; this.correctData ();  this.rerender()},
-    onChangePreferWater(body)   {this.nPreferWaterStr = body; this.correctData ();  this.correctWater (); this.rerender()},
+    onChangePreferWater(body)   {this.nPreferWaterStr = body; this.correctData ();   this.rerender()},
 
     onChangePrizeTea(body)      {this.prizeTeaStr = body;       this.rerender()},
     onChangePrizeCoffee(body)   {this.prizeCoffeeStr = body;    this.rerender()},
@@ -389,6 +369,8 @@ let game = {
         this.nServedInRow = 0
 
         //for Param Dialog
+        this.randomTypeStr = data.randomType
+
         this.nRowStr = this.nRow
         this.nColStr = this.nCol
 
@@ -417,8 +399,7 @@ let game = {
             //if (this.nPreferWater !== nRow*1.5) alert('Improper number of Water Answers')
 
             //1. Создаем массив one-two: сначала nRow/2 единиц, потом nRow/2 двоек
-            let
-                one_two = []
+            let one_two = []
             for (let i = 0; i < Math.floor((nRow + 1) / 2); i++) one_two.push(1)   //(nRow+1) - for odd nRow
             for (let i = 0; i < Math.floor(nRow / 2); i++) one_two.push(2)
             //2. Создаем массив one_two_rand - случайно перемешанный one_two
@@ -500,45 +481,44 @@ let game = {
         //Вариант случайной выборки из массива prefer с ограничением:
         //в одной секции кресел (между проходами) не допускаются 2 воды рядом.
         //
-        if (data.randomType === 'Wnot2')
-        {
+        if (data.randomType === 'Wnot2') {
             this.seats = []
 
-        let prefer = []
-        for (let i = 0; i < this.nPreferTea; i++) prefer.push('Tea')
-        for (let i = 0; i < this.nPreferCoffee; i++) prefer.push('Coffee')
-        for (let i = 0; i < this.nPreferWater; i++) prefer.push('Water')
+            let prefer = []
+            for (let i = 0; i < this.nPreferTea; i++) prefer.push('Tea')
+            for (let i = 0; i < this.nPreferCoffee; i++) prefer.push('Coffee')
+            for (let i = 0; i < this.nPreferWater; i++) prefer.push('Water')
 
-        const maxCount = 100
-        while (true) {
-            let preferRand = prefer.slice()
-            this.seats = []
-            let count
-            for (let j = 0; j < nRow; j++) {
-                let prev = false
-                for (let i = 0; i < nCol; i++) {
-                    let given, ind
-                    count = 0
-                    do {
-                        ind = Math.floor(Math.random() * preferRand.length)
-                        given = preferRand[ind]
-                        count++
+            const maxCount = 100
+            while (true) {
+                let preferRand = prefer.slice()
+                this.seats = []
+                let count
+                for (let j = 0; j < nRow; j++) {
+                    let prev = false
+                    for (let i = 0; i < nCol; i++) {
+                        let given, ind
+                        count = 0
+                        do {
+                            ind = Math.floor(Math.random() * preferRand.length)
+                            given = preferRand[ind]
+                            count++
+                            if (count === maxCount) break
+                        } while (given === 'Water' && prev)
                         if (count === maxCount) break
-                    } while (given === 'Water' && prev)
-                    if (count === maxCount) break
-                    preferRand.splice(ind, 1)          //delete element from array
-                    if (given === 'Water') prev = true
-                    else prev = false
-                    if (this.isPass(i + 1, nCol)) prev = false
+                        preferRand.splice(ind, 1)          //delete element from array
+                        if (given === 'Water') prev = true
+                        else prev = false
+                        if (this.isPass(i + 1, nCol)) prev = false
 
-                    let seat = this.createSeat(j, i, given)
-                    this.seats.push(seat)
+                        let seat = this.createSeat(j, i, given)
+                        this.seats.push(seat)
+                    }
+                    if (count === maxCount) break
                 }
-                if (count === maxCount) break
+                if (count !== maxCount) break
             }
-            if (count !== maxCount) break
         }
-    }
 
         //Вавриант абсолютно случайной выборки из массива prefer[]
         //
@@ -611,17 +591,17 @@ let game = {
                     this.seats.push(seat)
                 }
             }
-            this.openCodeStr = this.randomString(32)
-            this.secretKeyStr = this.randomString(20)
-            this.drinksStr = []
-            for (let j = 0, k = 0; j < nRow; j++) {
-                this.drinksStr += (j + 1)
-                for (let i = 0; i < nCol; i++) {
-                    this.drinksStr += this.givenToLetter[this.seats[k++].given]
-                }
-            }
         }
 
+        this.openCodeStr = this.randomString(32)
+        this.secretKeyStr = this.randomString(20)
+        this.drinksStr = []
+        for (let j = 0, k = 0; j < nRow; j++) {
+            this.drinksStr += (j + 1)
+            for (let i = 0; i < nCol; i++) {
+                this.drinksStr += this.givenToLetter[this.seats[k++].given]
+            }
+        }
         this.calcPrizeMax ()
     },
 
