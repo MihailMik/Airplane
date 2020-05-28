@@ -7,24 +7,31 @@ const GameSelect = (props) => {
 
     return (
         <div>
-            <label className={s.paramName}>Game:</label>
-            <select  className={s.select} onChange={ (e) => props.game.onChangeGameSelect(e.target.value)}>
-                <option value={'9x6'}>9x6, 1-2-3W and 1C in row</option>
-                <option value={'9x6a'}>9x6, 1-2W and 1C in row</option>
-                <option value={'9x5'}>9x5, 1-2-3W and 1C in row</option>
-                <option value={'6x4'}>6x4, 1-2W in row, 5C and 9T in all</option>
-                <option value={'param'}>arbitrary params</option>
-            </select>
+            <label className={s.paramName}>Game:
+                <select className={s.select} onChange={(e) => props.game.onChangeGameSelect(e.target.value)}>
+                    <option value={'9x6W123C1'} selected>9x6, 123W&1C in row</option>
+                    <option value={'9x6W12C1'}>9x6, 12W&1C in row</option>
+                    <option value={'9x5W123C1'}>9x5, 123W&1C in row</option>
+                    <option value={'6x4W12'}>6x4, 12W in row, 5C&9T in all</option>
+                    <option value={'6x4W1C1'}>6x4, 1W&1C in row</option>
+                    <option value={'9x5W1C1'}>9x5, 1W&1C in row</option>
+                    <option value={'9x6W1C1'}>9x6, 1W&1C in row</option>
+                    <option value={'param'}>arbitrary params</option>
+                </select>
+            </label>
 
             {/*Подсказка*/}
             <span className={classHint}>
-                <label>Hint:</label>
-                <input type="checkbox" checked={props.game.hintChecked} onChange={() => props.game.onClickHint()}></input>
+                <label>Hint:
+                <input type="checkbox" checked={props.game.hintChecked}
+                       onChange={() => props.game.onClickHint()}></input>
+                    </label>
             </span>
 
             {/*Призы*/}
             <div>
                 <label className={s.paramTitle}>Prize</label>
+
                 <label className={s.paramName}>Tea:</label>
                 <input className={s.paramValue} value={props.game.prizeTeaStr}
                        onChange={(e) => props.game.onChangePrizeTea(e.target.value)}></input>

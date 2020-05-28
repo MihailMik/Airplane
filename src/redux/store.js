@@ -6,7 +6,7 @@
     {<script type='text/javascript' src='js/CryptoJS/md5.js'></script>}
 */
 
-export let constData9x6 = {
+export const constData9x6W123C1 = {
     nRow: 9,
     nCol: 6,
 
@@ -18,10 +18,10 @@ export let constData9x6 = {
     prizeCoffee: 4,
     prizeTeaCoffee: 1,
 
-    randomType: 'W123'
+    randomType: 'W123C1'
 }
 
-export let constData9x6a = {
+export const constData9x6W12C1 = {
     nRow: 9,
     nCol: 6,
 
@@ -36,7 +36,7 @@ export let constData9x6a = {
     randomType: 'W12C1'
 }
 
-export let constData9x5 = {
+export const constData9x5W123C1 = {
     nRow: 9,
     nCol: 5,
 
@@ -48,10 +48,10 @@ export let constData9x5 = {
     prizeCoffee: 4,
     prizeTeaCoffee: 1,
 
-    randomType: 'W123'
+    randomType: 'W123C1'
 }
 
-export let constData6x4 = {
+export const constData6x4W12 = {
     nRow: 6,
     nCol: 4,
 
@@ -64,6 +64,51 @@ export let constData6x4 = {
     prizeTeaCoffee: 1,
 
     randomType: 'W12'
+}
+
+export const constData6x4W1C1 = {
+    nRow: 6,
+    nCol: 4,
+
+    nPreferTea: 12,
+    nPreferCoffee: 6,
+    nPreferWater: 6,
+
+    prizeTea: 2,
+    prizeCoffee: 4,
+    prizeTeaCoffee: 1,
+
+    randomType: 'W1C1'
+}
+
+export const constData9x5W1C1 = {
+    nRow: 9,
+    nCol: 5,
+
+    nPreferTea: 27,
+    nPreferCoffee: 9,
+    nPreferWater: 9,
+
+    prizeTea: 2,
+    prizeCoffee: 5,
+    prizeTeaCoffee: 1,
+
+    randomType: 'W1C1'
+}
+
+export const constData9x6W1C1 = {
+    nRow: 9,
+    nCol: 6,
+
+    nPreferTea: 36,
+    nPreferCoffee: 9,
+    nPreferWater: 9,
+
+    prizeTea: 2,
+    prizeCoffee: 6,
+    prizeTeaCoffee: 1,
+
+    randomType: 'W1C1'
 }
 
 let game = {
@@ -116,9 +161,9 @@ let game = {
         let ind = this.getIndex(row, col)
         if (this.gameEnded || this.seats[ind].served) return false
 
-        //Вариант 2: второй ряд открываем, когда открыт хотя бы один в текущем ряду
+        //Второй ряд открываем, когда открыта не менее половина в текущем ряду
         return (row === this.activeRow) ||
-               (row === (this.activeRow+1) && this.nServedInRow >= 1)
+               (row === (this.activeRow+1) && this.nServedInRow >= this.nCol/2)
     },
 
     seatOffer (ind) {
@@ -272,7 +317,7 @@ let game = {
         let nPreferCoffee
         let nPreferTea
         switch (this.randomTypeStr) {
-            case 'W123':
+            case 'W123C1':
                 nPreferWater =  Math.floor(nRow/3) * 6 + ((nRow%3 === 1) ? 1 : (nRow%3 === 2) ? 3 : 0)
                 nPreferCoffee = nRow
                 nPreferTea = nRow * nCol - nPreferCoffee - nPreferWater
@@ -284,6 +329,11 @@ let game = {
                 break
             case 'W12C1':
                 nPreferWater =  Math.floor(nRow/2) * 3 + ((nRow%2 === 1) ? 1 : 0)
+                nPreferCoffee = nRow
+                nPreferTea = nRow * nCol - nPreferCoffee - nPreferWater
+                break
+            case 'W1C1':
+                nPreferWater =  nRow
                 nPreferCoffee = nRow
                 nPreferTea = nRow * nCol - nPreferCoffee - nPreferWater
                 break
@@ -304,12 +354,16 @@ let game = {
     },
     onChangeGameSelect(body)           {
         switch (body) {
-            case 'param': this.initialize (constData9x6, true); break
-            case '9x5'  : this.initialize (constData9x5, false); break
-            case '6x4'  : this.initialize (constData6x4, false); break
-            case '9x6a' : this.initialize (constData9x6a,false); break
-            case '9x6'  :
-            default     : this.initialize (constData9x6, false); break
+            case 'param'    : this.initialize (constData9x6W123C1,true ); break
+            case '9x5W123C1': this.initialize (constData9x5W123C1,false); break
+            case '6x4W12'   : this.initialize (constData6x4W12   ,false); break
+            case '9x6W12C1' : this.initialize (constData9x6W12C1 ,false); break
+            case '6x4W1C1'  : this.initialize (constData6x4W1C1  ,false); break
+            case '9x5W1C1'  : this.initialize (constData9x5W1C1  ,false); break
+            case '9x6W1C1'  : this.initialize (constData9x6W1C1  ,false); break
+
+            case '9x6W123C1':
+            default         : this.initialize (constData9x6W123C1,false); break
         }
         this.rerender()
     },
@@ -334,7 +388,7 @@ let game = {
 
     create (rerender) {
         this.rerender = rerender
-        this.initialize (constData9x6, false)
+        this.initialize (constData9x6W123C1, false)
     },
 
     initialize(data, haveParamComponent) {
@@ -543,7 +597,7 @@ let game = {
         }
         //Вавриант блока из 3-х рядов
         //
-        if (data.randomType === 'W123') {
+        if (data.randomType === 'W123C1') {
             const T = 0
             const C = 1
             const W = 2
@@ -582,6 +636,30 @@ let game = {
             for (let j = 0; j < nRow; j++) {
                 let prefer = preferInThreeRow[j % 3].slice()
                 prefer = prefer.map((e) => e === T ? 'Tea' : (e === C) ? 'Coffee' : 'Water')
+                for (let i = 0; i < nCol; i++) {
+                    let ind = Math.floor(Math.random() * prefer.length)
+                    let given = prefer[ind]
+                    prefer.splice(ind, 1)          //delete element from array
+
+                    let seat = this.createSeat(j, i, given)
+                    this.seats.push(seat)
+                }
+            }
+        }
+
+        //Вавриант блока из 3-х рядов
+        //
+        if (data.randomType === 'W1C1') {
+            const T = 0
+            const C = 1
+            const W = 2
+
+            let preferInRow = [W, C, T, T, T, T];   //NB! Now 6 seats maximum only
+
+            this.seats = []
+            for (let j = 0; j < nRow; j++) {
+                let prefer = preferInRow.map((e) => e === T ? 'Tea' : (e === C) ? 'Coffee' : 'Water')
+
                 for (let i = 0; i < nCol; i++) {
                     let ind = Math.floor(Math.random() * prefer.length)
                     let given = prefer[ind]
