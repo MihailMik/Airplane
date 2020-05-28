@@ -90,7 +90,7 @@ export const constData9x5W1C1 = {
     nPreferWater: 9,
 
     prizeTea: 2,
-    prizeCoffee: 5,
+    prizeCoffee: 4,
     prizeTeaCoffee: 1,
 
     randomType: 'W1C1'
@@ -105,7 +105,7 @@ export const constData9x6W1C1 = {
     nPreferWater: 9,
 
     prizeTea: 2,
-    prizeCoffee: 6,
+    prizeCoffee: 4,
     prizeTeaCoffee: 1,
 
     randomType: 'W1C1'
@@ -162,8 +162,9 @@ let game = {
         if (this.gameEnded || this.seats[ind].served) return false
 
         //Второй ряд открываем, когда открыта не менее половина в текущем ряду
+        let openSeat = (this.randomType === 'W1C1') ? this.nCol/2 : 1
         return (row === this.activeRow) ||
-               (row === (this.activeRow+1) && this.nServedInRow >= this.nCol/2)
+               (row === (this.activeRow+1) && this.nServedInRow >= openSeat)
     },
 
     seatOffer (ind) {
@@ -647,21 +648,21 @@ let game = {
             }
         }
 
-        //Вавриант блока из 3-х рядов
+        //Вавриант 1 вода 1 кофу в каждом ряду
         //
         if (data.randomType === 'W1C1') {
             const T = 0
             const C = 1
             const W = 2
 
-            let preferInRow = [W, C, T, T, T, T];   //NB! Now 6 seats maximum only
+            const preferInRow = [W, C, T, T, T, T];   //NB! Now 6 seats maximum only
 
             this.seats = []
             for (let j = 0; j < nRow; j++) {
                 let prefer = preferInRow.map((e) => e === T ? 'Tea' : (e === C) ? 'Coffee' : 'Water')
 
                 for (let i = 0; i < nCol; i++) {
-                    let ind = Math.floor(Math.random() * prefer.length)
+                    let ind = Math.floor(Math.random() * (nCol-i))
                     let given = prefer[ind]
                     prefer.splice(ind, 1)          //delete element from array
 
