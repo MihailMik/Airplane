@@ -15,7 +15,7 @@ const GameSelect = (props) => {
                     <option value={'6x4W12'}>6x4, 12W in row, 5C&9T in all</option>
                     <option value={'6x4W1C1'}>6x4, 1W&1C in row</option>
                     <option value={'9x5W1C1'}>9x5, 1W&1C in row</option>
-                    <option value={'9x6W1C1'}>9x6, 1W&1C in row</option>
+                    <option value={'12x6W1C1'}>12x6, 1W&1C in row</option>
                     <option value={'param'}>arbitrary params</option>
                 </select>
             </label>

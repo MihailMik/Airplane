@@ -96,13 +96,13 @@ export const constData9x5W1C1 = {
     randomType: 'W1C1'
 }
 
-export const constData9x6W1C1 = {
-    nRow: 9,
+export const constData12x6W1C1 = {
+    nRow: 12,
     nCol: 6,
 
-    nPreferTea: 36,
-    nPreferCoffee: 9,
-    nPreferWater: 9,
+    nPreferTea: 48,
+    nPreferCoffee: 12,
+    nPreferWater: 12,
 
     prizeTea: 2,
     prizeCoffee: 4,
@@ -361,7 +361,7 @@ let game = {
             case '9x6W12C1' : this.initialize (constData9x6W12C1 ,false); break
             case '6x4W1C1'  : this.initialize (constData6x4W1C1  ,false); break
             case '9x5W1C1'  : this.initialize (constData9x5W1C1  ,false); break
-            case '9x6W1C1'  : this.initialize (constData9x6W1C1  ,false); break
+            case '12x6W1C1' : this.initialize (constData12x6W1C1 ,false); break
 
             case '9x6W123C1':
             default         : this.initialize (constData9x6W123C1,false); break
