@@ -12,7 +12,7 @@ const Row = (props) => {
         let stewardRow = game.activeRow
         let stewardPict = `/img/girl_N_0.png`
 
-        if (game.nextServed) {
+        if (game.nextServed !== undefined) {
             let stewardCol = game.getCol (game.nextServed)
             stewardRow = game.getRow (game.nextServed)
             stewardPict = (stewardCol >= game.nCol/2) ?`/img/girl_N0_right.png`:`/img/girl_N0_left.png`
