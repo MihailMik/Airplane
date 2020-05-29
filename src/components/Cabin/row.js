@@ -9,13 +9,12 @@ const Row = (props) => {
     const isPass = game.isPass
 
     const getSteward = () => {
-
         let stewardRow = game.activeRow
         let stewardPict = `/img/Truck_0.png`
         if (game.nextServed !== undefined) {
             let stewardCol = game.getCol (game.nextServed)
             stewardRow = game.getRow (game.nextServed)
-            stewardPict = (stewardCol >= game.nCol/2) ?`/img/girl_N0_right.png`:`/img/girl_N0_left.png`
+            stewardPict = (stewardCol >= game.nCol/2) ?`/img/Truck_R.png`:`/img/Truck_L.png`
         }
 
         let classSteward
