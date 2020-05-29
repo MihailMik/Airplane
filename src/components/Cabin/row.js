@@ -12,10 +12,10 @@ const Row = (props) => {
         const pict = {undefined     : '/img/Truck_0.png',
                       leftTea       : '/img/L_T.png',
                       leftCoffee    : '/img/L_C.png',
-                      leftTeaCoffee : '/img/Truck_L.png',
+                      leftTeaCoffee : '/img/L_CT.png',
                       rightTea      : '/img/R_T.png',
                       rightCoffee   : '/img/R_C.png',
-                      rightTeaCoffee: '/img/Truck_R.png'
+                      rightTeaCoffee: '/img/R_CT.png'
         }
 
         let stewardRow = game.activeRow
