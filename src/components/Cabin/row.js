@@ -9,9 +9,9 @@ const Row = (props) => {
     const isPass = game.isPass
 
     const getSteward = () => {
-        let stewardRow = game.activeRow
-        let stewardPict = `/img/girl_N_0.png`
 
+        let stewardRow = game.activeRow
+        let stewardPict = `/img/Truck_0.png`
         if (game.nextServed !== undefined) {
             let stewardCol = game.getCol (game.nextServed)
             stewardRow = game.getRow (game.nextServed)
