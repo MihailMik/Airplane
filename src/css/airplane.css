@@ -4,7 +4,8 @@
     left: 50%;
     bottom: 0;
     z-index: 3;
-    height: 4rem;
+    /*height: 4rem;*/
+    height: 80px;
 }
 .steward5 {
     left: 59%;
