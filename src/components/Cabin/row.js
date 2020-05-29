@@ -9,12 +9,29 @@ const Row = (props) => {
     const isPass = game.isPass
 
     const getSteward = () => {
+        const pict = {undefined     : '/img/Truck_0.png',
+                      leftTea       : '/img/L_T.png',
+                      leftCoffee    : '/img/L_C.png',
+                      leftTeaCoffee : '/img/Truck_L.png',
+                      rightTea      : '/img/R_T.png',
+                      rightCoffee   : '/img/R_C.png',
+                      rightTeaCoffee: '/img/Truck_R.png'
+        }
+
         let stewardRow = game.activeRow
-        let stewardPict = `/img/Truck_0.png`
+        let stewardPict = pict.undefined
+
         if (game.nextServed !== undefined) {
             let stewardCol = game.getCol (game.nextServed)
             stewardRow = game.getRow (game.nextServed)
-            stewardPict = (stewardCol >= game.nCol/2) ?`/img/Truck_R.png`:`/img/Truck_L.png`
+
+            let left = (stewardCol < game.nCol/2)
+            if (left) {
+                stewardPict = game.isQuestionTea ? pict.leftTea : game.isQuestionCoffee ? pict.leftCoffee : pict.leftTeaCoffee
+            }
+            else {
+                stewardPict = game.isQuestionTea ? pict.rightTea : game.isQuestionCoffee ? pict.rightCoffee : pict.rightTeaCoffee
+            }
         }
 
         let classSteward
