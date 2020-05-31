@@ -5,6 +5,7 @@ const StartAndEnd = (props) => {
     let game = props.game
 
     return (
+
         <div className={s.startGame}>
             {/*Button "New Game"*/}
             <button className={s.buttonNewGame}

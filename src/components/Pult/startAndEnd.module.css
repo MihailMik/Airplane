@@ -14,6 +14,10 @@
     font-size: 20px;
     margin-left: 10%;
 }
+.classDisabled {
+    background-color: #d0d0d0;
+}
+
 
 /*
 .buttonEndGameDisable {

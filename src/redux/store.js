@@ -136,6 +136,10 @@ let game = {
         game.hintChecked = !game.hintChecked
         game.rerender ()
     },
+    onClickFee () {
+        game.feeChecked = !game.feeChecked
+        game.rerender ()
+    },
 
     isPass (col, nCol) {
         const passes = [
@@ -174,6 +178,17 @@ let game = {
 
         if (seat.served || !game.isSeatEnabled (row, col)) {
             return
+        }
+
+        //Были ли необслуженные пассажиры
+        if (game.feeChecked && game.activeRow < row) {
+            debugger
+            for (let i = game.activeRow*game.nCol; i < (game.activeRow+1)*game.nCol; i++) {
+                let seat = game.seats[i]
+
+                if (!seat.served && (seat.given === 'Tea' || seat.given === 'Coffee'))
+                    game.prize -= 1
+            }
         }
 
         seat.served = true
@@ -281,7 +296,6 @@ let game = {
     },
 
     onClickEndGame () {
-        // game.hintChecked = true
         game.gameEnded = true
 
         this.rerender ()
@@ -416,6 +430,7 @@ let game = {
         this.isQuestionTeaCoffee = false
 
         this.gameEnded = false
+        this.feeChecked = false
         this.hintChecked = false
         this.nSize = nRow * nCol
         this.nextServed = undefined

@@ -41,17 +41,25 @@ const Pult = (props) => {
     }
     else ind = game.nextServed
 
-    let textTake = "Take Prize"
-    let stateButtonTake = s.buttonTake
-    let disabledTake = false
-    if (game.prize &&
-        ((game.activeRow && game.activeRow % 3 === 0 && game.nServedInRow === 0) ||
-        (game.activeRow % 3 === 2 && game.nServedInRow >= game.nCol/2) ||
-        game.gameEnded)) {
+    let disabledTake
+    let stateButtonTake
+    if (!game.prize) disabledTake = true
+    else if (game.gameEnded) disabledTake = false
+    else if (game.randomType === 'W1C1') {
+        disabledTake = (game.activeRow !== game.nRow-1 || game.nServedInRow < game.nCol/2)
     } else {
+        disabledTake = !((game.activeRow && game.activeRow % 3 === 0 && game.nServedInRow === 0) ||
+            (game.activeRow % 3 === 2 && game.nServedInRow >= game.nCol / 2))
+    }
+    if (disabledTake) {
         disabledTake = true;
         stateButtonTake = s.buttonTakeDisable
     }
+    else {
+        stateButtonTake = s.buttonTake
+        disabledTake = false
+    }
+    let textTake = "Take Prize"
 
     let ask = game.isQuestionTea ? 'Tea?' : game.isQuestionCoffee ? 'Coffee?' : 'Tea-Coffee?'
 
