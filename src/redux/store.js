@@ -182,7 +182,6 @@ let game = {
 
         //Были ли необслуженные пассажиры
         if (game.feeChecked && game.activeRow < row) {
-            debugger
             for (let i = game.activeRow*game.nCol; i < (game.activeRow+1)*game.nCol; i++) {
                 let seat = game.seats[i]
 
@@ -228,7 +227,7 @@ let game = {
 
         if (game.activeRow === game.nRow) {
             game.onClickEndGame()
-            game.onClickEndGame()   //!! Doubled call to changed hint in proper state
+            // game.onClickEndGame()   //!! Doubled call to changed hint in proper state
         }
         else
             game.rerender()
@@ -296,7 +295,19 @@ let game = {
     },
 
     onClickEndGame () {
+        //Уже заканчивали игру?
+        if (game.gameEnded ) return
         game.gameEnded = true
+
+        //Были ли необслуженные пассажиры
+        if (game.feeChecked && game.activeRow < game.nRow) {
+            for (let i = game.activeRow*game.nCol; i < (game.activeRow+1)*game.nCol; i++) {
+                let seat = game.seats[i]
+                if (!seat.served && (seat.given === 'Tea' || seat.given === 'Coffee')) {
+                    game.prize -= 1
+                }
+            }
+        }
 
         this.rerender ()
     },
