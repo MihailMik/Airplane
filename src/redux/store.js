@@ -380,16 +380,15 @@ let game = {
     },
     onChangeGameSelect(body)           {
         switch (body) {
-            case 'param'    : this.initialize (constData9x6W123C1,true ); break
+            case 'param'    : this.initialize (constData12x6W1C1,true ); break
             case '9x5W123C1': this.initialize (constData9x5W123C1,false); break
             case '6x4W12'   : this.initialize (constData6x4W12   ,false); break
             case '9x6W12C1' : this.initialize (constData9x6W12C1 ,false); break
             case '6x4W1C1'  : this.initialize (constData6x4W1C1  ,false); break
             case '9x5W1C1'  : this.initialize (constData9x5W1C1  ,false); break
             case '12x6W1C1' : this.initialize (constData12x6W1C1 ,false); break
-
-            case '9x6W123C1':
-            default         : this.initialize (constData9x6W123C1,false); break
+            case '9x6W123C1': this.initialize (constData9x6W123C1,false); break
+            default         : this.initialize (constData12x6W1C1 ,false); break
         }
         this.rerender()
     },
@@ -414,7 +413,7 @@ let game = {
 
     create (rerender) {
         this.rerender = rerender
-        this.initialize (constData9x6W123C1, false)
+        this.initialize (constData12x6W1C1, false)
     },
 
     initialize(data, haveParamComponent) {
