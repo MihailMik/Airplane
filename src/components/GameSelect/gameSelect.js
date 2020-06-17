@@ -21,18 +21,26 @@ const GameSelect = (props) => {
             </label>
 
             {/*Штраф*/}
+{/*
             <span className={s.classFee}>
                 <label>Fee:
                 <input type="checkbox" checked={props.game.feeChecked}
                        onChange={() => props.game.onClickFee()}></input>
                     </label>
             </span>
+*/}
 
-            {/*Подсказка*/}
-            <span className={classHint}>
-                <label>Hint:
-                <input type="checkbox" checked={props.game.hintChecked}
-                       onChange={() => props.game.onClickHint()}></input>
+            <span className={s.classFee}>
+                <label>Fee1:
+                <input type="radio" checked={props.game.feeChecked}
+                       onChange={() => props.game.onClickFee()}></input>
+                    </label>
+            </span>
+
+            <span className={s.classFee}>
+                <label>Fee2:
+                <input type="radio" checked={!props.game.feeChecked}
+                       onChange={() => props.game.onClickFee()}></input>
                     </label>
             </span>
 
@@ -40,17 +48,26 @@ const GameSelect = (props) => {
             <div>
                 <label className={s.paramTitle}>Prize</label>
 
-                <label className={s.paramName}>Tea:</label>
-                <input className={s.paramValue} value={props.game.prizeTeaStr}
-                       onChange={(e) => props.game.onChangePrizeTea(e.target.value)}></input>
+                <label className={s.paramName}>Tea:2</label>
+                {/*<input className={s.paramValue} disabled value={props.game.prizeTeaStr}*/}
+                {/*       onChange={(e) => props.game.onChangePrizeTea(e.target.value)}></input>*/}
 
                 <label className={s.paramName}>Coffee:</label>
                 <input className={s.paramValue} value={props.game.prizeCoffeeStr}
                        onChange={(e) => props.game.onChangePrizeCoffee(e.target.value)}></input>
 
-                <label className={s.paramName}>Tea-Coffee:</label>
-                <input className={s.paramValue} value={props.game.prizeTeaCoffeeStr}
-                       onChange={(e) => props.game.onChangePrizeTeaCoffee(e.target.value)}></input>
+                <label className={s.paramName}>Tea-Coffee:1</label>
+                {/*<input className={s.paramValue} disabled value={props.game.prizeTeaCoffeeStr}*/}
+                {/*       onChange={(e) => props.game.onChangePrizeTeaCoffee(e.target.value)}></input>*/}
+
+                {/*Подсказка*/}
+                <span className={classHint}>
+                <label>Hint:
+                <input type="checkbox" checked={props.game.hintChecked}
+                       onChange={() => props.game.onClickHint()}></input>
+                    </label>
+            </span>
+
             </div>
         </div>
     )

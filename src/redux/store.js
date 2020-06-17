@@ -90,7 +90,7 @@ export const constData9x5W1C1 = {
     nPreferWater: 9,
 
     prizeTea: 2,
-    prizeCoffee: 4,
+    prizeCoffee: 6,
     prizeTeaCoffee: 1,
 
     randomType: 'W1C1'
@@ -105,7 +105,7 @@ export const constData12x6W1C1 = {
     nPreferWater: 12,
 
     prizeTea: 2,
-    prizeCoffee: 4,
+    prizeCoffee: 8,
     prizeTeaCoffee: 1,
 
     randomType: 'W1C1'
@@ -165,8 +165,9 @@ let game = {
         let ind = this.getIndex(row, col)
         if (this.gameEnded || this.seats[ind].served) return false
 
-        //Второй ряд открываем, когда открыта не менее половина в текущем ряду
-        let openSeat = (this.randomType === 'W1C1') ? this.nCol/2 : 1
+        //Второй ряд открываем, когда открыта не менее половина в текущем ряду для feeChecked = true
+        //let openSeat = (this.randomType === 'W1C1') ? this.nCol/2 : 1 //Version befor 44
+        let openSeat = (this.randomType === 'W1C1' && this.feeChecked) ? this.nCol/2 : 1
         return (row === this.activeRow) ||
                (row === (this.activeRow+1) && this.nServedInRow >= openSeat)
     },
@@ -181,14 +182,17 @@ let game = {
         }
 
         //Были ли необслуженные пассажиры
-        if (game.feeChecked && game.activeRow < row) {
-            for (let i = game.activeRow*game.nCol; i < (game.activeRow+1)*game.nCol; i++) {
-                let seat = game.seats[i]
+        game.reducePrize (row);
+        /* old version
+                if (game.feeChecked && game.activeRow < row) {
+                    for (let i = game.activeRow*game.nCol; i < (game.activeRow+1)*game.nCol; i++) {
+                        let seat = game.seats[i]
 
-                if (!seat.served && (seat.given === 'Tea' || seat.given === 'Coffee'))
-                    game.prize -= 1
-            }
-        }
+                        if (!seat.served && (seat.given === 'Tea' || seat.given === 'Coffee'))
+                            game.prize -= 1
+                    }
+                }
+        */
 
         seat.served = true
         seat.isQuestionTea = game.isQuestionTea
@@ -294,12 +298,40 @@ let game = {
         this.rerender ()
     },
 
+    reducePrize(row) {
+        //Были ли необслуженные пассажиры
+        /*Version befor 44
+                if (game.feeChecked && game.activeRow < row) {
+                    for (let i = game.activeRow * game.nCol; i < (game.activeRow + 1) * game.nCol; i++) {
+                        let seat = game.seats[i]
+
+                        if (!seat.served && (seat.given === 'Tea' || seat.given === 'Coffee'))
+                            game.prize -= 1
+                    }
+                }
+            },
+        }
+*/
+        //Version 44
+        if (game.activeRow < row) {
+            for (let i = game.activeRow * game.nCol; i < (game.activeRow + 1) * game.nCol; i++) {
+                let seat = game.seats[i]
+
+                if (!seat.served && (seat.given === 'Tea' || seat.given === 'Coffee'))
+                    game.prize -= game.feeChecked ? 1 : 0.5;
+            }
+        }
+    },
+
+
     onClickEndGame () {
         //Уже заканчивали игру?
         if (game.gameEnded ) return
         game.gameEnded = true
 
         //Были ли необслуженные пассажиры
+        game.reducePrize (game.nRow);
+/*
         if (game.feeChecked && game.activeRow < game.nRow) {
             for (let i = game.activeRow*game.nCol; i < (game.activeRow+1)*game.nCol; i++) {
                 let seat = game.seats[i]
@@ -308,6 +340,8 @@ let game = {
                 }
             }
         }
+*/
+
 
         this.rerender ()
     },
@@ -380,14 +414,14 @@ let game = {
     },
     onChangeGameSelect(body)           {
         switch (body) {
-            case 'param'    : this.initialize (constData12x6W1C1,true ); break
+            case '9x6W123C1': this.initialize (constData9x6W123C1,false); break
             case '9x5W123C1': this.initialize (constData9x5W123C1,false); break
             case '6x4W12'   : this.initialize (constData6x4W12   ,false); break
             case '9x6W12C1' : this.initialize (constData9x6W12C1 ,false); break
             case '6x4W1C1'  : this.initialize (constData6x4W1C1  ,false); break
             case '9x5W1C1'  : this.initialize (constData9x5W1C1  ,false); break
             case '12x6W1C1' : this.initialize (constData12x6W1C1 ,false); break
-            case '9x6W123C1': this.initialize (constData9x6W123C1,false); break
+            case 'param'    : this.initialize (constData12x6W1C1,true ); break
             default         : this.initialize (constData12x6W1C1 ,false); break
         }
         this.rerender()
@@ -440,7 +474,7 @@ let game = {
         this.isQuestionTeaCoffee = false
 
         this.gameEnded = false
-        this.feeChecked = false
+        this.feeChecked = true
         this.hintChecked = false
         this.nSize = nRow * nCol
         this.nextServed = undefined
