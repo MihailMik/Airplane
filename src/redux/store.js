@@ -318,7 +318,8 @@ let game = {
                 let seat = game.seats[i]
 
                 if (!seat.served && (seat.given === 'Tea' || seat.given === 'Coffee'))
-                    game.prize -= game.feeChecked ? 1 : 0.5;
+                    game.prize -= game.feeChecked ? 1 :
+                        (seat.given === 'Tea' ? game.prizeTea/2 : game.prizeCoffee/2);
             }
         }
     },
