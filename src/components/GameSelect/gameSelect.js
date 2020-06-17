@@ -41,13 +41,12 @@ const GameSelect = (props) => {
                 <div className={s.Left}>
                     <label className={s.paramTitle}>Prize</label>
 
-                    <label className={s.paramName}>Tea:2</label>
+                    <label className={s.paramName}>Tea:2 Tea/Coffee:1</label>
 
                     <label className={s.paramName}>Coffee:</label>
                     <input className={s.paramValue} value={props.game.prizeCoffeeStr}
-                           onChange={(e) => props.game.onChangePrizeCoffee(e.target.value)}></input>
-
-                    <label className={s.paramName}>Tea/Coffee:1</label>
+                           onChange={(e) => props.game.onChangePrizeCoffee(e.target.value)}>
+                    </input>
                 </div>
 
                 {/*Подсказка*/}
