@@ -136,8 +136,8 @@ let game = {
         game.hintChecked = !game.hintChecked
         game.rerender ()
     },
-    onClickFee () {
-        game.feeChecked = !game.feeChecked
+    onClickFee (body) {
+        this.feeType = body;
         game.rerender ()
     },
 
@@ -166,8 +166,7 @@ let game = {
         if (this.gameEnded || this.seats[ind].served) return false
 
         //Второй ряд открываем, когда открыта не менее половина в текущем ряду для feeChecked = true
-        //let openSeat = (this.randomType === 'W1C1') ? this.nCol/2 : 1 //Version befor 44
-        let openSeat = (this.randomType === 'W1C1' && this.feeChecked) ? this.nCol/2 : 1
+        let openSeat = (this.randomType === 'W1C1' && this.feeType!=='Fee2') ? this.nCol/2 : 1
         return (row === this.activeRow) ||
                (row === (this.activeRow+1) && this.nServedInRow >= openSeat)
     },
@@ -183,16 +182,6 @@ let game = {
 
         //Были ли необслуженные пассажиры
         game.reducePrize (row);
-        /* old version
-                if (game.feeChecked && game.activeRow < row) {
-                    for (let i = game.activeRow*game.nCol; i < (game.activeRow+1)*game.nCol; i++) {
-                        let seat = game.seats[i]
-
-                        if (!seat.served && (seat.given === 'Tea' || seat.given === 'Coffee'))
-                            game.prize -= 1
-                    }
-                }
-        */
 
         seat.served = true
         seat.isQuestionTea = game.isQuestionTea
@@ -299,26 +288,14 @@ let game = {
     },
 
     reducePrize(row) {
+        if (game.feeType==='Fee0') return;  //No Fee, if Fee0
         //Были ли необслуженные пассажиры
-        /*Version befor 44
-                if (game.feeChecked && game.activeRow < row) {
-                    for (let i = game.activeRow * game.nCol; i < (game.activeRow + 1) * game.nCol; i++) {
-                        let seat = game.seats[i]
-
-                        if (!seat.served && (seat.given === 'Tea' || seat.given === 'Coffee'))
-                            game.prize -= 1
-                    }
-                }
-            },
-        }
-*/
-        //Version 44
         if (game.activeRow < row) {
             for (let i = game.activeRow * game.nCol; i < (game.activeRow + 1) * game.nCol; i++) {
                 let seat = game.seats[i]
 
                 if (!seat.served && (seat.given === 'Tea' || seat.given === 'Coffee'))
-                    game.prize -= game.feeChecked ? 1 :
+                    game.prize -= game.feeType==='Fee1' ? 1 :
                         (seat.given === 'Tea' ? game.prizeTea/2 : game.prizeCoffee/2);
             }
         }
@@ -329,20 +306,10 @@ let game = {
         //Уже заканчивали игру?
         if (game.gameEnded ) return
         game.gameEnded = true
+        game.hintChecked = false
 
         //Были ли необслуженные пассажиры
         game.reducePrize (game.nRow);
-/*
-        if (game.feeChecked && game.activeRow < game.nRow) {
-            for (let i = game.activeRow*game.nCol; i < (game.activeRow+1)*game.nCol; i++) {
-                let seat = game.seats[i]
-                if (!seat.served && (seat.given === 'Tea' || seat.given === 'Coffee')) {
-                    game.prize -= 1
-                }
-            }
-        }
-*/
-
 
         this.rerender ()
     },
@@ -475,7 +442,7 @@ let game = {
         this.isQuestionTeaCoffee = false
 
         this.gameEnded = false
-        this.feeChecked = true
+        this.feeType = 'Fee1'
         this.hintChecked = false
         this.nSize = nRow * nCol
         this.nextServed = undefined

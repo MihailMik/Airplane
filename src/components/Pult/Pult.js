@@ -43,10 +43,10 @@ const Pult = (props) => {
 
     let disabledTake
     let stateButtonTake
-    if (!game.prize) disabledTake = true
+    if (game.prize<=0) disabledTake = true
     else if (game.gameEnded) disabledTake = false
     else if (game.randomType === 'W1C1') {
-        disabledTake = (game.activeRow !== game.nRow-1 || game.nServedInRow < game.nCol/2)
+        disabledTake = (game.activeRow !== game.nRow-1 || game.nServedInRow < 1 || (game.nServedInRow<game.nCol/2 && game.feeType!=='Fee2'))
     } else {
         disabledTake = !((game.activeRow && game.activeRow % 3 === 0 && game.nServedInRow === 0) ||
             (game.activeRow % 3 === 2 && game.nServedInRow >= game.nCol / 2))
@@ -61,7 +61,7 @@ const Pult = (props) => {
     }
     let textTake = "Take Prize"
 
-    let ask = game.isQuestionTea ? 'Tea?' : game.isQuestionCoffee ? 'Coffee?' : 'Tea-Coffee?'
+    let ask = game.isQuestionTea ? 'Tea?' : game.isQuestionCoffee ? 'Coffee?' : 'Tea/Coffee?'
 
     let statePult = s.pult
     if (!game.gameEnded && ind < game.nSize) {
@@ -71,9 +71,9 @@ const Pult = (props) => {
         statePult = s.pultEmpty
     }
 
-    let stateTea = (game.isQuestionTea ? s.buttonActive : s.buttonNonActive) + ' ' + s.buttonGeneral
-    let stateCoffee = (game.isQuestionCoffee ? s.buttonActive : s.buttonNonActive) + ' ' + s.buttonCoffee
-    let stateTeaCoffee = (game.isQuestionTeaCoffee ? s.buttonActive : s.buttonNonActive) + ' ' + s.buttonGeneral
+    let stateTea        = (game.isQuestionTea       ? s.buttonActive : s.buttonNonActive) + ' ' + s.buttonGeneral
+    let stateTeaCoffee  = (game.isQuestionTeaCoffee ? s.buttonActive : s.buttonNonActive) + ' ' + s.buttonTeaCoffee
+    let stateCoffee     = (game.isQuestionCoffee    ? s.buttonActive : s.buttonNonActive) + ' ' + s.buttonGeneral
 
     return (
         <div>
@@ -82,13 +82,12 @@ const Pult = (props) => {
                     Tea?
                 </button>
 
+                <button className={stateTeaCoffee} onClick={onClickQuestionTeaCoffee}>
+                    Tea/Coffee?
+                </button>
 
                 <button className={stateCoffee} onClick={onClickQuestionCoffee}>
                     Coffee?
-                </button>
-
-                <button className={stateTeaCoffee} onClick={onClickQuestionTeaCoffee}>
-                    Tea-Coffee?
                 </button>
             </div>
 
