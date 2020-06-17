@@ -27,7 +27,7 @@ const Seat = (props) => {
         else if (!gameEnded) text = ''
     }
     if (ind === nextServed && !gameEnded)
-        text = game.isQuestionTea ? 'Tea?' : (game.isQuestionCoffee ? 'Coffee?' : 'Tea-Coffee?')
+        text = game.isQuestionTea ? 'Tea?' : (game.isQuestionCoffee ? 'Coffee?' : 'Tea/Coffee?')
 
     //Is button enabled for clicking
     const enabled = game.isSeatEnabled (row, col)
@@ -71,8 +71,8 @@ const Seat = (props) => {
     if (ind === nextServed && !gameEnded) clas += ' ' + s.nextServed
 
     let seatName = game.getSeatName (ind)
-    if (text === 'Tea-Coffee?') {
-        text = 'Tea-'
+    if (text === 'Tea/Coffee?') {
+        text = 'Tea/'
         seatName = 'Coffee?'
     }
     return (
