@@ -17,3 +17,21 @@
 .row-with-steward {
     position: relative;
 }
+.phase1 {bottom: 4px;}
+.phase2 {bottom: 8px;}
+.phase3 {bottom: 12px;}
+.phase4 {bottom: 16px;}
+.phase5 {bottom: 20px;}
+.phase6 {bottom: 24px;}
+.phase7 {bottom: 28px;}
+.phase8 {bottom: 32px;}
+.phase9 {bottom: 36px;}
+.phase-1 {bottom: -4px;}
+.phase-2 {bottom: -8px;}
+.phase-3 {bottom: -12px;}
+.phase-4 {bottom: -16px;}
+.phase-5 {bottom: -20px;}
+.phase-6 {bottom: -24px;}
+.phase-7 {bottom: -28px;}
+.phase-8 {bottom: -32px;}
+.phase-9 {bottom: -36px;}

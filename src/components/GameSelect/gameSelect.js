@@ -6,7 +6,7 @@ const GameSelect = (props) => {
         <div>
             <div className={s.Row}>
                 <div className={s.Select}>
-                    <label>Game:
+                    <label>Opt:
                         <select className={s.select} onChange={(e) => props.game.onChangeGameSelect(e.target.value)}>
                             <option value={'9x6W123C1'}>9x6, 123W&1C in row</option>
                             <option value={'9x6W12C1'}>9x6, 12W&1C in row</option>
@@ -19,20 +19,20 @@ const GameSelect = (props) => {
                     </label>
                 </div>
                 <div className={s.Right}>
-                    <label className={s.Fee}>Fee0
+
                         <input type="radio" value='Fee0' checked={props.game.feeType==='Fee0'}
                                onChange={(e) => props.game.onClickFee(e.target.value)}></input>
-                    </label>
-                    <label className={s.Fee}>Fee1
+                    <label className={s.Fee}>Fee0</label>
+
                         <input type="radio" value='Fee1'  checked={props.game.feeType==='Fee1'}
                                onChange={(e) => props.game.onClickFee(e.target.value)}></input>
-                    </label>
+                    <label className={s.Fee}>Fee1</label>
 
-                    <label className={s.Fee}>Fee2
+
                         <input type="radio" value='Fee2'  checked={props.game.feeType==='Fee2'}
                                onChange={(e) => props.game.onClickFee(e.target.value)}>
                         </input>
-                    </label>
+                    <label className={s.Fee}>Fee2</label>
 
                 </div>
             </div>
@@ -51,10 +51,9 @@ const GameSelect = (props) => {
 
                 {/*Подсказка*/}
                 <div className={props.game.gameEnded ? s.empty:s.Right}>
-                    <label>Hint:
                         <input  type="checkbox" checked={props.game.hintChecked}
                                onChange={() => props.game.onClickHint()}></input>
-                    </label>
+                    <label>Hint</label>
                 </div>
             </div>
         </div>

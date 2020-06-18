@@ -171,6 +171,22 @@ let game = {
                (row === (this.activeRow+1) && this.nServedInRow >= openSeat)
     },
 
+    handleInterval () {
+        if (game.timerId === undefined) return
+        if (game.phase > 0) {
+            game.phase--;
+        }
+        else if (game.phase < 0) {
+            game.phase++;
+        }
+        else {                              //game.phase === 0
+            if (game.timerId) {
+                clearInterval(game.timerId)
+                game.timerId = undefined
+            }
+        }
+        game.rerender ()
+    },
     seatOffer (ind) {
         let row = game.getRow (ind)
         let col = game.getCol (ind)
@@ -232,6 +248,18 @@ let game = {
     },
 
     onClickSeat (ind) {
+        //Вычисляем фазу движения стюардессы
+        let row = game.getRow(ind)                     
+        let oldRow = (game.nextServed === undefined) ? game.activeRow : game.getRow(game.nextServed)
+
+        if (row !== oldRow) {
+            game.phase = (row > oldRow) ? 9 : -9
+
+            if (game.timerId) clearInterval(game.timerId);
+
+            game.timerId = setInterval(this.handleInterval, 50);
+        }
+
         game.nextServed = ind
         game.rerender()
     },
@@ -426,6 +454,8 @@ let game = {
 
         this.nRow = nRow
         this.nCol = nCol
+
+        this.phase = 0
 
         this.nPreferTea = data.nPreferTea
         this.nPreferCoffee = data.nPreferCoffee
