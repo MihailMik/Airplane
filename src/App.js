@@ -1,5 +1,5 @@
 import React from 'react';
-import './css/airplane.css';
+import './scss/airplane.scss';
 // import {HashRouter, Route, Switch} from "react-router-dom";
 // import {constData6x4, constData9x5, constData9x6} from "./redux/store";
 // import {GameComponent} from "./components/Game";

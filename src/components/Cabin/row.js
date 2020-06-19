@@ -34,37 +34,9 @@ const Row = (props) => {
             }
         }
 
-        let classSteward
-        switch (nCol) {
-            case 3: classSteward = 'steward steward3'; break
-            case 5: classSteward = 'steward steward5'; break
-            default: classSteward = 'steward'; break
-        }
-        switch (game.phase)
-        {
-            case 9: classSteward += ' phase9'; break;
-            case 8: classSteward += ' phase8'; break;
-            case 7: classSteward += ' phase7'; break;
-            case 6: classSteward += ' phase6'; break;
-            case 5: classSteward += ' phase5'; break;
-            case 4: classSteward += ' phase4'; break;
-            case 3: classSteward += ' phase3'; break;
-            case 2: classSteward += ' phase2'; break;
-            case 1: classSteward += ' phase1'; break;
-            case -9: classSteward += ' phase-9'; break;
-            case -8: classSteward += ' phase-8'; break;
-            case -7: classSteward += ' phase-7'; break;
-            case -6: classSteward += ' phase-6'; break;
-            case -5: classSteward += ' phase-5'; break;
-            case -4: classSteward += ' phase-4'; break;
-            case -3: classSteward += ' phase-3'; break;
-            case -2: classSteward += ' phase-2'; break;
-            case -1: classSteward += ' phase-1'; break;
-            default: break;
-        }
         return {
             src: stewardPict
-            , classname: classSteward
+            , classname: `steward col${nCol} phase${game.phase}`
             , row: stewardRow
         }
     };

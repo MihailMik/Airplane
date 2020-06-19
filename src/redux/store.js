@@ -174,10 +174,10 @@ let game = {
     handleInterval () {
         if (game.timerId === undefined) return
         if (game.phase > 0) {
-            game.phase--;
+            game.phase--
         }
         else if (game.phase < 0) {
-            game.phase++;
+            game.phase++
         }
         else {                              //game.phase === 0
             if (game.timerId) {
