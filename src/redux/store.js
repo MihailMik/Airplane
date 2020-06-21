@@ -19,7 +19,7 @@ export const constData9x6W123C1 = {
     prizeTeaCoffee: 1,
 
     randomType: 'W123C1',
-    feeType: 'Fee1'
+    feeType: 'Fee0'
 }
 
 export const constData9x6W12C1 = {
@@ -35,7 +35,7 @@ export const constData9x6W12C1 = {
     prizeTeaCoffee: 1,
 
     randomType: 'W12C1',
-    feeType: 'Fee1'
+    feeType: 'Fee0'
 }
 
 export const constData9x5W123C1 = {
@@ -51,7 +51,7 @@ export const constData9x5W123C1 = {
     prizeTeaCoffee: 1,
 
     randomType: 'W123C1',
-    feeType: 'Fee1'
+    feeType: 'Fee0'
 }
 
 export const constData6x4W12 = {
@@ -67,7 +67,7 @@ export const constData6x4W12 = {
     prizeTeaCoffee: 1,
 
     randomType: 'W12',
-    feeType: 'Fee1'
+    feeType: 'Fee'
 }
 
 export const constData6x4W1C1 = {
@@ -83,7 +83,7 @@ export const constData6x4W1C1 = {
     prizeTeaCoffee: 1,
 
     randomType: 'W1C1',
-    feeType: 'Fee1'
+    feeType: 'Fee0'
 }
 
 export const constData9x5W1C1 = {
@@ -99,7 +99,7 @@ export const constData9x5W1C1 = {
     prizeTeaCoffee: 1,
 
     randomType: 'W1C1',
-    feeType: 'Fee1'
+    feeType: 'Fee0'
 }
 
 export const constData12x6W1C1 = {
@@ -115,7 +115,7 @@ export const constData12x6W1C1 = {
     prizeTeaCoffee: 1,
 
     randomType: 'W1C1',
-    feeType: 'Fee1'
+    feeType: 'Fee0'
 }
 
 let game = {

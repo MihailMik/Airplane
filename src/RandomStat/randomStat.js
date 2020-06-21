@@ -85,7 +85,7 @@ export default props => {
             const PX_FOR_ONE_GAME = 1
             const PRIZE_NORMA = 6 / 2
 
-            let maxWidth = window.innerWidth - 180
+            let maxWidth = window.innerWidth - 280
             let coeff = PX_FOR_ONE_GAME
             if (stat.gist[PRIZE_NORMA] * PX_FOR_ONE_GAME > maxWidth) {
                 coeff = (maxWidth - 20) / stat.gist[PRIZE_NORMA]
@@ -93,10 +93,12 @@ export default props => {
             let value = stat.gist[row]
             let width = Math.min(maxWidth, value * coeff)
 
+            let percent = value/(stat.count||1)*100
             return (
                 <div key={row}>
                     <button className={s.buttonPrize}>{row * 2}</button>
                     <button className={s.buttonStat}>{value}</button>
+                    <button className={s.buttonPercent}>{percent.toLocaleString("ru-RU",{minimumFractionDigits:5, maximumFractionDigits:5})} %</button>
                     {value > 0 ?
                         <button className={s.buttonGist} style={{width: width}}/> : null
                     }
@@ -110,70 +112,71 @@ export default props => {
         }
         return rows;
     }
+
     let text = stat.start ? 'Перестать играть' : 'Играть серии непрерывно'
-
+    let total = stat.gist.reduce((x,y,i)=>x+y*i*2, 0)
+    let average = total/(stat.count || 1)
     return (
-        // <div className={s.main}>
-        <div>
+        <div className={s.main}>
             <div>
-                <div>
-                    <button className={s.toMainGame} onClick={() => {
-                        props.game.prizeCoffeeStr = props.game.prizeTeaCoffeeStr * 4;
-                        props.game.rerender()
-                    }}>Вернуться в главную игру
-                    </button>
-                </div>
+                <button className={s.toMainGame} onClick={() => {
+                    props.game.prizeCoffeeStr = props.game.prizeTeaCoffeeStr * 4;
+                    props.game.rerender()
+                }}>Вернуться в главную игру
+                </button>
+            </div>
 
-                <div className={s.seria}>
-                    <label>Длина серии (игр): </label>
-                    <input className={s.edit} value={stat.nInSeries}
-                           onChange={(e) => {
-                               stat.nInSeries = Number(e.target.value);
-                               props.game.rerender()
-                           }}>
-                    </input>
-                </div>
+            <div className={s.seria}>
+                <label>Длина серии (игр): </label>
+                <input className={s.edit} value={stat.nInSeries}
+                       onChange={(e) => {
+                           stat.nInSeries = Number(e.target.value);
+                           props.game.rerender()
+                       }}>
+                </input>
+            </div>
 
-                <div>
-                    <button className={s.playing} onClick={() => {
-                        stat.stopTimer()
-                        stat.start = !stat.start;
-                        if (stat.start) {
-                            stat.timerId = setInterval(stat.handleInterval, 10);
-                            stat.Play();
-                        }
+            <div>
+                <button className={s.playing} onClick={() => {
+                    stat.stopTimer()
+                    stat.start = !stat.start;
+                    if (stat.start) {
+                        stat.timerId = setInterval(stat.handleInterval, 10);
+                        stat.Play();
+                    }
 
-                        props.game.rerender()
-                    }}>
-                        {text}
-                    </button>
+                    props.game.rerender()
+                }}>
+                    {text}
+                </button>
 
-                    <button className={s.play} disabled={stat.start} onClick={() => {
-                        stat.Play()
-                        props.game.rerender()
-                    }}>
-                        Сыграть одну серию
-                    </button>
-                </div>
+                <button className={s.play} disabled={stat.start} onClick={() => {
+                    stat.Play()
+                    props.game.rerender()
+                }}>
+                    Сыграть одну серию
+                </button>
+            </div>
 
-                <div>
-                    <span className={s.count}>
-                        Count: {stat.count}
-                        </span>
-                    <button className={s.clear} onClick={() => {
-                        stat.clear()
-                        props.game.rerender()
-                    }}>Очистить статистику
-                    </button>
-                </div>
-
-
+            <div>
+                <span className={s.count}>Count: {stat.count.toLocaleString("ru-RU",{useGrouping:true})}</span>
+                <button className={s.clear} onClick={() => {
+                    stat.clear()
+                    props.game.rerender()
+                }}>Очистить статистику
+                </button>
             </div>
 
             <div>
                 {MakeAll()}
             </div>
 
+            <div>
+                <span className={s.total}>Total: {total.toLocaleString("ru-RU",{useGrouping:true})}</span>
+            </div>
+            <div>
+                <span className={s.total}>Average: {average.toLocaleString("ru-RU",{minimumFractionDigits:6, maximumFractionDigits:6})}</span>
+            </div>
         </div>
     )
 }
