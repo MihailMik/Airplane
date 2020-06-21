@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import App from './App';
 import game from "./redux/store";
+import {stat} from "./RandomStat/randomStat";
 
 const rerender = () => {
     ReactDOM.render(
@@ -15,6 +16,7 @@ const rerender = () => {
 }
 
 game.create(rerender);
+stat.create();
 rerender();
 
 // If you want your app to work offline and load faster, you can change

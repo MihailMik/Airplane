@@ -1,13 +1,83 @@
+.toMainGame
+{
+    margin: 5px;
+    width:  30rem;
+    height: 1.5rem;
+    background-color: yellow;
+    border-radius: 5px;
+}
+.seria
+{
+    margin: 5px;
+    height: 1.5rem;
+}
+.edit
+{
+    width:10rem;
+}
+.play
+{
+    margin: 5px;
+    width:  13rem;
+    height: 1.5rem;
+    background-color: yellow;
+    border-radius: 5px;
+}
+
+.playing
+{
+    margin: 5px;
+    width:  13rem;
+    height: 1.5rem;
+    background-color: yellow;
+    border-radius: 5px;
+}
+
+.clear
+{
+    margin: 5px;
+    width:  13rem;
+    height: 1.5rem;
+    background-color: yellow;
+    border-radius: 5px;
+}
+
+.count
+{
+    margin: 5px;
+    width:  30rem;
+    height: 1.5rem;
+}
+
 .buttonPrize  {
+    margin: 0;
+    padding: 0;
+
+    padding-right: 5px;
+    text-align: right;
+
     width: 50px;
-    text-align: center;
 }
 .buttonStat  {
-    width: 100px;
+    margin: 0;
+    padding: 0;
+
     padding-left: 5px;
     text-align: left;
+
+    width: 100px;
 }
 .buttonGist  {
-    height: 20px;
-    background-color: greenyellow;
+    margin: 0;
+    padding: 0;
+
+    /*padding-left: 5px;*/
+    /*text-align: left;*/
+
+    height: 1rem;
+    /*margin-top: 0.1 rem;*/
+    background-color: green;
+}
+.buttonPlay {
+    width:70px;
 }
