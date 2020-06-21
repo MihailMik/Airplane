@@ -18,7 +18,8 @@ export const constData9x6W123C1 = {
     prizeCoffee: 4,
     prizeTeaCoffee: 1,
 
-    randomType: 'W123C1'
+    randomType: 'W123C1',
+    feeType: 'Fee1'
 }
 
 export const constData9x6W12C1 = {
@@ -33,7 +34,8 @@ export const constData9x6W12C1 = {
     prizeCoffee: 4,
     prizeTeaCoffee: 1,
 
-    randomType: 'W12C1'
+    randomType: 'W12C1',
+    feeType: 'Fee1'
 }
 
 export const constData9x5W123C1 = {
@@ -48,7 +50,8 @@ export const constData9x5W123C1 = {
     prizeCoffee: 4,
     prizeTeaCoffee: 1,
 
-    randomType: 'W123C1'
+    randomType: 'W123C1',
+    feeType: 'Fee1'
 }
 
 export const constData6x4W12 = {
@@ -63,7 +66,8 @@ export const constData6x4W12 = {
     prizeCoffee: 4,
     prizeTeaCoffee: 1,
 
-    randomType: 'W12'
+    randomType: 'W12',
+    feeType: 'Fee1'
 }
 
 export const constData6x4W1C1 = {
@@ -78,7 +82,8 @@ export const constData6x4W1C1 = {
     prizeCoffee: 4,
     prizeTeaCoffee: 1,
 
-    randomType: 'W1C1'
+    randomType: 'W1C1',
+    feeType: 'Fee1'
 }
 
 export const constData9x5W1C1 = {
@@ -93,7 +98,8 @@ export const constData9x5W1C1 = {
     prizeCoffee: 6,
     prizeTeaCoffee: 1,
 
-    randomType: 'W1C1'
+    randomType: 'W1C1',
+    feeType: 'Fee1'
 }
 
 export const constData12x6W1C1 = {
@@ -108,7 +114,8 @@ export const constData12x6W1C1 = {
     prizeCoffee: 8,
     prizeTeaCoffee: 1,
 
-    randomType: 'W1C1'
+    randomType: 'W1C1',
+    feeType: 'Fee1'
 }
 
 let game = {
@@ -274,6 +281,7 @@ let game = {
         let nRow = Number (this.nRowStr)
         let nCol = Number (this.nColStr)
         let randomType = this.randomTypeStr
+        let feeType = this.feeType
 
 /*
         //Вариант запрета соседей-Water
@@ -310,7 +318,8 @@ let game = {
             prizeCoffee: prizeCoffee,
             prizeTeaCoffee: prizeTeaCoffee,
 
-            randomType: randomType
+            randomType: randomType,
+            feeType: feeType
         }, this.haveParamComponent ())
         this.rerender ()
     },
@@ -466,13 +475,13 @@ let game = {
         this.prizeTeaCoffee = data.prizeTeaCoffee
 
         this.randomType = data.randomType
+        this.feeType = data.feeType
 
         this.isQuestionTea = true
         this.isQuestionCoffee = false
         this.isQuestionTeaCoffee = false
 
         this.gameEnded = false
-        this.feeType = 'Fee1'
         this.hintChecked = false
         this.nSize = nRow * nCol
         this.nextServed = undefined

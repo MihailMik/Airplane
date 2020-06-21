@@ -55,6 +55,7 @@ const Seat = (props) => {
         switch (given) {
             case 'Tea':     answer = s.Tea;     break
             case 'Coffee':  answer = s.Coffee;  break
+
             case 'Water':   answer = s.Water;   break
             default:text = 'err'; break
         }

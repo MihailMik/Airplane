@@ -17,7 +17,32 @@ $cell-height: 40px;
     left: 50%;
 }
 
-
+//$phases: (
+//        0: 0px,
+//        1: 1px,
+//        2: 3px,
+//        3: 7px,
+//        4: 15px,
+//        5: 25px,
+//        6: 33px,
+//        7: 37px,
+//        8: 39px,
+//        9: 40px,
+//        -1: -1px,
+//        -2: -3px,
+//        -3: -7px,
+//        -4: -15px,
+//        -5: -25px,
+//        -6: -33px,
+//        -7: -37px,
+//        -8: -39px,
+//        -9: -40px
+//);
+//@each $phase, $dist in $phases {
+//    .phase#{$phase} {
+//        bottom: $dist;
+//    }
+//}
 $cell-step: 0.1*$cell-height;
 $phases: (-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9);
 @each $phase in $phases {

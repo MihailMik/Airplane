@@ -1,0 +1,13 @@
+.buttonPrize  {
+    width: 50px;
+    text-align: center;
+}
+.buttonStat  {
+    width: 100px;
+    padding-left: 5px;
+    text-align: left;
+}
+.buttonGist  {
+    height: 20px;
+    background-color: greenyellow;
+}
