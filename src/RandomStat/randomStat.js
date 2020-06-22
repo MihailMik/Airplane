@@ -20,8 +20,15 @@ const mix = (arr) => {
     }
     return out
 }
-
 const PlayOne = () => {
+    switch (stat.strategy) {
+        case '1T': return Strategy_1T ();
+        case '1C': return Strategy_1C ();
+        case 'Strat2': return Strategy_Strat2 ();
+        default: return 0;
+    }
+}
+const Strategy_1T = () => {
     let prize = 0
     for (let row = 0; row < NROW; row++) {
         let seats = mix(ONE_ROW)
@@ -39,16 +46,57 @@ const PlayOne = () => {
     return prize
 }
 
+const Strategy_1C = () => {
+    let prize = 0
+    for (let row = 0; row < NROW; row++) {
+        let seats = mix(ONE_ROW)
+        const [one, two] = [...seats]
+        if (one === C) {
+            if (two === T) prize += 6
+            else if (two === W) prize = 0
+        } else if (one === T) {
+            if (two === C) prize += 4
+            else if (two === W) prize = 0
+        } else {
+            prize = 0
+        }
+    }
+    return prize
+}
+
+const Strategy_Strat2 = () => {
+    let prize = 0
+    for (let row = 0; row < NROW; row++) {
+        let seats = mix(ONE_ROW)
+        const [one, two] = [...seats]
+        if (one === C) {
+            if (two === T) prize += 6
+            else if (two === W) prize = 0
+        } else if (one === T) {
+            if (two === C) prize += 4
+            else if (two === W) prize = 0
+        } else {
+            prize = 0
+        }
+    }
+    return prize
+}
+
 export let stat = {
     start: false,
     count: 0,
     gist: [],
     nInSeries: 100,
+    strategy: 'Strat2',
     timerId: undefined,
     stopTimer: () => {
         if (stat.timerId !== undefined)
             clearInterval(stat.timerId)
         stat.timerId = undefined
+    },
+    newStrategy: (strategy) => {
+      stat.clear ()
+      stat.strategy = strategy
     },
     create: () => {
         stat.start = false
@@ -133,6 +181,18 @@ export default props => {
 
     return (
         <div className={s.main}>
+            <div className={s.Select}>
+                <label>Strategy:
+                    <select className={s.select} onChange={(e) => {
+                        stat.newStrategy (e.target.value)
+                        game.rerender()
+                    }}>
+                        <option value={'1T'} selected={stat.strategy==='1T'}>1T</option>
+                        <option value={'1C'} selected={stat.strategy==='1C'}>1C</option>
+                        <option value={'Strat2'} selected={stat.strategy==='Strat2'}>Str2</option>
+                    </select>
+                </label>
+            </div>
             <div>
                 <button className={s.toMainGame} onClick={() => {
                     props.game.prizeCoffeeStr = props.game.prizeTeaCoffeeStr * 4;
