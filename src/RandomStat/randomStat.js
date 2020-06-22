@@ -20,6 +20,8 @@ const mix = (arr) => {
     }
     return out
 }
+const PRIZE_TEA = 2
+const PRIZE_COFFEE = 4
 const PlayOne = () => {
     switch (stat.strategy) {
         case '1T': return Strategy_1T ();
@@ -34,10 +36,11 @@ const Strategy_1T = () => {
         let seats = mix(ONE_ROW)
         const [one, two] = [...seats]
         if (one === T) {
-            if (two === C) prize += 6
+            prize += PRIZE_TEA
+            if (two === C) prize += PRIZE_COFFEE
             else if (two === W) prize = 0
         } else if (one === C) {
-            if (two === T) prize += 2
+            if (two === T) prize += PRIZE_TEA
             else if (two === W) prize = 0
         } else {
             prize = 0
@@ -45,17 +48,17 @@ const Strategy_1T = () => {
     }
     return prize
 }
-
 const Strategy_1C = () => {
     let prize = 0
     for (let row = 0; row < NROW; row++) {
         let seats = mix(ONE_ROW)
         const [one, two] = [...seats]
         if (one === C) {
-            if (two === T) prize += 6
+            prize += PRIZE_COFFEE
+            if (two === T) prize += PRIZE_TEA
             else if (two === W) prize = 0
         } else if (one === T) {
-            if (two === C) prize += 4
+            if (two === C) prize += PRIZE_COFFEE
             else if (two === W) prize = 0
         } else {
             prize = 0
@@ -68,13 +71,29 @@ const Strategy_Strat2 = () => {
     let prize = 0
     for (let row = 0; row < NROW; row++) {
         let seats = mix(ONE_ROW)
-        const [one, two] = [...seats]
-        if (one === C) {
-            if (two === T) prize += 6
-            else if (two === W) prize = 0
-        } else if (one === T) {
-            if (two === C) prize += 4
-            else if (two === W) prize = 0
+        const [one, two, three] = [...seats]
+
+        if (one === T) {
+            prize += PRIZE_TEA
+            if (two === C) prize += PRIZE_COFFEE
+            else if (two === T) {
+                prize += 0
+                if (prize <= PRIZE_COFFEE) {
+                    if (three === C) prize += PRIZE_COFFEE
+                    else prize = 0
+                }
+            }
+            else prize = 0
+        } else if (one === C) {
+            prize += 0
+            if (two === T) {
+                prize += PRIZE_TEA
+                if (prize <= PRIZE_TEA) {
+                    if (three === T) prize += PRIZE_TEA
+                    else prize = 0
+                }
+            }
+            else  prize = 0
         } else {
             prize = 0
         }
@@ -134,12 +153,16 @@ export default props => {
     const MakeAll = () => {
         const MakeRow = (row) => {
             const PX_FOR_ONE_GAME = 1
-            const PRIZE_NORMA = 6 / 2
+            // const PRIZE_NORMA = 6 / 2
+
+            // const norma = stat.gist[PRIZE_NORMA]
+            let [, ...normaArr] = [...stat.gist]
+            const norma = Math.max (...normaArr)
 
             let maxWidth = window.innerWidth - 480
             let coeff = PX_FOR_ONE_GAME
-            if (stat.gist[PRIZE_NORMA] * PX_FOR_ONE_GAME > maxWidth) {
-                coeff = (maxWidth - 20) / stat.gist[PRIZE_NORMA]
+            if (norma * PX_FOR_ONE_GAME > maxWidth) {
+                coeff = (maxWidth - 20) / norma
             }
             let value = stat.gist[row]
             let valuePrz = value*row*2
@@ -164,11 +187,11 @@ export default props => {
 
         let rows = []
         rows.push(<div key={'title'}>
-            <button className={s.buttonPrize}>Prz</button>
-            <button className={s.buttonGames}>Games</button>
-            <button className={s.buttonGames}>% games</button>
-            <button className={s.buttonGames}>Przs</button>
-            <button className={s.buttonGames}>% Przs</button>
+            <button className={s.butPrize}>Prz</button>
+            <button className={s.butGames}>Games</button>
+            <button className={s.butGames}>% games</button>
+            <button className={s.butGames}>Przs</button>
+            <button className={s.butGames}>% Przs</button>
         </div>)
 
         for (let row = 0; row < NPRIZES; row++) {
@@ -196,6 +219,7 @@ export default props => {
             <div>
                 <button className={s.toMainGame} onClick={() => {
                     props.game.prizeCoffeeStr = props.game.prizeTeaCoffeeStr * 4;
+                    props.game.prizeCoffee = props.game.prizeTeaCoffeeStr * 4;
                     props.game.rerender()
                 }}>Вернуться в главную игру
                 </button>
@@ -245,14 +269,11 @@ export default props => {
                 {MakeAll()}
             </div>
 
-            {/*<button className={s.buttonTotalPrzs}>{totalPrzs.toLocaleString("ru-RU",{useGrouping:true})}</button>*/}
-            <button className={s.buttonPrize}>Total:</button>
-            <button className={s.buttonGames}>{stat.count}</button>
-            {/*<button className={s.buttonGames}>{totalPercent.toLocaleString("ru-RU",{minimumFractionDigits:5, maximumFractionDigits:5})} %</button>*/}
-            <button className={s.buttonGames}>100 %</button>
-            {/*<button className={s.buttonGames}>{stat.totalPrzs}</button>*/}
-            <button className={s.buttonGames}>{totalPrzs}</button>
-            <button className={s.buttonGames}>100 %</button>
+            <button className={s.butPrize} >Total:</button>
+            <button className={s.butGames}>{stat.count}</button>
+            <button className={s.butGames}>100 %</button>
+            <button className={s.butGames}>{totalPrzs}</button>
+            <button className={s.butGames}>100 %</button>
 
 
             <div>

@@ -74,6 +74,28 @@
 
     width: 100px;
 }
+.butPrize  {
+    background-color: grey;
+    color: white;
+    margin: 0;
+    padding: 0;
+
+    padding-right: 5px;
+    text-align: right;
+
+    width: 50px;
+}
+.butGames  {
+    background-color: grey;
+    color: white;
+    margin: 0;
+    padding: 0;
+
+    padding-right: 5px;
+    text-align: right;
+
+    width: 100px;
+}
 .buttonGist  {
     margin: 0;
     padding: 0;
