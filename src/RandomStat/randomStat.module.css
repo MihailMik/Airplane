@@ -46,7 +46,7 @@
     border-radius: 5px;
 }
 
-.count, .total
+.total
 {
     font-family: monospace;
     margin: 5px;
@@ -64,17 +64,7 @@
 
     width: 50px;
 }
-.buttonStat  {
-    font-family: monospace;
-    margin: 0;
-    padding: 0;
-
-    padding-right: 5px;
-    text-align: right;
-
-    width: 100px;
-}
-.buttonPercent  {
+.buttonGames  {
     font-family: monospace;
     margin: 0;
     padding: 0;

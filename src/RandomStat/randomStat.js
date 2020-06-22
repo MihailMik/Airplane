@@ -80,25 +80,33 @@ export let stat = {
 }
 
 export default props => {
+    let totalPrzs = stat.gist.reduce((x,y,i)=>x+y*i*2, 0)
+    // let totalPercent = stat.gist.reduce((x,y,i)=>x+y/(stat.count||1)*100, 0)
+    let average = totalPrzs/(stat.count || 1)
     const MakeAll = () => {
         const MakeRow = (row) => {
             const PX_FOR_ONE_GAME = 1
             const PRIZE_NORMA = 6 / 2
 
-            let maxWidth = window.innerWidth - 280
+            let maxWidth = window.innerWidth - 480
             let coeff = PX_FOR_ONE_GAME
             if (stat.gist[PRIZE_NORMA] * PX_FOR_ONE_GAME > maxWidth) {
                 coeff = (maxWidth - 20) / stat.gist[PRIZE_NORMA]
             }
             let value = stat.gist[row]
+            let valuePrz = value*row*2
             let width = Math.min(maxWidth, value * coeff)
 
             let percent = value/(stat.count||1)*100
+            let percentPrz = valuePrz/(totalPrzs||1)*100
+
             return (
                 <div key={row}>
                     <button className={s.buttonPrize}>{row * 2}</button>
-                    <button className={s.buttonStat}>{value}</button>
-                    <button className={s.buttonPercent}>{percent.toLocaleString("ru-RU",{minimumFractionDigits:5, maximumFractionDigits:5})} %</button>
+                    <button className={s.buttonGames}>{value}</button>
+                    <button className={s.buttonGames}>{percent.toLocaleString("ru-RU",{minimumFractionDigits:5, maximumFractionDigits:5})} %</button>
+                    <button className={s.buttonGames}>{valuePrz}</button>
+                    <button className={s.buttonGames}>{percentPrz.toLocaleString("ru-RU",{minimumFractionDigits:5, maximumFractionDigits:5})} %</button>
                     {value > 0 ?
                         <button className={s.buttonGist} style={{width: width}}/> : null
                     }
@@ -107,6 +115,14 @@ export default props => {
         }
 
         let rows = []
+        rows.push(<div key={'title'}>
+            <button className={s.buttonPrize}>Prz</button>
+            <button className={s.buttonGames}>Games</button>
+            <button className={s.buttonGames}>% games</button>
+            <button className={s.buttonGames}>Przs</button>
+            <button className={s.buttonGames}>% Przs</button>
+        </div>)
+
         for (let row = 0; row < NPRIZES; row++) {
             rows.push(MakeRow(row))
         }
@@ -114,8 +130,7 @@ export default props => {
     }
 
     let text = stat.start ? 'Перестать играть' : 'Играть серии непрерывно'
-    let total = stat.gist.reduce((x,y,i)=>x+y*i*2, 0)
-    let average = total/(stat.count || 1)
+
     return (
         <div className={s.main}>
             <div>
@@ -159,7 +174,6 @@ export default props => {
             </div>
 
             <div>
-                <span className={s.count}>Count: {stat.count.toLocaleString("ru-RU",{useGrouping:true})}</span>
                 <button className={s.clear} onClick={() => {
                     stat.clear()
                     props.game.rerender()
@@ -171,11 +185,24 @@ export default props => {
                 {MakeAll()}
             </div>
 
+            {/*<button className={s.buttonTotalPrzs}>{totalPrzs.toLocaleString("ru-RU",{useGrouping:true})}</button>*/}
+            <button className={s.buttonPrize}>Total:</button>
+            <button className={s.buttonGames}>{stat.count}</button>
+            {/*<button className={s.buttonGames}>{totalPercent.toLocaleString("ru-RU",{minimumFractionDigits:5, maximumFractionDigits:5})} %</button>*/}
+            <button className={s.buttonGames}>100 %</button>
+            {/*<button className={s.buttonGames}>{stat.totalPrzs}</button>*/}
+            <button className={s.buttonGames}>{totalPrzs}</button>
+            <button className={s.buttonGames}>100 %</button>
+
+
             <div>
-                <span className={s.total}>Total: {total.toLocaleString("ru-RU",{useGrouping:true})}</span>
+            <span className={s.total}>Total Games: {stat.count.toLocaleString("ru-RU",{useGrouping:true})}</span>
             </div>
             <div>
-                <span className={s.total}>Average: {average.toLocaleString("ru-RU",{minimumFractionDigits:6, maximumFractionDigits:6})}</span>
+                <span className={s.total}>Total Przes: {totalPrzs.toLocaleString("ru-RU",{useGrouping:true})}</span>
+            </div>
+            <div>
+                <span className={s.total}>Average Prz: {average.toLocaleString("ru-RU",{minimumFractionDigits:6, maximumFractionDigits:6})}</span>
             </div>
         </div>
     )
