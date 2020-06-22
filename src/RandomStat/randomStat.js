@@ -153,9 +153,8 @@ export default props => {
     const MakeAll = () => {
         const MakeRow = (row) => {
             const PX_FOR_ONE_GAME = 1
-            // const PRIZE_NORMA = 6 / 2
 
-            // const norma = stat.gist[PRIZE_NORMA]
+            //ищем змаксимальное значение в массиве без учета элемента с индексом 0
             let [, ...normaArr] = [...stat.gist]
             const norma = Math.max (...normaArr)
 
@@ -178,7 +177,7 @@ export default props => {
                     <button className={s.buttonGames}>{percent.toLocaleString("ru-RU",{minimumFractionDigits:5, maximumFractionDigits:5})} %</button>
                     <button className={s.buttonGames}>{valuePrz}</button>
                     <button className={s.buttonGames}>{percentPrz.toLocaleString("ru-RU",{minimumFractionDigits:5, maximumFractionDigits:5})} %</button>
-                    {value > 0 ?
+                    {width > 0 ?
                         <button className={s.buttonGist} style={{width: width}}/> : null
                     }
                 </div>

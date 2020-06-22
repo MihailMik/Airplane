@@ -1,25 +1,3 @@
-.Row {
-    position: relative;
-    width: 100%;
-    height: 1.5em;
-}
-.Right {
-    position: absolute;
-    width: 50%;
-    left: 50%;
-    text-align: right;
-}
-.Left {
-    position: absolute;
-    width: 100%;
-    text-align: left;
-}
-
-.Select {
-    position: absolute;
-    /*width: 100%;*/
-    /*text-align: left;*/
-}
 .paramTitle{
     width: 50px;
     text-align: left;
@@ -35,7 +13,7 @@
     text-align: left;
 }
 .Fee {
-    margin-right: 10px;
+    margin-left:10px;
 }
 .classHint {
     position: absolute;
