@@ -173,7 +173,8 @@ let game = {
         if (this.gameEnded || this.seats[ind].served) return false
 
         //Второй ряд открываем, когда открыта не менее половина в текущем ряду для feeChecked = true
-        let openSeat = (this.randomType === 'W1C1' && this.feeType!=='Fee2') ? this.nCol/2 : 1
+        // let openSeat = (this.randomType === 'W1C1' && this.feeType!=='Fee2') ? this.nCol/2 : 1
+        let openSeat = (this.randomType === 'W1C1' && this.feeType==='Fee0') ? this.nCol/2 : 1
         return (row === this.activeRow) ||
                (row === (this.activeRow+1) && this.nServedInRow >= openSeat)
     },
