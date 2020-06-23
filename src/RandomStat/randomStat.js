@@ -7,6 +7,7 @@ const C = 1
 const W = 2
 const ONE_ROW = [W, C, T, T]
 const NROW = 6
+const PRIZE_TC = 1
 const PRIZE_TEA = 2
 const PRIZE_COFFEE = 4
 
@@ -34,11 +35,16 @@ const description = {
         'Q1: T IF C -> Q2: T IF (T&Prz<=t) -> Q3: T',
         'else Next',
     ],
+    'T/C': [
+        'Q1: T/C IF T -> Q2: T/C IF (T&Prz<=c) -> Q3: C',
+        '                           (C&Prz<=t) -> Q3: T',
+        'Q1: T/C IF C -> Q2: T   IF (T&Prz<=t) -> Q3: T',
+    ],
 }
 const realization = {
     '1T': [
         'let prize = 0',
-        '    for (let row = 0; row < NROW; row++) {',
+        'for (let row = 0; row < NROW; row++) {',
         '    let seats = mix(ONE_ROW)',
         '    const [one, two] = [...seats]',
         '',
@@ -129,6 +135,33 @@ const realization = {
         '}',
         'return prize'
     ],
+    'T/C': [
+        'if (one === T) {',
+        '    prize += PRIZE_TC',
+        '    if (two === T) {',
+        '        prize += PRIZE_TC',
+        '        if (prize <= PRIZE_COFFEE) {',
+        '            if (three === C) prize += PRIZE_COFFEE',
+        '            else prize = 0',
+        '        }',
+        '    } else if (two === C) {',
+        '        prize += PRIZE_TC',
+        '        if (prize <= PRIZE_TEA) {',
+        '            if (three === T) prize += PRIZE_TEA',
+        '            else prize = 0',
+        '        }',
+        '    } else prize = 0',
+        '} else if (one === C) {',
+        '    prize += PRIZE_TC',
+        '    if (two === T) {',
+        '        prize += PRIZE_TEA',
+        '        if (prize <= (PRIZE_TEA+PRIZE_TC)) {',
+        '            if (three === T) prize += PRIZE_TEA',
+        '            else prize = 0',
+        '        }',
+        '    } else prize = 0',
+        '} else prize = 0'
+    ],
 }
 const mix = (arr) => {
     let nCol = arr.length
@@ -152,6 +185,8 @@ const PlayOne = () => {
             return Strategy_Strat2();
         case 'Strat3':
             return Strategy_Strat3();
+        case 'T/C':
+            return Strategy_T_C();
         default:
             return 0;
     }
@@ -250,12 +285,53 @@ const Strategy_Strat3 = () => {
     return prize
 }
 
+const Strategy_T_C = () => {
+    let prize = 0
+    for (let row = 0; row < NROW; row++) {
+        let seats = mix(ONE_ROW)
+        const [one, two, three] = [...seats]
+
+/*
+        'Q1: T/C IF T -> Q2: T/C IF (T&Prz<=c) -> Q3: C',
+        '                           (C&Prz<=t) -> Q3: T',
+        'Q1: T/C IF C -> Q2: T   IF (T&Prz<=(t+tc)) -> Q3: T',
+*/
+
+        if (one === T) {
+            prize += PRIZE_TC
+            if (two === T) {
+                prize += PRIZE_TC
+                if (prize <= PRIZE_COFFEE) {
+                    if (three === C) prize += PRIZE_COFFEE
+                    else prize = 0
+                }
+            } else if (two === C) {
+                prize += PRIZE_TC
+                if (prize <= PRIZE_TEA) {
+                    if (three === T) prize += PRIZE_TEA
+                    else prize = 0
+                }
+            } else prize = 0
+        } else if (one === C) {
+            prize += PRIZE_TC
+            if (two === T) {
+                prize += PRIZE_TEA
+                if (prize <= (PRIZE_TEA+PRIZE_TC)) {
+                    if (three === T) prize += PRIZE_TEA
+                    else prize = 0
+                }
+            } else prize = 0
+        } else prize = 0
+    }
+    return prize
+}
+
 export let stat = {
     start: false,
     count: 0,
     gist: [],
     nInSeries: 100,
-    strategy: 'Strat3', NPRIZES: 38 / 2 + 1,
+    strategy: 'T/C', NPRIZES: 38 / 2 + 1,
     timerId: undefined,
     isDescription: false,
     isRealization: false,
@@ -369,6 +445,7 @@ export default props => {
                         <option value={'1C'} selected={stat.strategy === '1C'}>1C</option>
                         <option value={'Strat2'} selected={stat.strategy === 'Strat2'}>Str2</option>
                         <option value={'Strat3'} selected={stat.strategy === 'Strat3'}>Str3</option>
+                        <option value={'T/C'} selected={stat.strategy === 'T/C'}>T/C</option>
                     </select>
                 </label>
 
@@ -395,7 +472,7 @@ export default props => {
             }
 
             {stat.isRealization ?
-                <div className={s.description} > {makeDescription (realization[stat.strategy])} </div> :
+                <div className={s.realization} > {makeDescription (realization[stat.strategy])} </div> :
                 null
             }
 
