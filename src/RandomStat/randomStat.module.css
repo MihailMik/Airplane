@@ -5,42 +5,37 @@
 .toMainGame
 {
     margin: 5px;
-    width:  27rem;
+    width:  27.7rem;
+    height: 1.5rem;
+    background-color: yellow;
+    border-radius: 5px;
+}
+.description {
+    font-family: monospace;
+    white-space: pre;
+    /*font-size: '10px;*/
+}
+.buttonDescription
+{
+    margin: 5px;
+    width:  10rem;
     height: 1.5rem;
     background-color: yellow;
     border-radius: 5px;
 }
 .seria
 {
-    margin: 5px;
-    height: 1rem;
+    margin-bottom: 5px;
+    height: 1.5rem;
 }
 .edit
 {
-    width:10rem;
+    width:7.6rem;
 }
 .play
 {
     margin: 5px;
-    width:  13rem;
-    height: 1.5rem;
-    background-color: yellow;
-    border-radius: 5px;
-}
-
-.playing
-{
-    margin: 5px;
-    width:  13rem;
-    height: 1.5rem;
-    background-color: yellow;
-    border-radius: 5px;
-}
-
-.clear
-{
-    margin: 5px;
-    width:  13rem;
+    width:  13.5rem;
     height: 1.5rem;
     background-color: yellow;
     border-radius: 5px;
@@ -62,7 +57,7 @@
     padding-right: 5px;
     text-align: right;
 
-    width: 50px;
+    width: 40px;
 }
 .buttonGames  {
     font-family: monospace;
@@ -72,9 +67,10 @@
     padding-right: 5px;
     text-align: right;
 
-    width: 100px;
+    width: 80px;
 }
 .butPrize  {
+    font-family: monospace;
     background-color: grey;
     color: white;
     margin: 0;
@@ -83,9 +79,10 @@
     padding-right: 5px;
     text-align: right;
 
-    width: 50px;
+    width: 40px;
 }
 .butGames  {
+    font-family: monospace;
     background-color: grey;
     color: white;
     margin: 0;
@@ -94,7 +91,7 @@
     padding-right: 5px;
     text-align: right;
 
-    width: 100px;
+    width: 80px;
 }
 .buttonGist  {
     margin: 0;
