@@ -27,7 +27,7 @@ const description = {
     'Strat2': [
         'Q1: T IF T -> Q2: C IF (T&Prz<=c) -> Q3: C',
         'else Next',
-        'Q1: T IF C -> Q2: T IF (T&Prz<=t) -> Q3: T',
+        'Q1: T IF C -> Q2: T IF (T&Prz<=c) -> Q3: T',
         'else Next',
     ],
     'Strat3': [
@@ -78,7 +78,7 @@ const realization = {
         '    prize += 0',
         '    if (second === T) {',
         '        prize += PRIZE_TEA',
-        '        if (prize <= PRIZE_TEA) {',
+        '        if (prize <= PRIZE_COFFEE) {',
         '            if (third === T) prize += PRIZE_TEA',
         '            else prize = 0',
         '        }',
@@ -217,7 +217,7 @@ const Strategy_Strat2 = () => {
             prize += 0
             if (second === T) {
                 prize += PRIZE_TEA
-                if (prize <= PRIZE_TEA) {
+                if (prize <= PRIZE_COFFEE) {
                     if (third === T) prize += PRIZE_TEA
                     else prize = 0
                 }
@@ -295,7 +295,7 @@ export let stat = {
     start: false,
     count: 0,
     gist: [],
-    nInSeries: 100,
+    nInSeries: 10000,
     strategy: 'T/C',
     timerId: undefined,
     isDescription: false,
