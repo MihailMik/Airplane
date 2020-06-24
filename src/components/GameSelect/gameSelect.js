@@ -10,9 +10,9 @@ const GameSelect = (props) => {
                     <option value={'9x6W123C1'}>9x6, 123W&1C in row</option>
                     <option value={'9x6W12C1'}>9x6, 12W&1C in row</option>
                     <option value={'9x5W123C1'}>9x5, 123W&1C in row</option>
-                    <option value={'6x4W1C1'}>6x4, 1W&1C in row</option>
+                    <option value={'6x4W1C1'} selected>6x4, 1W&1C in row</option>
                     <option value={'9x5W1C1'}>9x5, 1W&1C in row</option>
-                    <option value={'12x6W1C1'} selected>12x6, 1W&1C in row</option>
+                    <option value={'12x6W1C1'}>12x6, 1W&1C in row</option>
                     <option value={'param'}>arbitrary params</option>
                 </select>
 
@@ -35,7 +35,7 @@ const GameSelect = (props) => {
                 {/*Призы*/}
                 <label className={s.paramTitle}>Prz</label>
 
-                <label className={s.paramName}>Tea:2 Tea/Co:1</label>
+                <label className={s.paramName}>Tea:{props.game.prizeTeaStr} Tea/Co:{props.game.prizeTeaCoffeeStr}</label>
 
                 <label className={s.paramName}>Co:</label>
                 <input className={s.paramValue} value={props.game.prizeCoffeeStr}
@@ -50,6 +50,8 @@ const GameSelect = (props) => {
                                onChange={() => props.game.onClickHint()}></input>
                     <label>Hint</label>
                 </span>
+
+                <button onClick={() => {props.game.isStatistic = true; props.game.rerender()}}>Stat</button>
             </div>
         </div>
     )

@@ -7,9 +7,10 @@ const C = 1
 const W = 2
 const ONE_ROW = [W, C, T, T]
 const NROW = 6
-const PRIZE_TC = 1
-const PRIZE_TEA = 2
-const PRIZE_COFFEE = 4
+const PRIZE_TC = 2
+const PRIZE_TEA = 3
+const PRIZE_COFFEE = 6
+const NPRIZES_MAX = 100 //максимально возможный приз в игре, оценка сверху
 
 const makeDescription = (strings) => {
     return strings.map((item, i) => <div key={i}>{item}</div>)
@@ -295,40 +296,36 @@ export let stat = {
     count: 0,
     gist: [],
     nInSeries: 100,
-    strategy: 'T/C', STEP: 1, NPRIZES: 21 / 1 + 1,
+    strategy: 'T/C',
     timerId: undefined,
     isDescription: false,
     isRealization: false,
+
     stopTimer: () => {
         if (stat.timerId !== undefined)
             clearInterval(stat.timerId)
         stat.timerId = undefined
     },
+
     newStrategy: (strategy) => {
         stat.strategy = strategy;
-        switch (strategy) {
-            case 'T/C':     stat.STEP=1; stat.NPRIZES = 21/stat.STEP +1; break
-            case 'Strat3':  stat.STEP=2; stat.NPRIZES = 38/stat.STEP +1; break
-            default:        stat.STEP=2; stat.NPRIZES = 36/stat.STEP +1; break
-        }
         stat.clear()
     },
+
     create: () => {
-        stat.start = false
-        stat.nInSeries = 100
         stat.clear();
         stat.stopTimer();
     },
 
     clear: () => {
         stat.count = 0
-        for (let i = 0; i < stat.NPRIZES; i++)
+        for (let i = 0; i < NPRIZES_MAX; i++)
             stat.gist[i] = 0
     },
 
     Play() {
         for (let i = 0; i < stat.nInSeries; i++) {
-            stat.gist[PlayOne() / stat.STEP]++
+            stat.gist[PlayOne()]++
         }
         stat.count += stat.nInSeries
     },
@@ -341,25 +338,27 @@ export let stat = {
 }
 
 export default props => {
-    let totalPrzs = stat.gist.reduce((x, y, i) => x + y * i * stat.STEP, 0)
-    // let totalPercent = stat.gist.reduce((x,y,i)=>x+y/(stat.count||1)*100, 0)
+    let totalPrzs = stat.gist.reduce((x, y, i) => x + y*i, 0)
+    let totalPercent = stat.gist.reduce((x, y, i)=>x + y/(stat.count||1)*100, 0)
+    let totalPercentPrzs = stat.gist.reduce((x, y, i)=>x + y*i/(totalPrzs||1)*100, 0)
     let average = totalPrzs / (stat.count || 1)
     const MakeAll = () => {
         const MakeRow = (row) => {
+            if (stat.gist[row] === 0) return null;
+
             const PX_FOR_ONE_GAME = 1
 
             //ищем змаксимальное значение в массиве без учета элемента с индексом 0
             let [, ...normaArr] = [...stat.gist]
             const norma = Math.max(...normaArr)
 
-            // let maxWidth = window.innerWidth - 390
             let maxWidth = window.innerWidth - 400
             let coeff = PX_FOR_ONE_GAME
             if (norma * PX_FOR_ONE_GAME > maxWidth) {
                 coeff = (maxWidth - 20) / norma
             }
             let value = stat.gist[row]
-            let valuePrz = value * row * stat.STEP
+            let valuePrz = value * row
             let width = Math.min(maxWidth, value * coeff)
 
             let percent = value / (stat.count || 1) * 100
@@ -367,7 +366,7 @@ export default props => {
 
             return (
                 <div key={row}>
-                    <button className={s.buttonPrize}>{row * stat.STEP}</button>
+                    <button className={s.buttonPrize}>{row}</button>
                     <button className={s.buttonGames}>{value}</button>
                     <button className={s.buttonGames}>{percent.toLocaleString("ru-RU", {
                         minimumFractionDigits: 3,
@@ -394,9 +393,24 @@ export default props => {
             <button className={s.butGames}>% Przs</button>
         </div>)
 
-        for (let row = 0; row < stat.NPRIZES; row++) {
+        for (let row = 0; row < NPRIZES_MAX; row++) {
             rows.push(MakeRow(row))
         }
+
+        rows.push(<div key={'footer'}>
+            <button className={s.butPrize}>Total:</button>
+            <button className={s.butGames}>{stat.count}</button>
+            <button className={s.butGames}>{totalPercent.toLocaleString("ru-RU", {
+                minimumFractionDigits: 3,
+                maximumFractionDigits: 3
+            })}</button>
+            <button className={s.butGames}>{totalPrzs}</button>
+            <button className={s.butGames}>{totalPercentPrzs.toLocaleString("ru-RU", {
+                minimumFractionDigits: 3,
+                maximumFractionDigits: 3
+            })}</button>
+        </div>)
+
         return rows;
     }
 
@@ -447,8 +461,7 @@ export default props => {
 
             <div>
                 <button className={s.toMainGame} onClick={() => {
-                    props.game.prizeCoffeeStr = props.game.prizeTeaCoffeeStr * 4;
-                    props.game.prizeCoffee = props.game.prizeTeaCoffeeStr * 4;
+                    props.game.isStatistic = false
                     props.game.rerender()
                 }}>Вернуться в главную игру
                 </button>
@@ -494,13 +507,6 @@ export default props => {
             <div>
                 {MakeAll()}
             </div>
-
-            <button className={s.butPrize}>Total:</button>
-            <button className={s.butGames}>{stat.count}</button>
-            <button className={s.butGames}>100</button>
-            <button className={s.butGames}>{totalPrzs}</button>
-            <button className={s.butGames}>100</button>
-
 
             <div>
                 <span className={s.total}>Total Games: {stat.count.toLocaleString("ru-RU", {useGrouping: true})}</span>

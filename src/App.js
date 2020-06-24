@@ -28,7 +28,7 @@ const App = (props) => {
     */
     // let path = document.location.pathname
     const paramComponent = props.game.haveParamComponent () ? <Param game={props.game}/> : <div/>
-    if (props.game.prizeCoffeeStr === props.game.prizeTeaCoffeeStr)
+    if (props.game.isStatistic)
         return <div>
             <RandomStat game = {props.game}/>
         </div>

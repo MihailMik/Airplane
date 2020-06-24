@@ -14,9 +14,9 @@ export const constData9x6W123C1 = {
     nPreferCoffee: 9,
     nPreferWater: 18,
 
-    prizeTea: 2,
-    prizeCoffee: 4,
-    prizeTeaCoffee: 1,
+    prizeTea: 5,
+    prizeCoffee: 20,
+    prizeTeaCoffee: 4,
 
     randomType: 'W123C1',
     feeType: 'Fee0'
@@ -30,9 +30,9 @@ export const constData9x6W12C1 = {
     nPreferCoffee: 9,
     nPreferWater: 13,
 
-    prizeTea: 2,
-    prizeCoffee: 4,
-    prizeTeaCoffee: 1,
+    prizeTea: 5,
+    prizeCoffee: 20,
+    prizeTeaCoffee: 4,
 
     randomType: 'W12C1',
     feeType: 'Fee0'
@@ -46,9 +46,9 @@ export const constData9x5W123C1 = {
     nPreferCoffee: 9,
     nPreferWater: 18,
 
-    prizeTea: 2,
-    prizeCoffee: 4,
-    prizeTeaCoffee: 1,
+    prizeTea: 4,
+    prizeCoffee: 12,
+    prizeTeaCoffee: 3,
 
     randomType: 'W123C1',
     feeType: 'Fee0'
@@ -62,9 +62,9 @@ export const constData6x4W12 = {
     nPreferCoffee: 5,
     nPreferWater: 9,
 
-    prizeTea: 2,
-    prizeCoffee: 4,
-    prizeTeaCoffee: 1,
+    prizeTea: 3,
+    prizeCoffee: 6,
+    prizeTeaCoffee: 2,
 
     randomType: 'W12',
     feeType: 'Fee'
@@ -78,9 +78,9 @@ export const constData6x4W1C1 = {
     nPreferCoffee: 6,
     nPreferWater: 6,
 
-    prizeTea: 2,
-    prizeCoffee: 4,
-    prizeTeaCoffee: 1,
+    prizeTea: 3,
+    prizeCoffee: 6,
+    prizeTeaCoffee: 2,
 
     randomType: 'W1C1',
     feeType: 'Fee0'
@@ -94,9 +94,9 @@ export const constData9x5W1C1 = {
     nPreferCoffee: 9,
     nPreferWater: 9,
 
-    prizeTea: 2,
-    prizeCoffee: 6,
-    prizeTeaCoffee: 1,
+    prizeTea: 4,
+    prizeCoffee: 12,
+    prizeTeaCoffee: 3,
 
     randomType: 'W1C1',
     feeType: 'Fee0'
@@ -110,9 +110,9 @@ export const constData12x6W1C1 = {
     nPreferCoffee: 12,
     nPreferWater: 12,
 
-    prizeTea: 2,
-    prizeCoffee: 8,
-    prizeTeaCoffee: 1,
+    prizeTea: 5,
+    prizeCoffee: 20,
+    prizeTeaCoffee: 4,
 
     randomType: 'W1C1',
     feeType: 'Fee0'
@@ -427,8 +427,8 @@ let game = {
             case '6x4W1C1'  : this.initialize (constData6x4W1C1  ,false); break
             case '9x5W1C1'  : this.initialize (constData9x5W1C1  ,false); break
             case '12x6W1C1' : this.initialize (constData12x6W1C1 ,false); break
-            case 'param'    : this.initialize (constData12x6W1C1,true ); break
-            default         : this.initialize (constData12x6W1C1 ,false); break
+            case 'param'    : this.initialize (constData6x4W1C1,true ); break
+            default         : this.initialize (constData6x4W1C1 ,false); break
         }
         this.rerender()
     },
@@ -453,10 +453,11 @@ let game = {
 
     create (rerender) {
         this.rerender = rerender
-        this.initialize (constData12x6W1C1, false)
+        this.initialize (constData6x4W1C1, false)
     },
 
     initialize(data, haveParamComponent) {
+        this.isStatics = false
         this.isParamComponent = haveParamComponent
 
         let nRow = data.nRow
