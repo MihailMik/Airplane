@@ -333,7 +333,7 @@ let game = {
                 let seat = game.seats[i]
 
                 if (!seat.served && (seat.given === 'Tea' || seat.given === 'Coffee'))
-                    game.prize -= game.feeType==='Fee1' ? 1 :
+                    game.prize -= game.feeType==='Fee1' ? game.prizeTeaCoffee :
                         (seat.given === 'Tea' ? game.prizeTea/2 : game.prizeCoffee/2);
             }
         }
