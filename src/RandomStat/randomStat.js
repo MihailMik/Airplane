@@ -295,7 +295,7 @@ export let stat = {
     start: false,
     count: 0,
     gist: [],
-    nInSeries: 10000,
+    nInSeries: 100000,
     strategy: 'T/C',
     timerId: undefined,
     isDescription: false,
