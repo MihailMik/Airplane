@@ -38,97 +38,97 @@ const description = {
     'T/C': [
         'Q1: T/C IF T -> Q2: T/C IF (T&Prz<=c) -> Q3: C',
         '                           (C&Prz<=t) -> Q3: T',
-        'Q1: T/C IF C -> Q2: T   IF (T&Prz<=t) -> Q3: T',
+        'Q1: T/C IF C -> Q2: T   IF (T&Prz<=(t+c)) -> Q3: T',
     ],
 }
 const realization = {
     '1T': [
-        'if (one === T) {',
+        'if (first === T) {',
         '    prize += PRIZE_TEA',
-        '    if (two === C) prize += PRIZE_COFFEE',
-        '    else if (two === W) prize = 0',
-        '} else if (one === C) {',
-        '    if (two === T) prize += PRIZE_TEA',
-        '    else if (two === W) prize = 0',
+        '    if (second === C) prize += PRIZE_COFFEE',
+        '    else if (second === W) prize = 0',
+        '} else if (first === C) {',
+        '    if (second === T) prize += PRIZE_TEA',
+        '    else if (second === W) prize = 0',
         '} else prize = 0',
     ],
     '1C': [
-        'if (one === T) {',
+        'if (first === T) {',
         '    prize += PRIZE_TEA',
-        '    if (two === C) prize += PRIZE_COFFEE',
-        '    else if (two === W) prize = 0',
-        '} else if (one === C) {',
-        '    if (two === T) prize += PRIZE_TEA',
-        '    else if (two === W) prize = 0',
+        '    if (second === C) prize += PRIZE_COFFEE',
+        '    else if (second === W) prize = 0',
+        '} else if (first === C) {',
+        '    if (second === T) prize += PRIZE_TEA',
+        '    else if (second === W) prize = 0',
         '} else prize = 0',
         ],
     'Strat2': [
-        'if (one === T) {',
+        'if (first === T) {',
         '    prize += PRIZE_TEA',
-        '    if (two === C) prize += PRIZE_COFFEE',
-        '    else if (two === T) {',
+        '    if (second === C) prize += PRIZE_COFFEE',
+        '    else if (second === T) {',
         '        prize += 0',
         '        if (prize <= PRIZE_COFFEE) {',
-        '            if (three === C) prize += PRIZE_COFFEE',
+        '            if (third === C) prize += PRIZE_COFFEE',
         '            else prize = 0',
         '        }',
         '    } else prize = 0',
-        '} else if (one === C) {',
+        '} else if (first === C) {',
         '    prize += 0',
-        '    if (two === T) {',
+        '    if (second === T) {',
         '        prize += PRIZE_TEA',
         '        if (prize <= PRIZE_TEA) {',
-        '            if (three === T) prize += PRIZE_TEA',
+        '            if (third === T) prize += PRIZE_TEA',
         '            else prize = 0',
         '        }',
         '    } else prize = 0',
         '} else prize = 0',
     ],
     'Strat3': [
-        'if (one === T) {',
+        'if (first === T) {',
         '    prize += PRIZE_TEA',
-        '    if (two === T) {',
+        '    if (second === T) {',
         '        prize += PRIZE_TEA',
         '        if (prize <= PRIZE_COFFEE) {',
-        '            if (three === C) prize += PRIZE_COFFEE',
+        '            if (third === C) prize += PRIZE_COFFEE',
         '            else prize = 0',
         '        }',
-        '    } else if (two === C) {',
+        '    } else if (second === C) {',
         '        prize += 0',
         '    } else prize = 0',
-        '} else if (one === C) {',
+        '} else if (first === C) {',
         '    prize += 0',
-        '    if (two === T) {',
+        '    if (second === T) {',
         '        prize += PRIZE_TEA',
         '        if (prize <= PRIZE_TEA) {',
-        '            if (three === T) prize += PRIZE_TEA',
+        '            if (third === T) prize += PRIZE_TEA',
         '            else prize = 0',
         '        }',
         '    } else prize = 0',
         '} else prize = 0',
     ],
     'T/C': [
-        'if (one === T) {',
+        'if (first === T) {',
         '    prize += PRIZE_TC',
-        '    if (two === T) {',
+        '    if (second === T) {',
         '        prize += PRIZE_TC',
         '        if (prize <= PRIZE_COFFEE) {',
-        '            if (three === C) prize += PRIZE_COFFEE',
+        '            if (third === C) prize += PRIZE_COFFEE',
         '            else prize = 0',
         '        }',
-        '    } else if (two === C) {',
+        '    } else if (second === C) {',
         '        prize += PRIZE_TC',
         '        if (prize <= PRIZE_TEA) {',
-        '            if (three === T) prize += PRIZE_TEA',
+        '            if (third === T) prize += PRIZE_TEA',
         '            else prize = 0',
         '        }',
         '    } else prize = 0',
-        '} else if (one === C) {',
+        '} else if (first === C) {',
         '    prize += PRIZE_TC',
-        '    if (two === T) {',
+        '    if (second === T) {',
         '        prize += PRIZE_TEA',
-        '        if (prize <= (PRIZE_TEA+PRIZE_TC)) {',
-        '            if (three === T) prize += PRIZE_TEA',
+        '        if (prize <= (PRIZE_TEA+PRIZE_COFFEE)) {',
+        '            if (third === T) prize += PRIZE_TEA',
         '            else prize = 0',
         '        }',
         '    } else prize = 0',
@@ -167,14 +167,14 @@ const Strategy_1T = () => {
     let prize = 0
     for (let row = 0; row < NROW; row++) {
         let seats = mix(ONE_ROW)
-        const [one, two] = [...seats]
-        if (one === T) {
+        const [first, second] = [...seats]
+        if (first === T) {
             prize += PRIZE_TEA
-            if (two === C) prize += PRIZE_COFFEE
-            else if (two === W) prize = 0
-        } else if (one === C) {
-            if (two === T) prize += PRIZE_TEA
-            else if (two === W) prize = 0
+            if (second === C) prize += PRIZE_COFFEE
+            else if (second === W) prize = 0
+        } else if (first === C) {
+            if (second === T) prize += PRIZE_TEA
+            else if (second === W) prize = 0
         } else prize = 0
     }
     return prize
@@ -183,14 +183,14 @@ const Strategy_1C = () => {
     let prize = 0
     for (let row = 0; row < NROW; row++) {
         let seats = mix(ONE_ROW)
-        const [one, two] = [...seats]
-        if (one === C) {
+        const [first, second] = [...seats]
+        if (first === C) {
             prize += PRIZE_COFFEE
-            if (two === T) prize += PRIZE_TEA
-            else if (two === W) prize = 0
-        } else if (one === T) {
-            if (two === C) prize += PRIZE_COFFEE
-            else if (two === W) prize = 0
+            if (second === T) prize += PRIZE_TEA
+            else if (second === W) prize = 0
+        } else if (first === T) {
+            if (second === C) prize += PRIZE_COFFEE
+            else if (second === W) prize = 0
         } else prize = 0
     }
     return prize
@@ -200,24 +200,24 @@ const Strategy_Strat2 = () => {
     let prize = 0
     for (let row = 0; row < NROW; row++) {
         let seats = mix(ONE_ROW)
-        const [one, two, three] = [...seats]
+        const [first, second, third] = [...seats]
 
-        if (one === T) {
+        if (first === T) {
             prize += PRIZE_TEA
-            if (two === C) prize += PRIZE_COFFEE
-            else if (two === T) {
+            if (second === C) prize += PRIZE_COFFEE
+            else if (second === T) {
                 prize += 0
                 if (prize <= PRIZE_COFFEE) {
-                    if (three === C) prize += PRIZE_COFFEE
+                    if (third === C) prize += PRIZE_COFFEE
                     else prize = 0
                 }
             } else prize = 0
-        } else if (one === C) {
+        } else if (first === C) {
             prize += 0
-            if (two === T) {
+            if (second === T) {
                 prize += PRIZE_TEA
                 if (prize <= PRIZE_TEA) {
-                    if (three === T) prize += PRIZE_TEA
+                    if (third === T) prize += PRIZE_TEA
                     else prize = 0
                 }
             } else prize = 0
@@ -230,25 +230,25 @@ const Strategy_Strat3 = () => {
     let prize = 0
     for (let row = 0; row < NROW; row++) {
         let seats = mix(ONE_ROW)
-        const [one, two, three] = [...seats]
+        const [first, second, third] = [...seats]
 
-        if (one === T) {
+        if (first === T) {
             prize += PRIZE_TEA
-            if (two === T) {
+            if (second === T) {
                 prize += PRIZE_TEA
                 if (prize <= PRIZE_COFFEE) {
-                    if (three === C) prize += PRIZE_COFFEE
+                    if (third === C) prize += PRIZE_COFFEE
                     else prize = 0
                 }
-            } else if (two === C) {
+            } else if (second === C) {
                 prize += 0
             } else prize = 0
-        } else if (one === C) {
+        } else if (first === C) {
             prize += 0
-            if (two === T) {
+            if (second === T) {
                 prize += PRIZE_TEA
                 if (prize <= PRIZE_TEA) {
-                    if (three === T) prize += PRIZE_TEA
+                    if (third === T) prize += PRIZE_TEA
                     else prize = 0
                 }
             } else prize = 0
@@ -260,28 +260,28 @@ const Strategy_T_C = () => {
     let prize = 0
     for (let row = 0; row < NROW; row++) {
         let seats = mix(ONE_ROW)
-        const [one, two, three] = [...seats]
-        if (one === T) {
+        const [first, second, third] = [...seats]
+        if (first === T) {
             prize += PRIZE_TC
-            if (two === T) {
+            if (second === T) {
                 prize += PRIZE_TC
                 if (prize <= PRIZE_COFFEE) {
-                    if (three === C) prize += PRIZE_COFFEE
+                    if (third === C) prize += PRIZE_COFFEE
                     else prize = 0
                 }
-            } else if (two === C) {
+            } else if (second === C) {
                 prize += PRIZE_TC
                 if (prize <= PRIZE_TEA) {
-                    if (three === T) prize += PRIZE_TEA
+                    if (third === T) prize += PRIZE_TEA
                     else prize = 0
                 }
             } else prize = 0
-        } else if (one === C) {
+        } else if (first === C) {
             prize += PRIZE_TC
-            if (two === T) {
+            if (second === T) {
                 prize += PRIZE_TEA
-                if (prize <= (PRIZE_TEA+PRIZE_TC)) {
-                    if (three === T) prize += PRIZE_TEA
+                if (prize <= (PRIZE_TEA+PRIZE_COFFEE)) {
+                    if (third === T) prize += PRIZE_TEA
                     else prize = 0
                 }
             } else prize = 0
@@ -295,7 +295,7 @@ export let stat = {
     count: 0,
     gist: [],
     nInSeries: 100,
-    strategy: 'T/C', STEP: 1, NPRIZES: 36 / 1 + 1,
+    strategy: 'T/C', STEP: 1, NPRIZES: 21 / 1 + 1,
     timerId: undefined,
     isDescription: false,
     isRealization: false,
@@ -307,7 +307,7 @@ export let stat = {
     newStrategy: (strategy) => {
         stat.strategy = strategy;
         switch (strategy) {
-            case 'T/C':     stat.STEP=1; stat.NPRIZES = 36/stat.STEP +1; break
+            case 'T/C':     stat.STEP=1; stat.NPRIZES = 21/stat.STEP +1; break
             case 'Strat3':  stat.STEP=2; stat.NPRIZES = 38/stat.STEP +1; break
             default:        stat.STEP=2; stat.NPRIZES = 36/stat.STEP +1; break
         }
