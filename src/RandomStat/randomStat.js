@@ -24,6 +24,9 @@ const description = {
         'Q1: C IF C -> Q2: T',
         'Q1: C IF T -> Q2: C',
     ],
+    '1TC 2TC': [
+        'Q1: TC  Q2: TC',
+    ],
     'Strat2': [
         'Q1: T IF T -> Q2: C IF (T&Prz<=c) -> Q3: C',
         'else Next',
@@ -40,6 +43,13 @@ const description = {
         'Q1: T/C IF T -> Q2: T/C IF (T&Prz<=c) -> Q3: C',
         '                           (C&Prz<=t) -> Q3: T',
         'Q1: T/C IF C -> Q2: T   IF (T&Prz<=(t+c)) -> Q3: T',
+    ],
+    'onlyC': [
+        'IF Prz  = 0:',
+        '    Q1: C IF T -> Q2: C IF T -> Q3: C',
+        'IF Prz != 0:',
+        '    Q1: T IF T -> Q2: C',
+        '    Q1: T IF C -> Q2: T',
     ],
 }
 const realization = {
@@ -62,6 +72,10 @@ const realization = {
         '    if (second === T) prize += PRIZE_TEA',
         '    else if (second === W) prize = 0',
         '} else prize = 0',
+        ],
+    '1TC 2TC': [
+        'if (first === W || second === w)prize = 0',
+        'else prize += PRIZE_TC * 2',
         ],
     'Strat2': [
         'if (first === T) {',
@@ -135,6 +149,24 @@ const realization = {
         '    } else prize = 0',
         '} else prize = 0'
     ],
+    'onlyC': [
+        'if (prize === 0) {',
+        '    if (first === C) prize += PRIZE_COFFEE',
+        '    else if (first === T) {',
+        '        if (second === C) prize += PRIZE_COFFEE',
+        '        else if (second === T) {',
+        '            if (third === C) prize += PRIZE_COFFEE',
+        '            else prize = 0',
+        '        }',
+        '        else prize = 0',
+        '    }',
+        '    else prize = 0',
+        '}',
+        'else {',
+        '    if (first === W) prize = 0',
+        '    else prize += PRIZE_TC',
+        '}'
+    ],
 }
 const mix = (arr) => {
     let nCol = arr.length
@@ -154,16 +186,59 @@ const PlayOne = () => {
             return Strategy_1T();
         case '1C':
             return Strategy_1C();
+        case '1TC 2TC':
+            return Strategy_1TC2TC();
         case 'Strat2':
             return Strategy_Strat2();
         case 'Strat3':
             return Strategy_Strat3();
         case 'T/C':
             return Strategy_T_C();
+        case 'onlyC':
+            return Strategy_onlyC();
         default:
             return 0;
     }
 }
+
+const Strategy_onlyC = () => {
+    debugger
+    let prize = 0
+    for (let row = 0; row < NROW; row++) {
+        let seats = mix(ONE_ROW)
+        const [first, second, third] = [...seats]
+
+        if (prize === 0) {
+            if (first === C) {
+                prize += PRIZE_COFFEE
+                if (second === T) prize += PRIZE_TEA
+                else prize = 0
+            }
+            else if (first === T) {
+                if (second === C) prize += PRIZE_COFFEE
+                else if (second === T) {
+                    if (third === C) prize += PRIZE_COFFEE
+                    else prize = 0
+                }
+                else prize = 0
+            }
+            else prize = 0
+        }
+        else {
+            if (first === T) {
+                prize += PRIZE_TEA
+                if (second === C) prize += PRIZE_COFFEE
+                else if (second === W) prize = 0
+            } else if (first === C) {
+                if (second === T) prize += PRIZE_TEA
+                else if (second === W) prize = 0
+            } else prize = 0
+        }
+    }
+    return prize
+}
+
+
 const Strategy_1T = () => {
     let prize = 0
     for (let row = 0; row < NROW; row++) {
@@ -180,6 +255,7 @@ const Strategy_1T = () => {
     }
     return prize
 }
+
 const Strategy_1C = () => {
     let prize = 0
     for (let row = 0; row < NROW; row++) {
@@ -193,6 +269,18 @@ const Strategy_1C = () => {
             if (second === C) prize += PRIZE_COFFEE
             else if (second === W) prize = 0
         } else prize = 0
+    }
+    return prize
+}
+
+const Strategy_1TC2TC = () => {
+    let prize = 0
+    for (let row = 0; row < NROW; row++) {
+        let seats = mix(ONE_ROW)
+        const [first, second] = [...seats]
+
+        if (first === W || second === W) prize = 0
+        else prize += PRIZE_TC * 2
     }
     return prize
 }
@@ -296,7 +384,7 @@ export let stat = {
     count: 0,
     gist: [],
     nInSeries: 100000,
-    strategy: 'T/C',
+    strategy: 'onlyC',
     timerId: undefined,
     isDescription: false,
     isRealization: false,
@@ -426,12 +514,16 @@ export default props => {
                     }}>
                         <option value={'1T'} selected={stat.strategy === '1T'}>1T</option>
                         <option value={'1C'} selected={stat.strategy === '1C'}>1C</option>
+                        <option value={'1TC 2TC'} selected={stat.strategy === '1TC 2TC'}>1TC 2TC</option>
                         <option value={'Strat2'} selected={stat.strategy === 'Strat2'}>Str2</option>
                         <option value={'Strat3'} selected={stat.strategy === 'Strat3'}>Str3</option>
                         <option value={'T/C'} selected={stat.strategy === 'T/C'}>T/C</option>
+                        <option value={'onlyC'} selected={stat.strategy === 'onlyC'}>Co + 1T</option>
                     </select>
                 </label>
+            </div>
 
+            <div>
                 <button className={s.buttonDescription} onClick={() => {
                     stat.isDescription = !stat.isDescription
                     game.rerender()
@@ -445,9 +537,7 @@ export default props => {
                 }}>
                     {stat.isRealization ? 'Скрыть реализацию' : 'Показать реализацию'}
                 </button>
-
             </div>
-
 
             {stat.isDescription ?
                 <div className={s.description} > {makeDescription (description[stat.strategy])} </div> :
@@ -519,6 +609,9 @@ export default props => {
                 minimumFractionDigits: 6,
                 maximumFractionDigits: 6
             })}</span>
+            </div>
+            <div className={s.total}>
+            Prizes: Tea/Coffee = {PRIZE_TC}, Tea= {PRIZE_TEA}, Coffee = {PRIZE_COFFEE}
             </div>
         </div>
     )
