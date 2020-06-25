@@ -15,6 +15,11 @@
 .Fee {
     margin-left:3px;
 }
+.Stat {
+    position: absolute;
+    /*width: 100%;*/
+    right: 0%;
+}
 .classHint {
     position: absolute;
     width: 100%;

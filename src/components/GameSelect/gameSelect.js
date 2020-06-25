@@ -28,30 +28,24 @@ const GameSelect = (props) => {
                 <input  className={s.Fee}type="radio" value='Fee2' checked={props.game.feeType === 'Fee2'}
                        onChange={(e) => props.game.onClickFee(e.target.value)}>
                 </input>
-                <label>Fee2</label>
+                <label>Mix</label>
             </div>
 
-            <div>
+            <div style={{position:"relative"}}>
                 {/*Призы*/}
                 <label className={s.paramTitle}>Prz</label>
-
-                <label className={s.paramName}>Tea:{props.game.prizeTeaStr} Tea/Co:{props.game.prizeTeaCoffeeStr}</label>
-
-                <label className={s.paramName}>Co:</label>
-                <input className={s.paramValue} value={props.game.prizeCoffeeStr}
-                       onChange={(e) => props.game.onChangePrizeCoffee(e.target.value)}>
-                </input>
+                <label className={s.paramName}>Tea/Co:{props.game.prizeTeaCoffeeStr} Tea:{props.game.prizeTeaStr} Co:{props.game.prizeCoffeeStr}</label>
 
                 {/*Подсказка*/}
                 {/*<div className={props.game.gameEnded ? s.empty:s.Right}>*/}
                 {/*<span className={props.game.gameEnded ? s.empty : s.Right}>*/}
                 <span hidden={props.game.gameEnded}>
-                        <input  className={s.Fee}type="checkbox" checked={props.game.hintChecked}
+                        <input  className={s.Fee} type="checkbox" checked={props.game.hintChecked}
                                onChange={() => props.game.onClickHint()}></input>
                     <label>Hint</label>
                 </span>
 
-                <button onClick={() => {props.game.isStatistic = true; props.game.rerender()}}>Stat</button>
+                <button className={s.Stat} onClick={() => {props.game.isStatistic = true; props.game.rerender()}}>Stat</button>
             </div>
         </div>
     )

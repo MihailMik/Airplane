@@ -83,7 +83,7 @@ export const constData6x4W1C1 = {
     prizeTeaCoffee: 2,
 
     randomType: 'W1C1',
-    feeType: 'Fee0'
+    feeType: 'Fee2'
 }
 
 export const constData9x5W1C1 = {
@@ -99,7 +99,7 @@ export const constData9x5W1C1 = {
     prizeTeaCoffee: 3,
 
     randomType: 'W1C1',
-    feeType: 'Fee0'
+    feeType: 'Fee2'
 }
 
 export const constData12x6W1C1 = {
@@ -115,7 +115,7 @@ export const constData12x6W1C1 = {
     prizeTeaCoffee: 4,
 
     randomType: 'W1C1',
-    feeType: 'Fee0'
+    feeType: 'Fee2'
 }
 
 let game = {
@@ -174,7 +174,7 @@ let game = {
 
         //Второй ряд открываем, когда открыта не менее половина в текущем ряду для feeChecked = true
         // let openSeat = (this.randomType === 'W1C1' && this.feeType!=='Fee2') ? this.nCol/2 : 1
-        let openSeat = (this.randomType === 'W1C1' && this.feeType==='Fee0') ? this.nCol/2 : 1
+        let openSeat = (this.randomType === 'W1C1' && (this.feeType==='Fee0'||this.feeType==='Fee2')) ? this.nCol/2 : 1
         return (row === this.activeRow) ||
                (row === (this.activeRow+1) && this.nServedInRow >= openSeat)
     },
@@ -333,8 +333,7 @@ let game = {
                 let seat = game.seats[i]
 
                 if (!seat.served && (seat.given === 'Tea' || seat.given === 'Coffee'))
-                    game.prize -= game.feeType==='Fee1' ? game.prizeTeaCoffee :
-                        (seat.given === 'Tea' ? game.prizeTea/2 : game.prizeCoffee/2);
+                    game.prize -= game.prizeTeaCoffee
             }
         }
     },

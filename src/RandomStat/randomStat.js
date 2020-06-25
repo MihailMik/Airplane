@@ -7,10 +7,227 @@ const C = 1
 const W = 2
 const ONE_ROW = [W, C, T, T]
 const NROW = 6
+let FEE = 2
 const PRIZE_TC = 2
 const PRIZE_TEA = 3
 const PRIZE_COFFEE = 6
 const NPRIZES_MAX = 100 //максимально возможный приз в игре, оценка сверху
+
+const mix = (arr) => {
+    let nCol = arr.length
+    let tmp = [...arr]
+    let out = []
+    for (let i = 0; i < nCol; i++) {
+        let ind = Math.floor(Math.random() * (nCol - i))
+        out[i] = tmp[ind]
+        tmp.splice(ind, 1)          //delete element from array
+    }
+    return out
+}
+
+const PlayOne = () => {
+    switch (stat.strategy) {
+        case '1T':
+            return Strategy_1T();
+        case '1C':
+            return Strategy_1C();
+        case '1TC 2TC':
+            return Strategy_1TC2TC();
+        case 'Strat2':
+            return Strategy_Strat2();
+        case 'Strat3':
+            return Strategy_Strat3();
+        case 'T/C':
+            return Strategy_T_C();
+        case 'onlyC':
+            return Strategy_onlyC();
+        default:
+            return 0;
+    }
+}
+
+const Strategy_onlyC = () => {
+    let prize = 0
+    for (let row = 0; row < NROW; row++) {
+        let seats = mix(ONE_ROW)
+        const [first, second, third] = [...seats]
+
+        if (prize === 0) {
+            if (first === C) {
+                prize += PRIZE_COFFEE
+                if (second === T) prize += PRIZE_TEA - FEE
+                else prize = 0
+            }
+            else if (first === T) {
+                if (second === C) prize += PRIZE_COFFEE - FEE
+                else if (second === T) {
+                    if (third === C) prize += PRIZE_COFFEE
+                    else prize = 0
+                }
+                else prize = 0
+            }
+            else prize = 0
+        }
+        else {
+            if (first === T) {
+                prize += PRIZE_TEA
+                if (second === C) prize += PRIZE_COFFEE - FEE
+                else if (second === W) prize = 0
+            } else if (first === C) {
+                if (second === T) prize += PRIZE_TEA - FEE
+                else if (second === W) prize = 0
+            } else prize = 0
+        }
+    }
+    return prize
+}
+
+
+const Strategy_1T = () => {
+    let prize = 0
+    for (let row = 0; row < NROW; row++) {
+        let seats = mix(ONE_ROW)
+        const [first, second] = [...seats]
+        if (first === T) {
+            prize += PRIZE_TEA
+            if (second === C) prize += PRIZE_COFFEE - FEE
+            else if (second === W) prize = 0
+        } else if (first === C) {
+            if (second === T) prize += PRIZE_TEA - FEE
+            else if (second === W) prize = 0
+        } else prize = 0
+    }
+    return prize
+}
+
+const Strategy_1C = () => {
+    let prize = 0
+    for (let row = 0; row < NROW; row++) {
+        let seats = mix(ONE_ROW)
+        const [first, second] = [...seats]
+        if (first === C) {
+            prize += PRIZE_COFFEE
+            if (second === T) prize += PRIZE_TEA - FEE
+            else if (second === W) prize = 0
+        } else if (first === T) {
+            if (second === C) prize += PRIZE_COFFEE - FEE
+            else if (second === W) prize = 0
+        } else prize = 0
+    }
+    return prize
+}
+
+const Strategy_1TC2TC = () => {
+    let prize = 0
+    for (let row = 0; row < NROW; row++) {
+        let seats = mix(ONE_ROW)
+        const [first, second] = [...seats]
+
+        if (first === W || second === W) prize = 0
+        else prize += PRIZE_TC * 2 - FEE
+    }
+    return prize
+}
+
+const Strategy_Strat2 = () => {
+    let prize = 0
+    for (let row = 0; row < NROW; row++) {
+        let seats = mix(ONE_ROW)
+        const [first, second, third] = [...seats]
+
+        if (first === T) {
+            prize += PRIZE_TEA
+            if (second === C) prize += PRIZE_COFFEE - FEE
+            else if (second === T) {
+                prize += 0
+                if (prize <= PRIZE_COFFEE) {
+                    if (third === C) prize += PRIZE_COFFEE
+                    else prize = 0
+                } else prize  -= FEE
+            } else prize = 0
+        } else if (first === C) {
+            prize += 0
+            if (second === T) {
+                prize += PRIZE_TEA
+                if (prize <= PRIZE_COFFEE) {
+                    if (third === T) prize += PRIZE_TEA
+                    else prize = 0
+                }
+                else  prize -= FEE
+            } else prize = 0
+        } else prize = 0
+    }
+    return prize
+}
+
+const Strategy_Strat3 = () => {
+    let prize = 0
+    for (let row = 0; row < NROW; row++) {
+        let seats = mix(ONE_ROW)
+        const [first, second, third] = [...seats]
+
+        if (first === T) {
+            prize += PRIZE_TEA
+            if (second === T) {
+                prize += PRIZE_TEA
+                if (prize <= PRIZE_COFFEE) {
+                    if (third === C) prize += PRIZE_COFFEE
+                    else prize = 0
+                }
+                else prize -=  FEE
+            } else if (second === C) {
+                prize += 0
+            } else prize = 0
+        } else if (first === C) {
+            prize += 0
+            if (second === T) {
+                prize += PRIZE_TEA
+                if (prize <= PRIZE_TEA) {
+                    if (third === T) prize += PRIZE_TEA
+                    else prize = 0
+                }
+                else prize -= FEE
+            } else prize = 0
+        } else prize = 0
+    }
+    return prize
+}
+const Strategy_T_C = () => {
+    let prize = 0
+    for (let row = 0; row < NROW; row++) {
+        let seats = mix(ONE_ROW)
+        const [first, second, third] = [...seats]
+        if (first === T) {
+            prize += PRIZE_TC
+            if (second === T) {
+                prize += PRIZE_TC
+                if (prize <= PRIZE_COFFEE) {
+                    if (third === C) prize += PRIZE_COFFEE
+                    else prize = 0
+                }
+                else prize -= FEE
+            } else if (second === C) {
+                prize += PRIZE_TC
+                if (prize <= PRIZE_TEA) {
+                    if (third === T) prize += PRIZE_TEA
+                    else prize = 0
+                }
+                else prize -= FEE
+            } else prize = 0
+        } else if (first === C) {
+            prize += PRIZE_TC
+            if (second === T) {
+                prize += PRIZE_TEA
+                if (prize <= (PRIZE_TEA+PRIZE_COFFEE)) {
+                    if (third === T) prize += PRIZE_TEA
+                    else prize = 0
+                }
+                else prize -= FEE
+            } else prize = 0
+        } else prize = 0
+    }
+    return prize
+}
 
 const makeDescription = (strings) => {
     return strings.map((item, i) => <div key={i}>{item}</div>)
@@ -53,330 +270,13 @@ const description = {
     ],
 }
 const realization = {
-    '1T': [
-        'if (first === T) {',
-        '    prize += PRIZE_TEA',
-        '    if (second === C) prize += PRIZE_COFFEE',
-        '    else if (second === W) prize = 0',
-        '} else if (first === C) {',
-        '    if (second === T) prize += PRIZE_TEA',
-        '    else if (second === W) prize = 0',
-        '} else prize = 0',
-    ],
-    '1C': [
-        'if (first === T) {',
-        '    prize += PRIZE_TEA',
-        '    if (second === C) prize += PRIZE_COFFEE',
-        '    else if (second === W) prize = 0',
-        '} else if (first === C) {',
-        '    if (second === T) prize += PRIZE_TEA',
-        '    else if (second === W) prize = 0',
-        '} else prize = 0',
-        ],
-    '1TC 2TC': [
-        'if (first === W || second === w)prize = 0',
-        'else prize += PRIZE_TC * 2',
-        ],
-    'Strat2': [
-        'if (first === T) {',
-        '    prize += PRIZE_TEA',
-        '    if (second === C) prize += PRIZE_COFFEE',
-        '    else if (second === T) {',
-        '        prize += 0',
-        '        if (prize <= PRIZE_COFFEE) {',
-        '            if (third === C) prize += PRIZE_COFFEE',
-        '            else prize = 0',
-        '        }',
-        '    } else prize = 0',
-        '} else if (first === C) {',
-        '    prize += 0',
-        '    if (second === T) {',
-        '        prize += PRIZE_TEA',
-        '        if (prize <= PRIZE_COFFEE) {',
-        '            if (third === T) prize += PRIZE_TEA',
-        '            else prize = 0',
-        '        }',
-        '    } else prize = 0',
-        '} else prize = 0',
-    ],
-    'Strat3': [
-        'if (first === T) {',
-        '    prize += PRIZE_TEA',
-        '    if (second === T) {',
-        '        prize += PRIZE_TEA',
-        '        if (prize <= PRIZE_COFFEE) {',
-        '            if (third === C) prize += PRIZE_COFFEE',
-        '            else prize = 0',
-        '        }',
-        '    } else if (second === C) {',
-        '        prize += 0',
-        '    } else prize = 0',
-        '} else if (first === C) {',
-        '    prize += 0',
-        '    if (second === T) {',
-        '        prize += PRIZE_TEA',
-        '        if (prize <= PRIZE_TEA) {',
-        '            if (third === T) prize += PRIZE_TEA',
-        '            else prize = 0',
-        '        }',
-        '    } else prize = 0',
-        '} else prize = 0',
-    ],
-    'T/C': [
-        'if (first === T) {',
-        '    prize += PRIZE_TC',
-        '    if (second === T) {',
-        '        prize += PRIZE_TC',
-        '        if (prize <= PRIZE_COFFEE) {',
-        '            if (third === C) prize += PRIZE_COFFEE',
-        '            else prize = 0',
-        '        }',
-        '    } else if (second === C) {',
-        '        prize += PRIZE_TC',
-        '        if (prize <= PRIZE_TEA) {',
-        '            if (third === T) prize += PRIZE_TEA',
-        '            else prize = 0',
-        '        }',
-        '    } else prize = 0',
-        '} else if (first === C) {',
-        '    prize += PRIZE_TC',
-        '    if (second === T) {',
-        '        prize += PRIZE_TEA',
-        '        if (prize <= (PRIZE_TEA+PRIZE_COFFEE)) {',
-        '            if (third === T) prize += PRIZE_TEA',
-        '            else prize = 0',
-        '        }',
-        '    } else prize = 0',
-        '} else prize = 0'
-    ],
-    'onlyC': [
-        'if (prize === 0) {',
-        '    if (first === C) prize += PRIZE_COFFEE',
-        '    else if (first === T) {',
-        '        if (second === C) prize += PRIZE_COFFEE',
-        '        else if (second === T) {',
-        '            if (third === C) prize += PRIZE_COFFEE',
-        '            else prize = 0',
-        '        }',
-        '        else prize = 0',
-        '    }',
-        '    else prize = 0',
-        '}',
-        'else {',
-        '    if (first === W) prize = 0',
-        '    else prize += PRIZE_TC',
-        '}'
-    ],
-}
-const mix = (arr) => {
-    let nCol = arr.length
-    let tmp = [...arr]
-    let out = []
-    for (let i = 0; i < nCol; i++) {
-        let ind = Math.floor(Math.random() * (nCol - i))
-        out[i] = tmp[ind]
-        tmp.splice(ind, 1)          //delete element from array
-    }
-    return out
-}
-
-const PlayOne = () => {
-    switch (stat.strategy) {
-        case '1T':
-            return Strategy_1T();
-        case '1C':
-            return Strategy_1C();
-        case '1TC 2TC':
-            return Strategy_1TC2TC();
-        case 'Strat2':
-            return Strategy_Strat2();
-        case 'Strat3':
-            return Strategy_Strat3();
-        case 'T/C':
-            return Strategy_T_C();
-        case 'onlyC':
-            return Strategy_onlyC();
-        default:
-            return 0;
-    }
-}
-
-const Strategy_onlyC = () => {
-    debugger
-    let prize = 0
-    for (let row = 0; row < NROW; row++) {
-        let seats = mix(ONE_ROW)
-        const [first, second, third] = [...seats]
-
-        if (prize === 0) {
-            if (first === C) {
-                prize += PRIZE_COFFEE
-                if (second === T) prize += PRIZE_TEA
-                else prize = 0
-            }
-            else if (first === T) {
-                if (second === C) prize += PRIZE_COFFEE
-                else if (second === T) {
-                    if (third === C) prize += PRIZE_COFFEE
-                    else prize = 0
-                }
-                else prize = 0
-            }
-            else prize = 0
-        }
-        else {
-            if (first === T) {
-                prize += PRIZE_TEA
-                if (second === C) prize += PRIZE_COFFEE
-                else if (second === W) prize = 0
-            } else if (first === C) {
-                if (second === T) prize += PRIZE_TEA
-                else if (second === W) prize = 0
-            } else prize = 0
-        }
-    }
-    return prize
-}
-
-
-const Strategy_1T = () => {
-    let prize = 0
-    for (let row = 0; row < NROW; row++) {
-        let seats = mix(ONE_ROW)
-        const [first, second] = [...seats]
-        if (first === T) {
-            prize += PRIZE_TEA
-            if (second === C) prize += PRIZE_COFFEE
-            else if (second === W) prize = 0
-        } else if (first === C) {
-            if (second === T) prize += PRIZE_TEA
-            else if (second === W) prize = 0
-        } else prize = 0
-    }
-    return prize
-}
-
-const Strategy_1C = () => {
-    let prize = 0
-    for (let row = 0; row < NROW; row++) {
-        let seats = mix(ONE_ROW)
-        const [first, second] = [...seats]
-        if (first === C) {
-            prize += PRIZE_COFFEE
-            if (second === T) prize += PRIZE_TEA
-            else if (second === W) prize = 0
-        } else if (first === T) {
-            if (second === C) prize += PRIZE_COFFEE
-            else if (second === W) prize = 0
-        } else prize = 0
-    }
-    return prize
-}
-
-const Strategy_1TC2TC = () => {
-    let prize = 0
-    for (let row = 0; row < NROW; row++) {
-        let seats = mix(ONE_ROW)
-        const [first, second] = [...seats]
-
-        if (first === W || second === W) prize = 0
-        else prize += PRIZE_TC * 2
-    }
-    return prize
-}
-
-const Strategy_Strat2 = () => {
-    let prize = 0
-    for (let row = 0; row < NROW; row++) {
-        let seats = mix(ONE_ROW)
-        const [first, second, third] = [...seats]
-
-        if (first === T) {
-            prize += PRIZE_TEA
-            if (second === C) prize += PRIZE_COFFEE
-            else if (second === T) {
-                prize += 0
-                if (prize <= PRIZE_COFFEE) {
-                    if (third === C) prize += PRIZE_COFFEE
-                    else prize = 0
-                }
-            } else prize = 0
-        } else if (first === C) {
-            prize += 0
-            if (second === T) {
-                prize += PRIZE_TEA
-                if (prize <= PRIZE_COFFEE) {
-                    if (third === T) prize += PRIZE_TEA
-                    else prize = 0
-                }
-            } else prize = 0
-        } else prize = 0
-    }
-    return prize
-}
-
-const Strategy_Strat3 = () => {
-    let prize = 0
-    for (let row = 0; row < NROW; row++) {
-        let seats = mix(ONE_ROW)
-        const [first, second, third] = [...seats]
-
-        if (first === T) {
-            prize += PRIZE_TEA
-            if (second === T) {
-                prize += PRIZE_TEA
-                if (prize <= PRIZE_COFFEE) {
-                    if (third === C) prize += PRIZE_COFFEE
-                    else prize = 0
-                }
-            } else if (second === C) {
-                prize += 0
-            } else prize = 0
-        } else if (first === C) {
-            prize += 0
-            if (second === T) {
-                prize += PRIZE_TEA
-                if (prize <= PRIZE_TEA) {
-                    if (third === T) prize += PRIZE_TEA
-                    else prize = 0
-                }
-            } else prize = 0
-        } else prize = 0
-    }
-    return prize
-}
-const Strategy_T_C = () => {
-    let prize = 0
-    for (let row = 0; row < NROW; row++) {
-        let seats = mix(ONE_ROW)
-        const [first, second, third] = [...seats]
-        if (first === T) {
-            prize += PRIZE_TC
-            if (second === T) {
-                prize += PRIZE_TC
-                if (prize <= PRIZE_COFFEE) {
-                    if (third === C) prize += PRIZE_COFFEE
-                    else prize = 0
-                }
-            } else if (second === C) {
-                prize += PRIZE_TC
-                if (prize <= PRIZE_TEA) {
-                    if (third === T) prize += PRIZE_TEA
-                    else prize = 0
-                }
-            } else prize = 0
-        } else if (first === C) {
-            prize += PRIZE_TC
-            if (second === T) {
-                prize += PRIZE_TEA
-                if (prize <= (PRIZE_TEA+PRIZE_COFFEE)) {
-                    if (third === T) prize += PRIZE_TEA
-                    else prize = 0
-                }
-            } else prize = 0
-        } else prize = 0
-    }
-    return prize
+    '1T': Strategy_1T.toString(),
+    '1C': Strategy_1T.toString(),
+    '1TC 2TC': Strategy_1TC2TC.toString(),
+    'Strat2': Strategy_Strat2.toString(),
+    'Strat3': Strategy_Strat3.toString(),
+    'T/C': Strategy_T_C.toString(),
+    'onlyC': Strategy_onlyC.toString(),
 }
 
 export let stat = {
@@ -426,6 +326,7 @@ export let stat = {
 }
 
 export default props => {
+    FEE = props.game.feeType === 'Fee0' ? 0:props.game.prizeTeaCoffee
     let totalPrzs = stat.gist.reduce((x, y, i) => x + y*i, 0)
     let totalPercent = stat.gist.reduce((x, y, i)=>x + y/(stat.count||1)*100, 0)
     let totalPercentPrzs = stat.gist.reduce((x, y, i)=>x + y*i/(totalPrzs||1)*100, 0)
@@ -503,7 +404,7 @@ export default props => {
     }
 
     let text = stat.start ? 'Перестать играть' : 'Играть серии непрерывно'
-
+debugger
     return (
         <div className={s.main}>
             <div className={s.Select}>
@@ -545,7 +446,7 @@ export default props => {
             }
 
             {stat.isRealization ?
-                <div className={s.realization} > {makeDescription (realization[stat.strategy])} </div> :
+                <div className={s.realization} > {makeDescription (realization[stat.strategy].split ('\n'))} </div> :
                 null
             }
 
