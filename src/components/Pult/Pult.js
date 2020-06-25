@@ -46,8 +46,8 @@ const Pult = (props) => {
     if (game.prize<=0) disabledTake = true
     else if (game.gameEnded) disabledTake = false
     else if (game.randomType === 'W1C1') {
-        // disabledTake = (game.activeRow !== game.nRow-1 || game.nServedInRow < 1 || (game.nServedInRow<game.nCol/2 && game.feeType!=='Fee2'))
-        disabledTake = (game.activeRow !== game.nRow-1 || game.nServedInRow < 1 || (game.nServedInRow<game.nCol/2 && (game.feeType==='Fee0'||game.feeType==='Fee2')))
+        // disabledTake = (game.activeRow !== game.nRow-1 || game.nServedInRow < 1 || (game.nServedInRow<game.nCol/2 && game.feeType!=='Mix'))
+        disabledTake = (game.activeRow !== game.nRow-1 || game.nServedInRow < 1 || (game.nServedInRow<game.nCol/2 && (game.feeType==='Fee0'||game.feeType==='Mix')))
     } else {
         disabledTake = !((game.activeRow && game.activeRow % 3 === 0 && game.nServedInRow === 0) ||
             (game.activeRow % 3 === 2 && game.nServedInRow >= game.nCol / 2))

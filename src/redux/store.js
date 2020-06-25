@@ -83,7 +83,7 @@ export const constData6x4W1C1 = {
     prizeTeaCoffee: 2,
 
     randomType: 'W1C1',
-    feeType: 'Fee2'
+    feeType: 'Mix'
 }
 
 export const constData9x5W1C1 = {
@@ -99,7 +99,7 @@ export const constData9x5W1C1 = {
     prizeTeaCoffee: 3,
 
     randomType: 'W1C1',
-    feeType: 'Fee2'
+    feeType: 'Mix'
 }
 
 export const constData12x6W1C1 = {
@@ -115,7 +115,7 @@ export const constData12x6W1C1 = {
     prizeTeaCoffee: 4,
 
     randomType: 'W1C1',
-    feeType: 'Fee2'
+    feeType: 'Mix'
 }
 
 let game = {
@@ -173,8 +173,8 @@ let game = {
         if (this.gameEnded || this.seats[ind].served) return false
 
         //Второй ряд открываем, когда открыта не менее половина в текущем ряду для feeChecked = true
-        // let openSeat = (this.randomType === 'W1C1' && this.feeType!=='Fee2') ? this.nCol/2 : 1
-        let openSeat = (this.randomType === 'W1C1' && (this.feeType==='Fee0'||this.feeType==='Fee2')) ? this.nCol/2 : 1
+        // let openSeat = (this.randomType === 'W1C1' && this.feeType!=='Mix') ? this.nCol/2 : 1
+        let openSeat = (this.randomType === 'W1C1' && (this.feeType==='Fee0'||this.feeType==='Mix')) ? this.nCol/2 : 1
         return (row === this.activeRow) ||
                (row === (this.activeRow+1) && this.nServedInRow >= openSeat)
     },
