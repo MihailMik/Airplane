@@ -48,10 +48,8 @@
 
 .total
 {
-    /*font-family: monospace;*/
-    margin: 5px;
-    width:  30rem;
-    height: 1rem;
+    font-family: monospace;
+    white-space: pre;
 }
 
 .buttonPrize  {

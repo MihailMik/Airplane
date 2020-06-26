@@ -1,4 +1,4 @@
-import s from './gameSelect.module.css'
+﻿import s from './gameSelect.module.css'
 import React from "react";
 
 const GameSelect = (props) => {
@@ -20,15 +20,14 @@ const GameSelect = (props) => {
                        onChange={(e) => props.game.onClickFee(e.target.value)}></input>
                 <label>Fee0</label>
 
-                <input className={s.Fee} type="radio" value='Full' checked={props.game.feeType === 'Full'}
-                       onChange={(e) => props.game.onClickFee(e.target.value)}></input>
-                <label>Full</label>
-
 
                 <input  className={s.Fee}type="radio" value='Mix' checked={props.game.feeType === 'Mix'}
-                       onChange={(e) => props.game.onClickFee(e.target.value)}>
-                </input>
-                <label>Mix</label>
+                       onChange={(e) => props.game.onClickFee(e.target.value)}></input>
+                <label>Min</label>
+
+                <input className={s.Fee} type="radio" value='Full' checked={props.game.feeType === 'Full'}
+                       onChange={(e) => props.game.onClickFee(e.target.value)}></input>
+                <label>Max</label>
             </div>
 
             <div style={{position:"relative"}}>

@@ -41,6 +41,8 @@ const PlayOne = () => {
             return Strategy_1TC();
         case '1T@Mix':
             return Strategy_1T_Mix();
+        case '1C @ 3steps':
+            return Strategy_1C_3steps();
         case 'T/C':
             return Strategy_T_C();
         case 'onlyC':
@@ -201,6 +203,33 @@ const Strategy_1T_Mix = () => {
     return prize
 }
 
+const Strategy_1C_3steps = () => {
+    let prize = 0
+    for (let row = 0; row < NROW; row++) {
+        let seats = mix(ONE_ROW)
+        const [first, second, third] = [...seats]
+
+        if (first === C) {
+            prize += PRIZE_COFFEE
+            if (second === T) {
+                prize += PRIZE_TEA - FEE_TEA
+            } else prize = 0
+        } else if (first === T) {
+            if (second === C) {
+                prize += PRIZE_COFFEE - FEE_TEA
+            }
+            else if (second === T) {
+                if (prize <= PRIZE_COFFEE) {
+                    if (third === C) prize += PRIZE_COFFEE
+                    else prize = 0
+                }
+                else prize -= FEE_COFFEE
+            } else prize = 0
+        }  else prize = 0
+    }
+    return prize
+}
+
 const Strategy_T_C = () => {
     let prize = 0
     for (let row = 0; row < NROW; row++) {
@@ -217,12 +246,7 @@ const Strategy_T_C = () => {
                 }
                 else prize -= FEE_COFFEE
             } else if (second === C) {
-                prize += PRIZE_TC
-                if (prize <= PRIZE_TEA) {
-                    if (third === T) prize += PRIZE_TEA
-                    else prize = 0
-                }
-                else prize -= FEE_TEA
+                prize += PRIZE_TC - FEE_TEA
             } else prize = 0
         } else if (first === C) {
             prize += PRIZE_TC
@@ -257,19 +281,26 @@ const description = {
     ],
     '1T@Mix': [
         'Q1: T IF T -> Q2: C IF (T&Prz<=c) -> Q3: C',
-        'else Next',
+        '                    else Next',
         'Q1: T IF C -> Q2: T IF (T&Prz<=t) -> Q3: T',
-        'else Next',
+        '                    else Next',
+    ],
+    '1C @ 3steps': [
+        'Q1: C IF C -> Q2: T',
+        '      IF T -> Q2: C IF (T&Prz<=c) -> Q3: C',
+        '                    else Next',
     ],
     'T/C': [
         'Q1: T/C IF T -> Q2: T/C IF (T&Prz<=c) -> Q3: C',
-        '                           (C&Prz<=t) -> Q3: T',
+        '                        else Next',
         'Q1: T/C IF C -> Q2: T   IF (T&Prz<=(t+c)) -> Q3: T',
+        '                        else Next',
     ],
     'onlyC': [
         'IF Prz  = 0:',
-        '    Q1: C IF C -> Q2: T, Q3: T',
-        '    Q1: C IF T -> Q2: C, Q3: T или C',
+        '    Q1: C IF C -> Q2: T',
+        '    Q1: C IF T -> Q2: C IF T -> Q3: C',
+        '                        else Next',
         'IF Prz != 0:',
         '    Q1: C IF C -> Q2: T',
         '    Q1: C IF T -> Q2: C',
@@ -280,6 +311,7 @@ const realization = {
     '1C': Strategy_1T.toString(),
     '1T/C': Strategy_1TC.toString(),
     'Strat2': Strategy_1T_Mix.toString(),
+    '1C @ 3steps': Strategy_1C_3steps(),
     'T/C': Strategy_T_C.toString(),
     'onlyC': Strategy_onlyC.toString(),
 }
@@ -287,6 +319,8 @@ const realization = {
 export let stat = {
     start: false,
     count: 0,
+    min: 0,
+    negCount:0,
     gist: [],
     nInSeries: 100000,
     strategy: 'onlyC',
@@ -312,13 +346,20 @@ export let stat = {
 
     clear: () => {
         stat.count = 0
+        stat.min = 0
+        stat.negCount = 0
         for (let i = 0; i < NPRIZES_MAX; i++)
             stat.gist[i] = 0
     },
 
     Play() {
         for (let i = 0; i < stat.nInSeries; i++) {
-            stat.gist[PlayOne()]++
+            let ind = PlayOne ()
+            if (ind < stat.min) {
+                stat.min = ind
+                stat.negCount++
+            }
+            stat.gist[Math.max (0, ind)]++
         }
         stat.count += stat.nInSeries
     },
@@ -331,10 +372,10 @@ export let stat = {
 }
 
 export default props => {
-    let totalPrzs = stat.gist.reduce((x, y, i) => x + y*i, 0)
-    let totalPercent = stat.gist.reduce((x, y, i)=>x + y/(stat.count||1)*100, 0)
-    let totalPercentPrzs = stat.gist.reduce((x, y, i)=>x + y*i/(totalPrzs||1)*100, 0)
-    let average = totalPrzs / (stat.count || 1)
+    let totalPrzs           = stat.gist.reduce((x, y, i) => x + y*i, 0)
+    let totalPercent        = stat.gist.reduce((x, y, i)=>x + y*100/(stat.count||1), 0)
+    let totalPercentPrzs    = stat.gist.reduce((x, y, i)=>x + y*i/(totalPrzs||1)*100, 0)
+    let average             = totalPrzs / (stat.count || 1)
     const MakeAll = () => {
         const MakeRow = (row) => {
             if (stat.gist[row] === 0) return null;
@@ -408,6 +449,9 @@ export default props => {
     }
 
     let text = stat.start ? 'Перестать играть' : 'Играть серии непрерывно'
+    let maxPrzIndex = stat.gist.length
+    while (maxPrzIndex && stat.gist[--maxPrzIndex] === 0);
+
     return (
         <div className={s.main}>
             <div className={s.Select}>
@@ -416,12 +460,13 @@ export default props => {
                         stat.newStrategy(e.target.value)
                         game.rerender()
                     }}>
-                        <option value={'1T'} selected={stat.strategy === '1T'}>1T</option>
-                        <option value={'1C'} selected={stat.strategy === '1C'}>1C</option>
-                        <option value={'1T/C'} selected={stat.strategy === '1T/C'}>1T/C</option>
-                        <option value={'1T@Mix'} selected={stat.strategy === '1T@Mix'}>1T@Mix</option>
-                        <option value={'T/C'} selected={stat.strategy === 'T/C'}>T/C</option>
-                        <option value={'onlyC'} selected={stat.strategy === 'onlyC'}>Co + 1C</option>
+                        <option value={'1T'} selected={stat.strategy === '1T'}>1T @ 2steps</option>
+                        <option value={'1C'} selected={stat.strategy === '1C'}>1C @ 2steps</option>
+                        <option value={'1T/C'} selected={stat.strategy === '1T/C'}>1T/C @ 2steps</option>
+                        <option value={'1T@Mix'} selected={stat.strategy === '1T@Mix'}>1T @ 3steps</option>
+                        <option value={'1C @ 3steps'} selected={stat.strategy === '1C @ 3steps'}>1C @ 3steps</option>
+                        <option value={'T/C'} selected={stat.strategy === 'T/C'}>1T/C @ 3steps</option>
+                        <option value={'onlyC'} selected={stat.strategy === 'onlyC'}>Co+1C  @ 3steps</option>
                     </select>
                 </label>
             </div>
@@ -501,24 +546,22 @@ export default props => {
                 {MakeAll()}
             </div>
 
-            <div>
-                <span className={s.total}>Total Games: {stat.count.toLocaleString("ru-RU", {useGrouping: true})}</span>
-            </div>
-            <div>
-                <span className={s.total}>Total Przes: {totalPrzs.toLocaleString("ru-RU", {useGrouping: true})}</span>
-            </div>
-            <div>
-            <span className={s.total}>Average Prz: {average.toLocaleString("ru-RU", {
-                minimumFractionDigits: 6,
-                maximumFractionDigits: 6
-            })}</span>
-            </div>
-            <div className={s.total}>
-            Prizes: Tea/Coffee = {PRIZE_TC}, Tea= {PRIZE_TEA}, Coffee = {PRIZE_COFFEE}
-            </div>
-            <div className={s.total}>
-            Fee Type: {props.game.feeType}
-            </div>
+            <div className={s.total}>Total Games: {stat.count.toLocaleString("ru-RU", {useGrouping: true})}</div>
+            <div className={s.total}>Total Przes: {totalPrzs.toLocaleString("ru-RU", {useGrouping: true})}</div>
+            <div className={s.total}>Aver Prz   : {average.toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}</div>
+
+            <div className={s.total}> </div>
+
+            <div className={s.total}>Prz=0@%    : {(stat.gist[0]/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
+            <div className={s.total}>Prz=1...5@%: {((stat.gist.reduce ((x,y,i) => i < 6 && i > 0 ? x+y:x, 0))/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
+            <div className={s.total}>Prz=6@%    : {(stat.gist[6]/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
+            <div className={s.total}>MaxPrz@%   : {maxPrzIndex}@ {(stat.gist[maxPrzIndex]/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
+            <div className={s.total}>MinPrz@%   : {stat.min}, total negative: {(stat.negCount/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
+
+            <div className={s.total}> </div>
+
+            <div className={s.total}>Prizes  : Tea/Coffee = {PRIZE_TC}, Tea= {PRIZE_TEA}, Coffee = {PRIZE_COFFEE}</div>
+            <div className={s.total}>Fee Type: {props.game.feeType}</div>
         </div>
     )
 }
