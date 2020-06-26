@@ -28,8 +28,8 @@ const mix = (arr) => {
 const PlayOne = () => {
     switch (game.feeType) {
         case 'Fee0': FEE_TEA = 0; FEE_COFFEE = 0; break
-        case 'Full': FEE_TEA = game.prizeTea; FEE_COFFEE = game.prizeCoffee; break
-        case 'Mix':
+        case 'Max': FEE_TEA = game.prizeTea; FEE_COFFEE = game.prizeCoffee; break
+        case 'Min':
         default: FEE_TEA =  game.prizeTeaCoffee; FEE_COFFEE = game.prizeTeaCoffee; break
     }
     switch (stat.strategy) {
@@ -87,7 +87,7 @@ const Strategy_onlyC = () => {   //NB!
         let seats = mix(ONE_ROW)
         const [first, second, third] = [...seats]
 
-        if (prize === 0) {
+        if (prize <= PRIZE_COFFEE*2) {    //NB!
             if (first === C) {
                 prize += PRIZE_COFFEE
                 if (second === T) prize += PRIZE_TEA - FEE_TEA
@@ -297,7 +297,7 @@ const description = {
         '                        else Next',
     ],
     'onlyC': [
-        'IF Prz  = 0:',
+        'IF Prz  <= 0:',
         '    Q1: C IF C -> Q2: T',
         '    Q1: C IF T -> Q2: C IF T -> Q3: C',
         '                        else Next',
