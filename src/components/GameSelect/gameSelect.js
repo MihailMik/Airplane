@@ -20,9 +20,9 @@ const GameSelect = (props) => {
                        onChange={(e) => props.game.onClickFee(e.target.value)}></input>
                 <label>Fee0</label>
 
-                <input className={s.Fee} type="radio" value='Fee1' checked={props.game.feeType === 'Fee1'}
+                <input className={s.Fee} type="radio" value='Full' checked={props.game.feeType === 'Full'}
                        onChange={(e) => props.game.onClickFee(e.target.value)}></input>
-                <label>Fee1</label>
+                <label>Full</label>
 
 
                 <input  className={s.Fee}type="radio" value='Mix' checked={props.game.feeType === 'Mix'}
