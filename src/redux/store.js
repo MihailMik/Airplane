@@ -244,7 +244,6 @@ let game = {
 
         if (game.activeRow === game.nRow) {
             game.onClickEndGame()
-            // game.onClickEndGame()   //!! Doubled call to changed hint in proper state
         }
         else
             game.rerender()
@@ -284,29 +283,7 @@ let game = {
         let randomType = this.randomTypeStr
         let feeType = this.feeType
 
-/*
-        //Вариант запрета соседей-Water
-        const maxWaterInRow = [
-            0,
-            1,  //for 1 seat in raw
-            2,
-            2,
-            2,
-            3,  //for 5 seat in raw
-            4,  //for 6 seat in raw
-            4,
-            4,
-            6,
-            6,  //for 10 seat in raw
-            7,  //for 11 seat in raw
-            7,  //for 12 seat in raw
-        ]
-        if (nPreferWater >= maxWaterInRow[nCol]*nRow) {alert ('The number of Water Answers is too large'); return}
-        //Вариант 2: в ряду 1-2 Water (равновероятно)
-        let nWater = Math.floor(nRow*1.5)
-        if (nPreferWater !== nWater) {alert (`The number of Water Answers must be equal ${nWater}`); return}
-*/
-
+        const saveHint = this.hintChecked
         this.initialize ({
             nRow: nRow,
             nCol: nCol,
@@ -322,6 +299,7 @@ let game = {
             randomType: randomType,
             feeType: feeType
         }, this.haveParamComponent ())
+        this.hintChecked = saveHint
         this.rerender ()
     },
 
@@ -691,22 +669,31 @@ let game = {
             }
         }
 
-        //Вавриант 1 вода 1 кофу в каждом ряду
+        //Вавриант 1 вода и 1 кофе в каждом ряду
         //
         if (data.randomType === 'W1C1') {
             const T = 0
             const C = 1
             const W = 2
-            const preferInRow = [W, C, T, T, T, T];   //NB! Now 6 seats maximum only
+            // const preferInRow = [W, C, T, T, T, T];   //NB! Now 6 seats maximum only
 
             this.seats = []
             for (let j = 0; j < nRow; j++) {
+
+                let i0, i1
+                i0 = Math.floor (Math.random ()*nCol)
+                do {i1 = Math.floor (Math.random ()*nCol)} while (i1 === i0);
+                let preferInRow = [T, T, T, T, T, T]
+                preferInRow[i0] = W
+                preferInRow[i1] = C
+
                 let prefer = preferInRow.map((e) => e === T ? 'Tea' : (e === C) ? 'Coffee' : 'Water')
 
                 for (let i = 0; i < nCol; i++) {
-                    let ind = Math.floor(Math.random() * (nCol-i))
-                    let given = prefer[ind]
-                    prefer.splice(ind, 1)          //delete element from array
+                    // let ind = Math.floor(Math.random() * (nCol-i))
+                    // let given = prefer[ind]
+                    // prefer.splice(ind, 1)          //delete element from array
+                    let given = prefer[i]
 
                     let seat = this.createSeat(j, i, given)
                     this.seats.push(seat)

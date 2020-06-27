@@ -8,11 +8,13 @@ const W = 2
 const ONE_ROW = [W, C, T, T]
 const NROW = 6
 let FEE_TEA, FEE_COFFEE
-const PRIZE_TC = 2
-const PRIZE_TEA = 3
-const PRIZE_COFFEE = 6
+let PRIZE_TC = 2
+let PRIZE_TEA = 3
+let PRIZE_COFFEE = 6
+let strategy = ()=>{return 0}
 const NPRIZES_MAX = 100 //максимально возможный приз в игре, оценка сверху
 
+/*
 const mix = (arr) => {
     let nCol = arr.length
     let tmp = [...arr]
@@ -24,64 +26,42 @@ const mix = (arr) => {
     }
     return out
 }
+*/
+const mix = () => {
+    let i0, i1
 
-const PlayOne = () => {
-    switch (game.feeType) {
-        case 'Fee0': FEE_TEA = 0; FEE_COFFEE = 0; break
-        case 'Max': FEE_TEA = game.prizeTea; FEE_COFFEE = game.prizeCoffee; break
-        case 'Min':
-        default: FEE_TEA =  game.prizeTeaCoffee; FEE_COFFEE = game.prizeTeaCoffee; break
-    }
-    switch (stat.strategy) {
-        case '1T':
-            return Strategy_1T();
-        case '1C':
-            return Strategy_1C();
-        case '1T/C':
-            return Strategy_1TC();
-        case '1T@Mix':
-            return Strategy_1T_Mix();
-        case '1C @ 3steps':
-            return Strategy_1C_3steps();
-        case 'T/C':
-            return Strategy_T_C();
-        case 'onlyC':
-            return Strategy_onlyC();
-        default:
-            return 0;
-    }
+    i0 = Math.floor (Math.random ()*4)
+    do {i1 = Math.floor (Math.random ()*4)} while (i1 === i0);
+
+    let out = [T, T, T, T]
+    out[i0] = W
+    out[i1] = C
+
+    return out
+}
+const takeRandom = (arr) => {
+    let i0, i1, i2
+
+    i0 = Math.floor (Math.random ()*4)
+    do {i1 = Math.floor (Math.random ()*4)} while (i1 === i0);
+    do {i2 = Math.floor (Math.random ()*4)} while (i2 === i0 || i2 === i1);
+
+    return [arr[i0], arr[i1], arr[i2]]
 }
 
-/*
-const Strategy_onlyC = () => {
+const PlayOne = () => {
     let prize = 0
     for (let row = 0; row < NROW; row++) {
-        let seats = mix(ONE_ROW)
+        let seats = takeRandom (mix(ONE_ROW))
         const [first, second, third] = [...seats]
 
-        if (prize <= 0 || row < 1) {   //NB!
-            if (first === W || second === W || third === W) prize = 0
-            else if (first  === C)  prize += PRIZE_COFFEE + PRIZE_TEA * 2
-            else if (second === C)  prize += PRIZE_COFFEE + PRIZE_TEA
-            else                    prize += PRIZE_COFFEE
-        }
-        else {
-            if (first === C) {
-                prize += PRIZE_COFFEE
-                if (second === T) prize += PRIZE_TEA - FEE_TEA
-                else              prize = 0
-            } else if (first === T) {
-                if      (second === C) prize += PRIZE_COFFEE - FEE_TEA
-                else if (second === T) prize += 0-FEE_COFFEE
-                else                   prize = 0
-            } else prize = 0
-        }
+        prize = strategy(prize, first, second, third)
     }
     return prize
 }
-*/
 
-const Strategy_onlyC = () => {   //NB!
+/*
+const Strategy_onlyCbestForMax = () => {   //NB!
     let prize = 0
     for (let row = 0; row < NROW; row++) {
         let seats = mix(ONE_ROW)
@@ -90,11 +70,24 @@ const Strategy_onlyC = () => {   //NB!
         if (prize <= PRIZE_COFFEE*2) {    //NB!
             if (first === C) {
                 prize += PRIZE_COFFEE
-                if (second === T) prize += PRIZE_TEA - FEE_TEA
+                if (second === T) {
+                    if (prize <= (PRIZE_COFFEE+PRIZE_TEA)) {
+                        if (third === T) prize += PRIZE_TEA*2
+                        else prize = 0
+                    }
+                    else prize += PRIZE_TEA - FEE_TEA
+                }
                 else prize = 0
             }
             else if (first === T) {
-                if (second === C) prize += PRIZE_COFFEE - FEE_TEA
+                if (second === C) {
+                    prize += PRIZE_COFFEE
+                    if (prize <= (PRIZE_COFFEE+PRIZE_TEA)) {
+                        if (third === T) prize += PRIZE_TEA
+                        else prize = 0
+                    }
+                    else prize += 0 - FEE_TEA
+                }
                 else if (second === T) {
                     if (third === C) prize += PRIZE_COFFEE
                     else prize = 0
@@ -117,33 +110,26 @@ const Strategy_onlyC = () => {   //NB!
     }
     return prize
 }
+*/
 
-
-const Strategy_1T = () => {
-    let prize = 0
-    for (let row = 0; row < NROW; row++) {
-        let seats = mix(ONE_ROW)
-        const [first, second] = [...seats]
-
-        if (first === T) {
-            prize += PRIZE_TEA
-            if (second === C)       prize += PRIZE_COFFEE - FEE_TEA
-            else if (second === T)  prize += 0-FEE_COFFEE
-            else                    prize = 0
-        } else if (first === C) {
-            if (second === T)       prize += PRIZE_TEA - FEE_TEA
-            else                    prize = 0
-        } else prize = 0
+const Strategy_onlyC = (prize, first, second, third) => {   //NB!
+    if (prize <= PRIZE_COFFEE*2) {    //NB!
+        if (first === C) {
+            prize += PRIZE_COFFEE
+            if (second === T) prize += PRIZE_TEA - FEE_TEA
+            else prize = 0
+        }
+        else if (first === T) {
+            if (second === C) prize += PRIZE_COFFEE - FEE_TEA
+            else if (second === T) {
+                if (third === C) prize += PRIZE_COFFEE
+                else prize = 0
+            }
+            else prize = 0
+        }
+        else prize = 0
     }
-    return prize
-}
-
-const Strategy_1C = () => {
-    let prize = 0
-    for (let row = 0; row < NROW; row++) {
-        let seats = mix(ONE_ROW)
-        const [first, second] = [...seats]
-
+    else {
         if (first === C) {
             prize += PRIZE_COFFEE
             if (second === T) prize += PRIZE_TEA - FEE_TEA
@@ -157,109 +143,112 @@ const Strategy_1C = () => {
     return prize
 }
 
-const Strategy_1TC = () => {
-    let prize = 0
-    for (let row = 0; row < NROW; row++) {
-        let seats = mix(ONE_ROW)
-        const [first, second] = [...seats]
 
-        if (first === W || second === W) prize = 0
-
-        else if (first  === C) prize += PRIZE_TC + PRIZE_TEA - FEE_TEA
-        else if (second === C) prize += PRIZE_TC + PRIZE_COFFEE - FEE_TEA
-        else                   prize += PRIZE_TC  - FEE_COFFEE
-    }
+const Strategy_1T = (prize, first, second, third) => {
+    if (first === T) {
+        prize += PRIZE_TEA
+        if (second === C)       prize += PRIZE_COFFEE - FEE_TEA
+        else if (second === T)  prize += 0-FEE_COFFEE
+        else                    prize = 0
+    } else if (first === C) {
+        if (second === T)       prize += PRIZE_TEA - FEE_TEA
+        else                    prize = 0
+    } else prize = 0
     return prize
 }
 
-const Strategy_1T_Mix = () => {
-    let prize = 0
-    for (let row = 0; row < NROW; row++) {
-        let seats = mix(ONE_ROW)
-        const [first, second, third] = [...seats]
+const Strategy_1C = (prize, first, second, third) => {
+    if (first === C) {
+        prize += PRIZE_COFFEE
+        if (second === T) prize += PRIZE_TEA - FEE_TEA
+        else              prize = 0
+    } else if (first === T) {
+        if      (second === C) prize += PRIZE_COFFEE - FEE_TEA
+        else if (second === T) prize += 0-FEE_COFFEE
+        else                   prize = 0
+    } else prize = 0
+    return prize
+}
 
-        if (first === T) {
-            prize += PRIZE_TEA
-            if (second === C) prize += PRIZE_COFFEE - FEE_TEA
-            else if (second === T) {
-                prize += 0
-                if (prize <= PRIZE_COFFEE) {
-                    if (third === C) prize += PRIZE_COFFEE
-                    else prize = 0
-                } else prize  -= FEE_COFFEE
-            } else prize = 0
-        } else if (first === C) {
+const Strategy_1TC = (prize, first, second, third) => {
+    if (first === W || second === W) prize = 0
+
+    else if (first  === C) prize += PRIZE_TC + PRIZE_TEA - FEE_TEA
+    else if (second === C) prize += PRIZE_TC + PRIZE_COFFEE - FEE_TEA
+    else                   prize += PRIZE_TC  - FEE_COFFEE
+    return prize
+}
+
+const Strategy_1T_Mix = (prize, first, second, third) => {
+    if (first === T) {
+        prize += PRIZE_TEA
+        if (second === C) prize += PRIZE_COFFEE - FEE_TEA
+        else if (second === T) {
             prize += 0
-            if (second === T) {
-                prize += PRIZE_TEA
-                if (prize <= PRIZE_TEA) {
-                    if (third === T) prize += PRIZE_TEA
-                    else prize = 0
-                }
-                else  prize -= FEE_TEA
-            } else prize = 0
+            if (prize <= PRIZE_COFFEE) {
+                if (third === C) prize += PRIZE_COFFEE
+                else prize = 0
+            } else prize  -= FEE_COFFEE
         } else prize = 0
-    }
-    return prize
-}
-
-const Strategy_1C_3steps = () => {
-    let prize = 0
-    for (let row = 0; row < NROW; row++) {
-        let seats = mix(ONE_ROW)
-        const [first, second, third] = [...seats]
-
-        if (first === C) {
-            prize += PRIZE_COFFEE
-            if (second === T) {
-                prize += PRIZE_TEA - FEE_TEA
-            } else prize = 0
-        } else if (first === T) {
-            if (second === C) {
-                prize += PRIZE_COFFEE - FEE_TEA
+    } else if (first === C) {
+        prize += 0
+        if (second === T) {
+            prize += PRIZE_TEA
+            if (prize <= PRIZE_TEA) {
+                if (third === T) prize += PRIZE_TEA
+                else prize = 0
             }
-            else if (second === T) {
-                if (prize <= PRIZE_COFFEE) {
-                    if (third === C) prize += PRIZE_COFFEE
-                    else prize = 0
-                }
-                else prize -= FEE_COFFEE
-            } else prize = 0
-        }  else prize = 0
-    }
+            else  prize -= FEE_TEA
+        } else prize = 0
+    } else prize = 0
     return prize
 }
 
-const Strategy_T_C = () => {
-    let prize = 0
-    for (let row = 0; row < NROW; row++) {
-        let seats = mix(ONE_ROW)
-        const [first, second, third] = [...seats]
-
-        if (first === T) {
-            prize += PRIZE_TC
-            if (second === T) {
-                prize += PRIZE_TC
-                if (prize <= PRIZE_COFFEE) {
-                    if (third === C) prize += PRIZE_COFFEE
-                    else prize = 0
-                }
-                else prize -= FEE_COFFEE
-            } else if (second === C) {
-                prize += PRIZE_TC - FEE_TEA
-            } else prize = 0
-        } else if (first === C) {
-            prize += PRIZE_TC
-            if (second === T) {
-                prize += PRIZE_TEA
-                if (prize <= (PRIZE_TEA+PRIZE_COFFEE)) {
-                    if (third === T) prize += PRIZE_TEA
-                    else prize = 0
-                }
-                else prize -= FEE_TEA
-            } else prize = 0
+const Strategy_1C_3steps = (prize, first, second, third) => {
+    if (first === C) {
+        prize += PRIZE_COFFEE
+        if (second === T) {
+            prize += PRIZE_TEA - FEE_TEA
         } else prize = 0
-    }
+    } else if (first === T) {
+        if (second === C) {
+            prize += PRIZE_COFFEE - FEE_TEA
+        }
+        else if (second === T) {
+            if (prize <= PRIZE_COFFEE) {
+                if (third === C) prize += PRIZE_COFFEE
+                else prize = 0
+            }
+            else prize -= FEE_COFFEE
+        } else prize = 0
+    }  else prize = 0
+    return prize
+}
+
+const Strategy_T_C = (prize, first, second, third) => {
+    if (first === T) {
+        prize += PRIZE_TC
+        if (second === T) {
+            prize += PRIZE_TC
+            if (prize <= PRIZE_COFFEE) {
+                if (third === C) prize += PRIZE_COFFEE
+                else prize = 0
+            }
+            else prize -= FEE_COFFEE
+        } else if (second === C) {
+            prize += PRIZE_TC - FEE_TEA
+        } else prize = 0
+    } else if (first === C) {
+        prize += PRIZE_TC
+        if (second === T) {
+            prize += PRIZE_TEA
+            if (prize <= (PRIZE_TEA+PRIZE_COFFEE)) {
+                if (third === T) prize += PRIZE_TEA
+                else prize = 0
+            }
+            else prize -= FEE_TEA
+        } else prize = 0
+    } else prize = 0
     return prize
 }
 
@@ -334,12 +323,29 @@ export let stat = {
         stat.timerId = undefined
     },
 
-    newStrategy: (strategy) => {
-        stat.strategy = strategy;
-        stat.clear()
+    newStrategy: (strat) => {
+        stat.strategy = strat;
+        switch (stat.strategy) {
+            case '1T':
+                strategy = Strategy_1T; break
+            case '1C':
+                strategy = Strategy_1C; break
+            case '1T/C':
+                strategy = Strategy_1TC; break
+            case '1T@Mix':
+                strategy = Strategy_1T_Mix; break
+            case '1C @ 3steps':
+                strategy = Strategy_1C_3steps; break
+            case 'T/C':
+                strategy = Strategy_T_C; break
+            case 'onlyC':
+            default:
+                strategy = Strategy_onlyC; break
+        }
     },
 
     create: () => {
+        stat.newStrategy(stat.strategy);
         stat.clear();
         stat.stopTimer();
     },
@@ -355,10 +361,10 @@ export let stat = {
     Play() {
         for (let i = 0; i < stat.nInSeries; i++) {
             let ind = PlayOne ()
-            if (ind < stat.min) {
-                stat.min = ind
-                stat.negCount++
-            }
+
+            if (ind < 0)        stat.negCount++
+            if (ind < stat.min) stat.min = ind
+
             stat.gist[Math.max (0, ind)]++
         }
         stat.count += stat.nInSeries
@@ -376,6 +382,16 @@ export default props => {
     let totalPercent        = stat.gist.reduce((x, y, i)=>x + y*100/(stat.count||1), 0)
     let totalPercentPrzs    = stat.gist.reduce((x, y, i)=>x + y*i/(totalPrzs||1)*100, 0)
     let average             = totalPrzs / (stat.count || 1)
+    switch (game.feeType) {
+        case 'Fee0': FEE_TEA = 0; FEE_COFFEE = 0; break
+        case 'Max': FEE_TEA = game.prizeTea; FEE_COFFEE = game.prizeCoffee; break
+        case 'Min':
+        default: FEE_TEA =  game.prizeTeaCoffee; FEE_COFFEE = game.prizeTeaCoffee; break
+    }
+    PRIZE_TEA = game.prizeTea
+    PRIZE_COFFEE = game.prizeCoffee
+    PRIZE_TC = game.prizeTeaCoffee
+
     const MakeAll = () => {
         const MakeRow = (row) => {
             if (stat.gist[row] === 0) return null;
@@ -458,6 +474,7 @@ export default props => {
                 <label>Strategy:
                     <select className={s.select} onChange={(e) => {
                         stat.newStrategy(e.target.value)
+                        stat.clear ()
                         game.rerender()
                     }}>
                         <option value={'1T'} selected={stat.strategy === '1T'}>1T @ 2steps</option>
@@ -555,7 +572,7 @@ export default props => {
             <div className={s.total}>Prz=0@%    : {(stat.gist[0]/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
             <div className={s.total}>Prz=1...5@%: {((stat.gist.reduce ((x,y,i) => i < 6 && i > 0 ? x+y:x, 0))/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
             <div className={s.total}>Prz=6@%    : {(stat.gist[6]/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
-            <div className={s.total}>MaxPrz@%   : {maxPrzIndex}@ {(stat.gist[maxPrzIndex]/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
+            <div className={s.total}>MaxPrz@%   : {maxPrzIndex} {(stat.gist[maxPrzIndex]/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
             <div className={s.total}>MinPrz@%   : {stat.min}, total negative: {(stat.negCount/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
 
             <div className={s.total}> </div>
