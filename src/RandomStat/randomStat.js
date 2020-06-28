@@ -5,8 +5,9 @@ import game from '../redux/store'
 const T = 0
 const C = 1
 const W = 2
-const ONE_ROW = [W, C, T, T]
+// const ONE_ROW = [W, C, T, T]
 const NROW = 6
+const NCOL = 4
 let FEE_TEA, FEE_COFFEE
 let PRIZE_TC = 2
 let PRIZE_TEA = 3
@@ -21,19 +22,22 @@ const mix = (arr) => {
     let out = []
     for (let i = 0; i < nCol; i++) {
         let ind = Math.floor(Math.random() * (nCol - i))
-        out[i] = tmp[ind]
-        tmp.splice(ind, 1)          //delete element from array
+        // out[i] = tmp[ind]
+        // tmp.splice(ind, 1)          //delete element from array
+        out[i] = tmp.splice(ind, 1)[0]
     }
     return out
 }
 */
-const mix = () => {
+const mix = (nCol) => {
     let i0, i1
 
-    i0 = Math.floor (Math.random ()*4)
-    do {i1 = Math.floor (Math.random ()*4)} while (i1 === i0);
+    i0 = Math.floor (Math.random ()*nCol)
+    do {i1 = Math.floor (Math.random ()*nCol)} while (i1 === i0);
 
-    let out = [T, T, T, T]
+    let out = []
+    for (let i = 0; i < nCol; i++)
+        out.push (T)
     out[i0] = W
     out[i1] = C
 
@@ -42,9 +46,10 @@ const mix = () => {
 const takeRandom = (arr) => {
     let i0, i1, i2
 
-    i0 = Math.floor (Math.random ()*4)
-    do {i1 = Math.floor (Math.random ()*4)} while (i1 === i0);
-    do {i2 = Math.floor (Math.random ()*4)} while (i2 === i0 || i2 === i1);
+    let len = arr.length
+    i0 = Math.floor (Math.random ()*len)
+    do {i1 = Math.floor (Math.random ()*len)} while (i1 === i0);
+    do {i2 = Math.floor (Math.random ()*len)} while (i2 === i0 || i2 === i1);
 
     return [arr[i0], arr[i1], arr[i2]]
 }
@@ -52,7 +57,7 @@ const takeRandom = (arr) => {
 const PlayOne = () => {
     let prize = 0
     for (let row = 0; row < NROW; row++) {
-        let seats = takeRandom (mix(ONE_ROW))
+        let seats = takeRandom (mix(NCOL))
         const [first, second, third] = [...seats]
 
         prize = strategy(prize, first, second, third)
@@ -63,6 +68,7 @@ const PlayOne = () => {
 /*
 const Strategy_onlyCbestForMax = () => {   //NB!
     let prize = 0
+    for (let row = 0; row < NROW; row++) {
     for (let row = 0; row < NROW; row++) {
         let seats = mix(ONE_ROW)
         const [first, second, third] = [...seats]
@@ -134,11 +140,13 @@ const Strategy_onlyC = (prize, first, second, third) => {   //NB!
             prize += PRIZE_COFFEE
             if (second === T) prize += PRIZE_TEA - FEE_TEA
             else              prize = 0
-        } else if (first === T) {
+        }
+        else if (first === T) {
             if      (second === C) prize += PRIZE_COFFEE - FEE_TEA
             else if (second === T) prize += 0-FEE_COFFEE
             else                   prize = 0
-        } else prize = 0
+        }
+        else prize = 0
     }
     return prize
 }
@@ -150,10 +158,12 @@ const Strategy_1T = (prize, first, second, third) => {
         if (second === C)       prize += PRIZE_COFFEE - FEE_TEA
         else if (second === T)  prize += 0-FEE_COFFEE
         else                    prize = 0
-    } else if (first === C) {
+    }
+    else if (first === C) {
         if (second === T)       prize += PRIZE_TEA - FEE_TEA
         else                    prize = 0
-    } else prize = 0
+    }
+    else prize = 0
     return prize
 }
 
@@ -162,11 +172,13 @@ const Strategy_1C = (prize, first, second, third) => {
         prize += PRIZE_COFFEE
         if (second === T) prize += PRIZE_TEA - FEE_TEA
         else              prize = 0
-    } else if (first === T) {
+    }
+    else if (first === T) {
         if      (second === C) prize += PRIZE_COFFEE - FEE_TEA
         else if (second === T) prize += 0-FEE_COFFEE
         else                   prize = 0
-    } else prize = 0
+    }
+    else prize = 0
     return prize
 }
 
@@ -188,9 +200,12 @@ const Strategy_1T_Mix = (prize, first, second, third) => {
             if (prize <= PRIZE_COFFEE) {
                 if (third === C) prize += PRIZE_COFFEE
                 else prize = 0
-            } else prize  -= FEE_COFFEE
-        } else prize = 0
-    } else if (first === C) {
+            }
+            else prize  -= FEE_COFFEE
+        }
+        else prize = 0
+    }
+    else if (first === C) {
         prize += 0
         if (second === T) {
             prize += PRIZE_TEA
@@ -199,8 +214,10 @@ const Strategy_1T_Mix = (prize, first, second, third) => {
                 else prize = 0
             }
             else  prize -= FEE_TEA
-        } else prize = 0
-    } else prize = 0
+        }
+        else prize = 0
+    }
+    else prize = 0
     return prize
 }
 
@@ -209,8 +226,10 @@ const Strategy_1C_3steps = (prize, first, second, third) => {
         prize += PRIZE_COFFEE
         if (second === T) {
             prize += PRIZE_TEA - FEE_TEA
-        } else prize = 0
-    } else if (first === T) {
+        }
+        else prize = 0
+    }
+    else if (first === T) {
         if (second === C) {
             prize += PRIZE_COFFEE - FEE_TEA
         }
@@ -220,8 +239,10 @@ const Strategy_1C_3steps = (prize, first, second, third) => {
                 else prize = 0
             }
             else prize -= FEE_COFFEE
-        } else prize = 0
-    }  else prize = 0
+        }
+        else prize = 0
+    }
+    else prize = 0
     return prize
 }
 
@@ -235,10 +256,13 @@ const Strategy_T_C = (prize, first, second, third) => {
                 else prize = 0
             }
             else prize -= FEE_COFFEE
-        } else if (second === C) {
+        }
+        else if (second === C) {
             prize += PRIZE_TC - FEE_TEA
-        } else prize = 0
-    } else if (first === C) {
+        }
+        else prize = 0
+    }
+    else if (first === C) {
         prize += PRIZE_TC
         if (second === T) {
             prize += PRIZE_TEA
@@ -247,8 +271,10 @@ const Strategy_T_C = (prize, first, second, third) => {
                 else prize = 0
             }
             else prize -= FEE_TEA
-        } else prize = 0
-    } else prize = 0
+        }
+        else prize = 0
+    }
+    else prize = 0
     return prize
 }
 
@@ -286,7 +312,7 @@ const description = {
         '                        else Next',
     ],
     'onlyC': [
-        'IF Prz  <= 0:',
+        'IF Prz  <= c*2:',
         '    Q1: C IF C -> Q2: T',
         '    Q1: C IF T -> Q2: C IF T -> Q3: C',
         '                        else Next',
