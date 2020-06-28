@@ -672,27 +672,19 @@ let game = {
         //Вавриант 1 вода и 1 кофе в каждом ряду
         //
         if (data.randomType === 'W1C1') {
-            const T = 0
-            const C = 1
-            const W = 2
-            // const preferInRow = [W, C, T, T, T, T];   //NB! Now 6 seats maximum only
-
             this.seats = []
             for (let j = 0; j < nRow; j++) {
 
                 let i0, i1
                 i0 = Math.floor (Math.random ()*nCol)
                 do {i1 = Math.floor (Math.random ()*nCol)} while (i1 === i0);
-                let preferInRow = [T, T, T, T, T, T]
-                preferInRow[i0] = W
-                preferInRow[i1] = C
-
-                let prefer = preferInRow.map((e) => e === T ? 'Tea' : (e === C) ? 'Coffee' : 'Water')
+                let prefer = ['Tea', 'Tea', 'Tea', 'Tea', 'Tea', 'Tea']
+                prefer[i0] = 'Water'
+                prefer[i1] = 'Coffee'
 
                 for (let i = 0; i < nCol; i++) {
                     // let ind = Math.floor(Math.random() * (nCol-i))
-                    // let given = prefer[ind]
-                    // prefer.splice(ind, 1)          //delete element from array
+                    // let given = prefer.splice(ind, 1)[0]
                     let given = prefer[i]
 
                     let seat = this.createSeat(j, i, given)
