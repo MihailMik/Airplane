@@ -7,6 +7,7 @@
 */
 
 export const constData9x6W123C1 = {
+    gameSelected: '9x6W123C1',
     nRow: 9,
     nCol: 6,
 
@@ -39,6 +40,7 @@ export const constData9x6W12C1 = {
 }
 
 export const constData9x5W123C1 = {
+    gameSelected: '9x5W123C1',
     nRow: 9,
     nCol: 5,
 
@@ -55,6 +57,7 @@ export const constData9x5W123C1 = {
 }
 
 export const constData6x4W12 = {
+    gameSelected: '6x4W12',
     nRow: 6,
     nCol: 4,
 
@@ -71,6 +74,7 @@ export const constData6x4W12 = {
 }
 
 export const constData6x4W1C1 = {
+    gameSelected: '6x4W1C1',
     nRow: 6,
     nCol: 4,
 
@@ -87,6 +91,7 @@ export const constData6x4W1C1 = {
 }
 
 export const constData9x5W1C1 = {
+    gameSelected: '9x5W1C1',
     nRow: 9,
     nCol: 5,
 
@@ -103,6 +108,7 @@ export const constData9x5W1C1 = {
 }
 
 export const constData12x6W1C1 = {
+    gameSelected: '12x6W1C1',
     nRow: 12,
     nCol: 6,
 
@@ -285,6 +291,7 @@ let game = {
 
         const saveHint = this.hintChecked
         this.initialize ({
+            gameSelected: this.gameSelected,
             nRow: nRow,
             nCol: nCol,
 
@@ -397,11 +404,12 @@ let game = {
         this.rerender()
     },
     onChangeGameSelect(body)           {
+        this.gameSelected = body
         switch (body) {
-            case '9x6W123C1': this.initialize (constData9x6W123C1,false); break
-            case '9x5W123C1': this.initialize (constData9x5W123C1,false); break
-            case '6x4W12'   : this.initialize (constData6x4W12   ,false); break
-            case '9x6W12C1' : this.initialize (constData9x6W12C1 ,false); break
+            // case '9x6W123C1': this.initialize (constData9x6W123C1,false); break
+            // case '9x5W123C1': this.initialize (constData9x5W123C1,false); break
+            // case '6x4W12'   : this.initialize (constData6x4W12   ,false); break
+            // case '9x6W12C1' : this.initialize (constData9x6W12C1 ,false); break
             case '6x4W1C1'  : this.initialize (constData6x4W1C1  ,false); break
             case '9x5W1C1'  : this.initialize (constData9x5W1C1  ,false); break
             case '12x6W1C1' : this.initialize (constData12x6W1C1 ,false); break
@@ -444,6 +452,7 @@ let game = {
         this.nRow = nRow
         this.nCol = nCol
 
+        this.gameSelected = data.gameSelected
         this.phase = 0
 
         this.nPreferTea = data.nPreferTea
