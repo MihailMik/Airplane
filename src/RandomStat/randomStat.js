@@ -726,6 +726,7 @@ export default props => {
     let text = stat.start ? 'Перестать играть' : 'Играть серии непрерывно'
     let maxPrzIndex = stat.gist.length
     while (maxPrzIndex && stat.gist[--maxPrzIndex] === 0);
+    let mainPrz = NCOL === 4 ? 6 : (NCOL === 5 ? 9 : 12)
 
     const makeSelect = () => {
         let rows = []
@@ -847,8 +848,8 @@ export default props => {
             <div className={s.total}> </div>
 
             <div className={s.total}>Prz=0@%    : {(stat.gist[0]/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
-            <div className={s.total}>Prz=1...5@%: {((stat.gist.reduce ((x,y,i) => i < 6 && i > 0 ? x+y:x, 0))/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
-            <div className={s.total}>Prz=6@%    : {(stat.gist[6]/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
+            <div className={s.total}>Prz=1...{mainPrz-1}@%: {((stat.gist.reduce ((x,y,i) => i < mainPrz && i > 0 ? x+y:x, 0))/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
+            <div className={s.total}>Prz={mainPrz}@%    : {(stat.gist[mainPrz]/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
             <div className={s.total}>MaxPrz@%   : {maxPrzIndex} {(stat.gist[maxPrzIndex]/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
             <div className={s.total}>MinPrz@%   : {stat.min}, total negative: {(stat.negCount/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
 
