@@ -75,7 +75,8 @@ const randomSeats = (arr) => {
 
 const PlayOne = () => {
     let prize = 0
-    for (let row = 0; row < NROW; row++) {
+    let nRow = stat.isOneRow ? 1 : NROW
+    for (let row = 0; row < nRow; row++) {
         let seats = randomSeats (randomRow(NCOL))
         const [first, second, third, fourth] = [...seats]
 
@@ -594,6 +595,7 @@ export let stat = {
     timerId: undefined,
     isDescription: false,
     isRealization: false,
+    isOneRow: false,
 
     stopTimer: () => {
         if (stat.timerId !== undefined)
@@ -752,9 +754,15 @@ export default props => {
                             <option value={'T/C'} selected={stat.strategy === 'T/C'}>1T/C @ 3steps</option>
                             <option value={'onlyC'} selected={stat.strategy === 'onlyC'}>Co+1C  @ 3steps</option>
 */}
-                        }
                     </select>
                 </label>
+
+                <span>
+                    <label>1-рядовая игра</label>
+                        <input className={s.clIsOneRow} type="checkbox" checked={stat.isOneRow}
+                                onChange={() => {stat.isOneRow = !stat.isOneRow; game.rerender()}}></input>
+                </span>
+
             </div>
 
             <div>

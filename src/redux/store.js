@@ -87,7 +87,7 @@ export const constData6x4W1C1 = {
     prizeTeaCoffee: 2,
 
     randomType: 'W1C1',
-    feeType: 'Min'
+    feeType: 'Fee0'
 }
 
 export const constData9x5W1C1 = {
@@ -104,7 +104,7 @@ export const constData9x5W1C1 = {
     prizeTeaCoffee: 3,
 
     randomType: 'W1C1',
-    feeType: 'Min'
+    feeType: 'Fee0'
 }
 
 export const constData12x6W1C1 = {
@@ -121,7 +121,7 @@ export const constData12x6W1C1 = {
     prizeTeaCoffee: 4,
 
     randomType: 'W1C1',
-    feeType: 'Min'
+    feeType: 'Fee0'
 }
 
 let game = {
