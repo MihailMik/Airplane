@@ -62,14 +62,18 @@ const randomRow = (nCol) => {
     return out
 }
 const randomSeats = (arr) => {
-    let i0, i1, i2, i3
+    let i0, i1, i2, i3, i4
 
     let len = arr.length
     i0 = Math.floor (Math.random ()*len)
     do {i1 = Math.floor (Math.random ()*len)} while (i1 === i0);
     do {i2 = Math.floor (Math.random ()*len)} while (i2 === i0 || i2 === i1);
     do {i3 = Math.floor (Math.random ()*len)} while (i3 === i0 || i3 === i1 || i3 === i2);
+    if (len===6)
+    do {i4 = Math.floor (Math.random ()*len)} while (i4 === i0 || i4 === i1 || i4 === i3);
 
+    if (len===6)
+    return [arr[i0], arr[i1], arr[i2], arr[i3], arr[i4]]
     return [arr[i0], arr[i1], arr[i2], arr[i3]]
 }
 
@@ -78,9 +82,9 @@ const PlayOne = () => {
     let nRow = stat.isOneRow ? 1 : NROW
     for (let row = 0; row < nRow; row++) {
         let seats = randomSeats (randomRow(NCOL))
-        const [first, second, third, fourth] = [...seats]
+        const [first, second, third, fourth, fifth] = [...seats]
 
-        prize = strategyProg(prize, first, second, third, fourth)
+        prize = strategyProg(prize, first, second, third, fourth, fifth)
     }
     return prize
 }
@@ -468,6 +472,15 @@ const Strategy6_1T = (prize, first, second, third) => {
     return prize
 }
 
+const Strategy6_1Ts = (prize, first, second, third) => {
+    if      (first===T && second===T && third===T) prize += PRIZE_TEA*2                - FEE_TEA - FEE_COFFEE
+    else if (first===T && second===T && third===C) prize += PRIZE_TEA*2 + PRIZE_COFFEE - FEE_TEA*2
+    else if (first===T && second===C && third===T) prize += PRIZE_TEA*2                - FEE_TEA*2
+    else if (first===C && second===T && third===T) prize += PRIZE_TEA*2                - FEE_TEA*2
+    else prize = 0
+    return prize
+}
+
 const Strategy6_1C = (prize, first, second, third) => {
     if      (first===T && second===T && third===T) prize += 0                           - FEE_TEA - FEE_COFFEE
     else if (first===T && second===T && third===C) prize += PRIZE_COFFEE                - FEE_TEA*2
@@ -508,10 +521,51 @@ const Strategy6_1Tmore = (prize, first, second, third, fourth) => {
     return prize
 }
 
+const Strategy6_1TmoreS = (prize, first, second, third, fourth) => {
+    if      (first===T && second===T && third===T) {
+        if (prize < PRIZE_COFFEE) {
+            if      (fourth===T) prize += PRIZE_TEA*2                 - FEE_TEA
+            else if (fourth===C) prize += PRIZE_TEA*2 + PRIZE_COFFEE  - FEE_TEA
+            else                 prize = 0
+        }
+        else                     prize += PRIZE_TEA*2                 - FEE_TEA  - FEE_COFFEE
+    }
+    else if (first===T && second===T && third===C) prize += PRIZE_TEA*2 +PRIZE_COFFEE - FEE_TEA*2
+    else if (first===T && second===C && third===T) prize += PRIZE_TEA*2 - FEE_TEA*2
+    else if (first===C && second===T && third===T) {
+        if (prize < PRIZE_TEA*3) {
+            if (fourth===T) prize += PRIZE_TEA*3 - FEE_TEA
+            else            prize = 0
+        }
+        else                prize += PRIZE_TEA*2 - FEE_TEA*2
+    }
+    else prize = 0
+    return prize
+}
+
 const Strategy6_1Cmore = (prize, first, second, third, fourth) => {
     if      (first===T && second===T && third===T) {
         if (prize < PRIZE_COFFEE) {
             if      (fourth===T) prize += 0            - FEE_COFFEE
+            else if (fourth===C) prize += PRIZE_COFFEE - FEE_TEA
+            else                 prize = 0
+        }
+        else    prize += 0 - FEE_TEA - FEE_COFFEE
+    }
+    else if (first===T && second===T && third===C) prize += PRIZE_COFFEE                - FEE_TEA*2
+    else if (first===T && second===C && third===T) prize += PRIZE_COFFEE + PRIZE_TEA    - FEE_TEA*2
+    else if (first===C && second===T && third===T) prize += PRIZE_COFFEE + PRIZE_TEA*2  - FEE_TEA*2
+    else prize = 0
+    return prize
+}
+
+const Strategy6_1CmoreC = (prize, first, second, third, fourth,fifth) => {
+    if      (first===T && second===T && third===T) {
+        if (prize < PRIZE_COFFEE) {
+            if      (fourth===T) {
+                if (fifth===C) prize += PRIZE_COFFEE
+                else           prize = 0
+            }
             else if (fourth===C) prize += PRIZE_COFFEE - FEE_TEA
             else                 prize = 0
         }
@@ -670,6 +724,11 @@ const description = {
             '                    IF C -> Q3: T',
             '      IF C -> Q2: T IF T -> Q3: T',
         ],
+        '1Ts': [
+            'Q1: T IF T -> Q2: T IF T -> Q3: C',
+            '                    IF C -> Q3: T',
+            '      IF C -> Q2: T IF T -> Q3: T',
+        ],
         '1C': [
             'Q1: C IF C -> Q2: T IF T -> Q3: T',
             '      IF T -> Q2: C IF C -> Q3: T',
@@ -685,10 +744,20 @@ const description = {
             '                    IF C -> Q3: T',
             '      IF C -> Q2: T IF T -> Q3: T IF T&Prz<3t -> Q4: T',
         ],
+        '1TmoreS': [
+            'Q1: T IF T -> Q2: T IF T -> Q3: C IF T&Prz<c -> Q4:C',
+            '                    IF C -> Q3: T',
+            '      IF C -> Q2: T IF T -> Q3: T IF T&Prz<3t -> Q4: T',
+        ],
         '1Cmore': [
             'Q1: C IF C -> Q2: T IF T -> Q3: T',
             '      IF T -> Q2: C IF C -> Q3: T',
             '                    IF T -> Q3: C IF T&Prz<c -> Q4: C',
+        ],
+        '1CmoreC': [
+            'Q1: C IF C -> Q2: T IF T -> Q3: T',
+            '      IF T -> Q2: C IF C -> Q3: T',
+            '                    IF T -> Q3: C IF T&Prz<c -> Q4: C IF T -> Q5: C',
         ],
         '1T/Cmore': [
             'Q1: T/C IF T -> Q2: T/C IF T -> Q3: C IF T&Prz<c -> Q4: C',
@@ -698,7 +767,7 @@ const description = {
         '1CmoreR': [
             'Q1: C IF C -> Q2: T IF T -> Q3: T',
             '      IF T -> Q2: C IF C -> Q3: T IF T&Prz<c+2t -> Q4: T',
-            '                    IF T -> Q3: C IF T&Prz<c -> Q4: T',
+            '                    IF T -> Q3: C IF T&Prz<c -> Q4: C',
         ],
         '1T/CmoreR': [
             'Q1: T/C IF T -> Q2: T/C IF T -> Q3: C IF T&Prz<c  -> Q4: C',
@@ -729,13 +798,16 @@ const realization = {
     },
     '6': {
         '1T'        : Strategy6_1T.toString(),
+        '1Ts'       : Strategy6_1Ts.toString(),
         '1C'        : Strategy6_1C.toString(),
         '1T/C'      : Strategy6_1TC.toString(),
         '1Tmore'    : Strategy6_1Tmore.toString(),
+        '1TmoreS'   : Strategy6_1TmoreS.toString(),
         '1Cmore'    : Strategy6_1Cmore.toString(),
+        '1CmoreC'    : Strategy6_1CmoreC.toString(),
         '1T/Cmore'  : Strategy6_1TCmore.toString(),
-        '1CmoreR'   : Strategy6_1Cmore.toString(),
-        '1T/CmoreR' : Strategy6_1TCmore.toString(),
+        '1CmoreR'   : Strategy6_1CmoreR.toString(),
+        '1T/CmoreR' : Strategy6_1TCmoreR.toString(),
     },
 }
 
@@ -762,13 +834,16 @@ export let stat = {
         ],
         '6': [
             {title: '1T'                , descr: '1T @ 3Q economy'      , prog: Strategy6_1T},
+            {title: '1Ts'               , descr: '1T @ 3Q* economy'     , prog: Strategy6_1Ts},
             {title: '1C'                , descr: '1C @ 3Q economy'      , prog: Strategy6_1C},
             {title: '1T/C'              , descr: '1T/C @ 3Q economy'    , prog: Strategy6_1TC},
             {title: '1Tmore'            , descr: '1T @ 4Q economy'      , prog: Strategy6_1Tmore},
+            {title: '1TmoreS'           , descr: '1T @ 4Q* economy'     , prog: Strategy6_1TmoreS},
             {title: '1Cmore'            , descr: '1C @ 4Q economy'      , prog: Strategy6_1Cmore},
+            {title: '1CmoreC'           , descr: '1C @ 5Q economy'      , prog: Strategy6_1CmoreC},
             {title: '1T/Cmore'          , descr: '1T/C @ 4Q economy'    , prog: Strategy6_1TCmore},
-            {title: '1CmoreR'           , descr: '1C @ 4QR economy'      , prog: Strategy6_1CmoreR},
-            {title: '1T/CmoreR'         , descr: '1T/C @ 4QR economy'    , prog: Strategy6_1TCmoreR},
+            {title: '1CmoreR'           , descr: '1C @ 4QR economy'     , prog: Strategy6_1CmoreR},
+            {title: '1T/CmoreR'         , descr: '1T/C @ 4QR economy'   , prog: Strategy6_1TCmoreR},
         ],
     },
 
@@ -913,7 +988,7 @@ export default props => {
     let text = stat.start ? 'Перестать играть' : 'Играть серии непрерывно'
     let maxPrzIndex = stat.gist.length
     while (maxPrzIndex && stat.gist[--maxPrzIndex] === 0);
-    let mainPrz = NCOL === 4 ? 6 : (NCOL === 5 ? 9 : 12)
+    let mainPrz = NCOL === 4 ? 6 : (NCOL === 5 ? 9 : 18)
 
     const makeSelect = () => {
         let rows = []
