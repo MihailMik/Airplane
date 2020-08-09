@@ -183,6 +183,31 @@ const Strategy4_1Cmore = (prize, first, second, third) => {
     return prize
 }
 
+const Strategy4_1CstarMore = (prize, first, second, third) => {
+    if (first === C) {
+        prize += PRIZE_COFFEE
+        if (second === T) {
+            prize += PRIZE_TEA - FEE_TEA
+        }
+        else prize = 0
+    }
+    else if (first === T) {
+        if (second === C) {
+            prize += PRIZE_COFFEE - FEE_TEA
+        }
+        else if (second === T) {
+            if (prize < PRIZE_COFFEE) {
+                if (third === C) prize += PRIZE_COFFEE
+                else prize = 0
+            }
+            else prize -= FEE_COFFEE
+        }
+        else prize = 0
+    }
+    else prize = 0
+    return prize
+}
+
 const Strategy4_1TCmore = (prize, first, second, third) => {
     if (first === T) {
         prize += PRIZE_TC
@@ -709,6 +734,10 @@ const description = {
                 'Q1: C IF C -> Q2: T',
                 '      IF T -> Q2: C IF (T&Prz<=c) -> Q3: C',
             ],
+            '1C*more': [
+                'Q1: C IF C -> Q2: T',
+                '      IF T -> Q2: C IF (T&Prz<c) -> Q3: C',
+            ],
             '1T/Cmore': [
                 'Q1: T/C IF T -> Q2: T/C IF (T&Prz<=c) -> Q3: C',
                 '                        else Next',
@@ -847,6 +876,7 @@ const realization = {
         '1T/C'      : Strategy4_1TC.toString(),
         '1Tmore'    : Strategy4_1Tmore.toString(),
         '1Cmore'    : Strategy4_1Cmore.toString(),
+        '1C*more'    : Strategy4_1CstarMore.toString(),
         '1T/Cmore'  : Strategy4_1TCmore.toString(),
         'my'        : Strategy4_my.toString(),
     },
@@ -886,6 +916,7 @@ export let stat = {
                 {title: '1T/C'          , descr: '1T/C @ 2Q buisness'    , prog: Strategy4_1TC},
                 {title: '1Tmore'        , descr: '1T @ 3Q buisness'      , prog: Strategy4_1Tmore},
                 {title: '1Cmore'        , descr: '1C @ 3Q buisness'      , prog: Strategy4_1Cmore},
+                {title: '1C*more'       , descr: '1C*@ 3Q buisness'      , prog: Strategy4_1CstarMore},
                 {title: '1T/Cmore'      , descr: '1T/C @ 3Q buisness'    , prog: Strategy4_1TCmore},
                 {title: 'my'            , descr: 'Co+1C @ 3Q buisness'   , prog: Strategy4_my},
             ],
