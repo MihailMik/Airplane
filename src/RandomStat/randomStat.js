@@ -831,6 +831,11 @@ const description = {
             '                    IF C -> Q3: T',
             '      IF C -> Q2: T IF T -> Q3: T IF T&Prz<3t -> Q4: T',
         ],
+        '1Cmore': [
+            'Q1: C IF C -> Q2: T IF T -> Q3: T',
+            '      IF T -> Q2: C IF C -> Q3: T',
+            '                    IF T -> Q3: C IF T&Prz<c -> Q4: C',
+        ],
         '1T/Cmore': [
             'Q1: T/C IF T -> Q2: T/C IF T -> Q3: C IF T&Prz<c -> Q4: C',
             '                        IF C -> Q3: T',
@@ -845,16 +850,6 @@ const description = {
             'Q1: T/C IF T -> Q2: T/C IF T -> Q3: C IF T&Prz<c  -> Q4: C',
             '                        IF C -> Q3: T IF T&Prz<3t -> Q4: T',
             '        IF C -> Q2: T   IF T -> Q3: T',
-        ],
-        '1Tmore5': [
-            'Q1: T IF T -> Q2: T IF T -> Q3: T IF T&Prz<c -> Q4: C IF T -> Q5: C',
-            '                    IF C -> Q3: T',
-            '      IF C -> Q2: T IF T -> Q3: T IF T&Prz<3t -> Q4: T',
-        ],
-        '1Cmore5': [
-            'Q1: C IF C -> Q2: T IF T -> Q3: T',
-            '      IF T -> Q2: C IF C -> Q3: T',
-            '                    IF T -> Q3: C IF T&Prz<c -> Q4: C IF T -> Q5: C',
         ],
         '1TmoreT': [
             'Q1: T IF T -> Q2: T IF T -> Q3: T IF T&Prz<c -> Q4: C IF T -> Q5: C',
