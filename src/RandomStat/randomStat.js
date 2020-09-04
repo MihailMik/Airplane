@@ -564,31 +564,6 @@ const Strategy6_1Tmore = (prize, first, second, third, fourth) => {
     return prize
 }
 
-const Strategy6_1TmoreT = (prize, first, second, third, fourth, fifth) => {
-    if (first===T && second===T && third===T) {
-        if (prize < (PRIZE_COFFEE-PRIZE_TEA*3)) {
-            if      (fourth===T) {
-                if (fifth===C) prize += PRIZE_TEA*4 + PRIZE_COFFEE
-                else prize = 0
-            }
-            else if (fourth===C) prize += PRIZE_TEA*3 + PRIZE_COFFEE  - FEE_TEA
-            else                 prize = 0
-        }
-        else                     prize += PRIZE_TEA*3                 - FEE_TEA  - FEE_COFFEE
-    }
-    else if (first===T && second===T && third===C) prize += PRIZE_TEA*2 - FEE_TEA*2
-    else if (first===T && second===C && third===T) prize += PRIZE_TEA*2 - FEE_TEA*2
-    else if (first===C && second===T && third===T) {
-        if (prize < (PRIZE_TEA*3-PRIZE_TEA)) {
-            if (fourth===T) prize += PRIZE_TEA*3 - FEE_TEA
-            else            prize = 0
-        }
-        else                prize += PRIZE_TEA*2 - FEE_TEA*2
-    }
-    else prize = 0
-    return prize
-}
-
 const Strategy6_1TmoreS = (prize, first, second, third, fourth) => {
     if      (first===T && second===T && third===T) {
         if (prize < (PRIZE_COFFEE-PRIZE_TEA*2)) {
@@ -627,41 +602,6 @@ const Strategy6_1Cmore = (prize, first, second, third, fourth) => {
     return prize
 }
 
-const Strategy6_1CmoreC = (prize, first, second, third, fourth,fifth) => {
-    if      (first===T && second===T && third===T) {
-        if (prize < PRIZE_COFFEE) {
-            if      (fourth===T) {
-                if (fifth===C) prize += PRIZE_COFFEE
-                else           prize = 0
-            }
-            else if (fourth===C) prize += PRIZE_COFFEE - FEE_TEA
-            else                 prize = 0
-        }
-        else    prize += 0 - FEE_TEA - FEE_COFFEE
-    }
-    else if (first===T && second===T && third===C) prize += PRIZE_COFFEE                - FEE_TEA*2
-    else if (first===T && second===C && third===T) prize += PRIZE_COFFEE + PRIZE_TEA    - FEE_TEA*2
-    else if (first===C && second===T && third===T) prize += PRIZE_COFFEE + PRIZE_TEA*2  - FEE_TEA*2
-    else prize = 0
-    return prize
-}
-
-const Strategy6_1TCmore = (prize, first, second, third, fourth) => {
-    if      (first===T && second===T && third===T) {
-        if (prize < (PRIZE_COFFEE-PRIZE_TC*2)) {
-            if      (fourth===T) prize += PRIZE_TC*2                 - FEE_COFFEE
-            else if (fourth===C) prize += PRIZE_TC*2 + PRIZE_COFFEE  - FEE_TEA
-            else                 prize = 0
-        }
-        else prize += PRIZE_TC*2 - FEE_TEA - FEE_COFFEE
-    }
-    else if (first===T && second===T && third===C) prize += PRIZE_TC*2 + PRIZE_COFFEE- FEE_TEA*2
-    else if (first===T && second===C && third===T) prize += PRIZE_TC*2 + PRIZE_TEA   - FEE_TEA*2
-    else if (first===C && second===T && third===T) prize += PRIZE_TC*1 + PRIZE_TEA*2 - FEE_TEA*2
-    else prize = 0
-    return prize
-}
-
 const Strategy6_1CmoreR = (prize, first, second, third, fourth) => {
     if (first===T && second===T && third===T) {
         if (prize < PRIZE_COFFEE) {
@@ -684,6 +624,22 @@ const Strategy6_1CmoreR = (prize, first, second, third, fourth) => {
     return prize
 }
 
+const Strategy6_1TCmore = (prize, first, second, third, fourth) => {
+    if      (first===T && second===T && third===T) {
+        if (prize < (PRIZE_COFFEE-PRIZE_TC*2)) {
+            if      (fourth===T) prize += PRIZE_TC*2                 - FEE_COFFEE
+            else if (fourth===C) prize += PRIZE_TC*2 + PRIZE_COFFEE  - FEE_TEA
+            else                 prize = 0
+        }
+        else prize += PRIZE_TC*2 - FEE_TEA - FEE_COFFEE
+    }
+    else if (first===T && second===T && third===C) prize += PRIZE_TC*2 + PRIZE_COFFEE- FEE_TEA*2
+    else if (first===T && second===C && third===T) prize += PRIZE_TC*2 + PRIZE_TEA   - FEE_TEA*2
+    else if (first===C && second===T && third===T) prize += PRIZE_TC*1 + PRIZE_TEA*2 - FEE_TEA*2
+    else prize = 0
+    return prize
+}
+
 const Strategy6_1TCmoreR = (prize, first, second, third, fourth) => {
     if (first===T && second===T && third===T) {
         if (prize < (PRIZE_COFFEE-PRIZE_TC*2)) {
@@ -702,6 +658,73 @@ const Strategy6_1TCmoreR = (prize, first, second, third, fourth) => {
         else prize += PRIZE_TC*2 + PRIZE_TEA   - FEE_TEA*2
     }
     else if (first===C && second===T && third===T) prize += PRIZE_TC*1 + PRIZE_TEA*2 - FEE_TEA*2
+    else prize = 0
+    return prize
+}
+
+const Strategy6_1TCmoreS = (prize, first, second, third, fourth) => {
+    if (first===T && second===T && third===T) {
+        if (prize < (PRIZE_COFFEE-PRIZE_TC*3)) {
+            if      (fourth===T) prize += PRIZE_TC*3                 - FEE_COFFEE
+            else if (fourth===C) prize += PRIZE_TC*3 + PRIZE_COFFEE  - FEE_TEA
+            else                 prize = 0
+        }
+        else prize += PRIZE_TC*3 - FEE_TEA - FEE_COFFEE
+    }
+    else if (first===T && second===T && third===C) prize += PRIZE_TC*3 - FEE_TEA*2
+
+    else if (first===T && second===C && third===T) {
+        if (prize < (PRIZE_TEA*3-PRIZE_TC*2-PRIZE_TEA)) {
+            if (fourth===T) prize += PRIZE_TC*2 + PRIZE_TEA*2 - FEE_TEA
+            else prize = 0
+        }
+        else prize += PRIZE_TC*2 + PRIZE_TEA   - FEE_TEA*2
+    }
+    else if (first===C && second===T && third===T) prize += PRIZE_TC*1 + PRIZE_TEA*2 - FEE_TEA*2
+    else prize = 0
+    return prize
+}
+
+const Strategy6_1TmoreT = (prize, first, second, third, fourth, fifth) => {
+    if (first===T && second===T && third===T) {
+        if (prize < (PRIZE_COFFEE-PRIZE_TEA*3)) {
+            if      (fourth===T) {
+                if (fifth===C) prize += PRIZE_TEA*4 + PRIZE_COFFEE
+                else prize = 0
+            }
+            else if (fourth===C) prize += PRIZE_TEA*3 + PRIZE_COFFEE  - FEE_TEA
+            else                 prize = 0
+        }
+        else                     prize += PRIZE_TEA*3                 - FEE_TEA  - FEE_COFFEE
+    }
+    else if (first===T && second===T && third===C) prize += PRIZE_TEA*2 - FEE_TEA*2
+    else if (first===T && second===C && third===T) prize += PRIZE_TEA*2 - FEE_TEA*2
+    else if (first===C && second===T && third===T) {
+        if (prize < (PRIZE_TEA*3-PRIZE_TEA)) {
+            if (fourth===T) prize += PRIZE_TEA*3 - FEE_TEA
+            else            prize = 0
+        }
+        else                prize += PRIZE_TEA*2 - FEE_TEA*2
+    }
+    else prize = 0
+    return prize
+}
+
+const Strategy6_1CmoreC = (prize, first, second, third, fourth,fifth) => {
+    if      (first===T && second===T && third===T) {
+        if (prize < PRIZE_COFFEE) {
+            if      (fourth===T) {
+                if (fifth===C) prize += PRIZE_COFFEE
+                else           prize = 0
+            }
+            else if (fourth===C) prize += PRIZE_COFFEE - FEE_TEA
+            else                 prize = 0
+        }
+        else    prize += 0 - FEE_TEA - FEE_COFFEE
+    }
+    else if (first===T && second===T && third===C) prize += PRIZE_COFFEE                - FEE_TEA*2
+    else if (first===T && second===C && third===T) prize += PRIZE_COFFEE + PRIZE_TEA    - FEE_TEA*2
+    else if (first===C && second===T && third===T) prize += PRIZE_COFFEE + PRIZE_TEA*2  - FEE_TEA*2
     else prize = 0
     return prize
 }
@@ -836,19 +859,24 @@ const description = {
             '      IF T -> Q2: C IF C -> Q3: T',
             '                    IF T -> Q3: C IF T&Prz<c -> Q4: C',
         ],
-        '1T/Cmore': [
-            'Q1: T/C IF T -> Q2: T/C IF T -> Q3: C IF T&Prz<c -> Q4: C',
-            '                        IF C -> Q3: T',
-            '        IF C -> Q2: T   IF T -> Q3: T',
-        ],
         '1CmoreR': [
             'Q1: C IF C -> Q2: T IF T -> Q3: T',
             '      IF T -> Q2: C IF C -> Q3: T IF T&Prz<c+2t -> Q4: T',
             '                    IF T -> Q3: C IF T&Prz<c -> Q4: C',
         ],
+        '1T/Cmore': [
+            'Q1: T/C IF T -> Q2: T/C IF T -> Q3: C IF T&Prz<c -> Q4: C',
+            '                        IF C -> Q3: T',
+            '        IF C -> Q2: T   IF T -> Q3: T',
+        ],
         '1T/CmoreR': [
             'Q1: T/C IF T -> Q2: T/C IF T -> Q3: C IF T&Prz<c  -> Q4: C',
             '                        IF C -> Q3: T IF T&Prz<3t -> Q4: T',
+            '        IF C -> Q2: T   IF T -> Q3: T',
+        ],
+        '1T/CmoreS': [
+            'Q1: T/C IF T -> Q2: T/C IF T -> Q3: T/C IF T&Prz<c  -> Q4: C',
+            '                        IF C -> Q3: T   IF T&Prz<3t -> Q4: T',
             '        IF C -> Q2: T   IF T -> Q3: T',
         ],
         '1TmoreT': [
@@ -894,9 +922,10 @@ const realization = {
         '1Tmore'    : Strategy6_1Tmore.toString(),
         '1TmoreS'   : Strategy6_1TmoreS.toString(),
         '1Cmore'    : Strategy6_1Cmore.toString(),
-        '1T/Cmore'  : Strategy6_1TCmore.toString(),
         '1CmoreR'   : Strategy6_1CmoreR.toString(),
+        '1T/Cmore'  : Strategy6_1TCmore.toString(),
         '1T/CmoreR' : Strategy6_1TCmoreR.toString(),
+        '1T/CmoreS' : Strategy6_1TCmoreS.toString(),
         '1TmoreT'   : Strategy6_1TmoreT.toString(),
         '1CmoreC'   : Strategy6_1CmoreC.toString(),
     },
@@ -937,6 +966,7 @@ export let stat = {
             {title: '1CmoreR'           , descr: '1C @ 4QR economy'     , prog: Strategy6_1CmoreR},
             {title: '1T/Cmore'          , descr: '1T/C @ 4Q economy'    , prog: Strategy6_1TCmore},
             {title: '1T/CmoreR'         , descr: '1T/C @ 4QR economy'   , prog: Strategy6_1TCmoreR},
+            {title: '1T/CmoreS'         , descr: '1T/C @ 4Q* economy'   , prog: Strategy6_1TCmoreS},
             {title: '1TmoreT'           , descr: '1T @ 5Q economy'      , prog: Strategy6_1TmoreT},
             {title: '1CmoreC'           , descr: '1C @ 5Q economy'      , prog: Strategy6_1CmoreC},
         ],
