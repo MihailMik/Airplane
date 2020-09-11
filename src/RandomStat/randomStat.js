@@ -35,18 +35,6 @@ const setParamFromGame = () => {
     NROW = game.nRow
 }
 
-/*
-const randomRow = (arr) => {
-    let nCol = arr.length
-    let tmp = [...arr]
-    let out = []
-    for (let i = 0; i < nCol; i++) {
-        let ind = Math.floor(Math.random() * (nCol - i))
-        out[i] = tmp.splice(ind, 1)[0]
-    }
-    return out
-}
-*/
 const randomRow = (nCol) => {
     let i0, i1
 
@@ -330,32 +318,11 @@ const Strategy5_1C = (prize, first, second, third) => {
 }
 
 const Strategy5_1TC = (prize, first, second, third) => {
-    if (first === T) {
-        prize += PRIZE_TC
-        if (second === T) {
-            prize += PRIZE_TC
-            if (third === C) prize += PRIZE_COFFEE - FEE_TEA
-            else if (third === T) prize += 0 - FEE_COFFEE
-            else prize  = 0
-        }
-        else if (second === C) {
-            prize += PRIZE_TC
-            if (third === T) prize += PRIZE_TEA - FEE_TEA
-            else prize = 0
-        }
-        else prize = 0
-    }
-    else if (first === C) {
-        prize += PRIZE_TC
-        if (second === T) {
-            prize += PRIZE_TEA
-            if (third === T) prize += PRIZE_TEA - FEE_TEA
-            else prize = 0
-        }
-        else prize = 0
-    }
+    if      (first===T && second===T && third===T) prize += PRIZE_TC*2               -  FEE_COFFEE
+    else if (first===T && second===T && third===C) prize += PRIZE_TC*2 + PRIZE_COFFEE- FEE_TEA
+    else if (first===T && second===C && third===T) prize += PRIZE_TC*2 + PRIZE_TEA   - FEE_TEA
+    else if (first===C && second===T && third===T) prize += PRIZE_TC*1 + PRIZE_TEA*2 - FEE_TEA
     else prize = 0
-
     return prize
 }
 
@@ -424,35 +391,12 @@ const Strategy5_1Cmore = (prize, first, second, third, fourth) => {
 }
 
 const Strategy5_1TCmore = (prize, first, second, third, fourth) => {
-    if (first === T) {
-        prize += PRIZE_TC
-        if (second === T) {
-            prize += PRIZE_TC
-            if (third === C) {
-                prize += PRIZE_COFFEE - FEE_TEA
-            }
-            else if (third === T) {
-                if (prize < PRIZE_COFFEE) {
-                    if (fourth === C) prize += PRIZE_COFFEE
-                    else prize = 0
-                }
-                else prize += 0 - FEE_COFFEE
-            }
-            else prize = 0
-        }
-        else if (second === C) {
-            if (third === T) prize += PRIZE_TEA - FEE_TEA
-            else prize = 0
-        }
-        else prize = 0
-    }
-    else if (first === C) {
-        prize += PRIZE_TC
-        if (second === T && third === T) prize += PRIZE_TEA*2 - FEE_TEA
-        else prize = 0
-    }
-    else prize = 0
-
+    if      (first===T && second===T && third===C) {prize += PRIZE_TC*2 + PRIZE_COFFEE- FEE_TEA}
+    else if (first===T && second===C && third===T) {prize += PRIZE_TC*2 + PRIZE_TEA   - FEE_TEA}
+    else if (first===C && second===T && third===T) {prize += PRIZE_TC*1 + PRIZE_TEA*2 - FEE_TEA}
+    else if (first===T && second===T && third===T && prize >= (PRIZE_COFFEE-PRIZE_TC*2)) {prize += PRIZE_TC*2 -  FEE_COFFEE}
+    else if (first===T && second===T && third===T && fourth===C) {prize += PRIZE_TC*2  + PRIZE_COFFEE}
+    else {prize = 0}
     return prize
 }
 
@@ -1118,7 +1062,8 @@ export default props => {
     const makeSelect = () => {
         let rows = []
         stat.strategies[NCOL].forEach ((item, ind) => {
-            rows.push (<option key = {ind} value={item.title} selected={stat.strategy === item.title}>{item.descr}</option>)
+            // NB! rows.push (<option key = {ind} value={item.title} selected={stat.strategy === item.title}>{item.descr}</option>)
+            rows.push (<option key = {ind} value={item.title}>{item.descr}</option>)
         })
         return rows
     }
@@ -1127,7 +1072,8 @@ export default props => {
         <div className={s.main}>
             <div className={s.Select}>
                 <label>Strategy:
-                    <select className={s.select} onChange={(e) => {
+                    {/*NB!<select className={s.select} onChange={(e) => {*/}
+                    <select className={s.select} value={stat.strategy} onChange={(e) => {
                         stat.newStrategy(e.target.value)
                         stat.clear ()
                         game.rerender()
@@ -1216,6 +1162,9 @@ export default props => {
             </div>
 
             <div>Prizes: {PRIZE_TC}/{PRIZE_TEA}/{PRIZE_COFFEE}</div>
+            <div className={s.total}>Total Games: {stat.count.toLocaleString("ru-RU", {useGrouping: true})}</div>
+            <div className={s.total}>Aver Prz   : {average.toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}</div>
+
             <div>
                 {MakeAll()}
             </div>

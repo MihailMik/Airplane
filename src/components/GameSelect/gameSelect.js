@@ -6,14 +6,11 @@ const GameSelect = (props) => {
         <div>
             <div>
                 <label>Opt:</label>
-                <select onChange={(e) => props.game.onChangeGameSelect(e.target.value)}>
-                    {/*<option value={'9x6W123C1'}>9x6, 123W&1C in row</option>*/}
-                    {/*<option value={'9x6W12C1'}>9x6, 12W&1C in row</option>*/}
-                    {/*<option value={'9x5W123C1'}>9x5, 123W&1C in row</option>*/}
-                    <option value={'6x4W1C1'} selected={props.game.gameSelected==='6x4W1C1'}>6x4, 1W&1C in row</option>
-                    <option value={'9x5W1C1'} selected={props.game.gameSelected==='9x5W1C1'}>9x5, 1W&1C in row</option>
-                    <option value={'12x6W1C1'} selected={props.game.gameSelected==='12x6W1C1'}>12x6, 1W&1C in row</option>
-                    <option value={'param'} selected={props.game.gameSelected==='param'}>arbitrary params</option>
+                <select value={props.game.gameSelected} onChange={(e) => props.game.onChangeGameSelect(e.target.value)}>
+                    <option value={'6x4W1C1'}>6x4, 1W&1C in row</option>
+                    <option value={'9x5W1C1'}>9x5, 1W&1C in row</option>
+                    <option value={'12x6W1C1'}>12x6, 1W&1C in row</option>
+                    <option value={'param'}>arbitrary params</option>
                 </select>
 
                 <input className={s.Fee} type="radio" value='Fee0' checked={props.game.feeType === 'Fee0'}
