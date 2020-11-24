@@ -12,6 +12,8 @@ let FEE_TEA, FEE_COFFEE
 let PRIZE_TC, PRIZE_TEA, PRIZE_COFFEE
 let strategyProg
 
+const randomInt = len => Math.floor(Math.random()*len)
+
 const setParamFromGame = () => {
     switch (game.feeType) {
         case 'Fee0':
@@ -38,8 +40,8 @@ const setParamFromGame = () => {
 const randomRow = (nCol) => {
     let i0, i1
 
-    i0 = Math.floor (Math.random ()*nCol)
-    do {i1 = Math.floor (Math.random ()*nCol)} while (i1 === i0);
+    i0 = randomInt(nCol)
+    do {i1 = randomInt(nCol)} while (i1 === i0);
 
     let out = []
     for (let i = 0; i < nCol; i++)
@@ -53,15 +55,16 @@ const randomSeats = (arr) => {
     let i0, i1, i2, i3, i4
 
     let len = arr.length
-    i0 = Math.floor (Math.random ()*len)
-    do {i1 = Math.floor (Math.random ()*len)} while (i1 === i0);
-    do {i2 = Math.floor (Math.random ()*len)} while (i2 === i0 || i2 === i1);
-    do {i3 = Math.floor (Math.random ()*len)} while (i3 === i0 || i3 === i1 || i3 === i2);
-    if (len===6)
-    do {i4 = Math.floor (Math.random ()*len)} while (i4 === i0 || i4 === i1 || i4 === i3);
+    i0 = randomInt(len)
+    do {i1 = randomInt(len)} while (i1 === i0);
+    do {i2 = randomInt(len)} while (i2 === i0 || i2 === i1);
+    do {i3 = randomInt(len)} while (i3 === i0 || i3 === i1 || i3 === i2);
 
-    if (len===6)
-    return [arr[i0], arr[i1], arr[i2], arr[i3], arr[i4]]
+    if (len===6) {
+        do {i4 = randomInt(len)} while (i4 === i0 || i4 === i1 || i4 === i2 || i4 === i3);
+        return [arr[i0], arr[i1], arr[i2], arr[i3], arr[i4]]
+    }
+
     return [arr[i0], arr[i1], arr[i2], arr[i3]]
 }
 
@@ -72,7 +75,12 @@ const PlayOne = () => {
         let seats = randomSeats (randomRow(NCOL))
         const [first, second, third, fourth, fifth] = [...seats]
 
-        prize = strategyProg(prize, first, second, third, fourth, fifth)
+        if (stat.strategy === 'chaos') {
+            const strategy = stat.strategies[NCOL][randomInt(stat.strategies[NCOL].length-1)]
+            prize = strategy.prog(prize, first, second, third, fourth, fifth)
+        }
+        else
+            prize = strategyProg(prize, first, second, third, fourth, fifth)
     }
     return prize
 }
@@ -287,6 +295,10 @@ const Strategy5_1T = (prize, first, second, third) => {
     else prize = 0
 
     return prize
+}
+
+const Strategy_chaos = () => {
+    // chaotic mix of all strategies
 }
 
 const Strategy5_1C = (prize, first, second, third) => {
@@ -719,6 +731,9 @@ const description = {
                 '    Q1: C IF C -> Q2: T',
                 '    Q1: C IF T -> Q2: C',
             ],
+            'chaos': [
+                'chaotic mix of all strategies',
+            ],
         },
     '5': {
         '1T': [
@@ -755,6 +770,9 @@ const description = {
             'Q1: C IF C -> Q2: T IF T -> Q3: T',
             '      IF T -> Q2: C IF C -> Q3: T',
             '                    IF T -> Q3: C IF T&Prz<=c*2 -> Q4: C',
+        ],
+        'chaos': [
+            'chaotic mix of all strategies',
         ],
     },
     '6': {
@@ -833,11 +851,13 @@ const description = {
             '      IF T -> Q2: C IF C -> Q3: T',
             '                    IF T -> Q3: C IF T&Prz<c -> Q4: C IF T -> Q5: C',
         ],
+        'chaos': [
+            'chaotic mix of all strategies',
+        ],
     },
 }
 const realization = {
     '4': {
-
         '1T'        : Strategy4_1T.toString(),
         '1C'        : Strategy4_1C.toString(),
         '1T/C'      : Strategy4_1TC.toString(),
@@ -846,15 +866,17 @@ const realization = {
         '1C*more'    : Strategy4_1CstarMore.toString(),
         '1T/Cmore'  : Strategy4_1TCmore.toString(),
         'my'        : Strategy4_my.toString(),
+        'chaos'     : Strategy_chaos.toString(),
     },
     '5': {
-        '1T': Strategy5_1T.toString(),
-        '1C': Strategy5_1C.toString(),
-        '1T/C': Strategy5_1TC.toString(),
-        '1Tmore': Strategy5_1Tmore.toString(),
-        '1Cmore': Strategy5_1Cmore.toString(),
-        '1T/Cmore': Strategy5_1TCmore.toString(),
-        'my': Strategy5_my.toString(),
+        '1T'        : Strategy5_1T.toString(),
+        '1C'        : Strategy5_1C.toString(),
+        '1T/C'      : Strategy5_1TC.toString(),
+        '1Tmore'    : Strategy5_1Tmore.toString(),
+        '1Cmore'    : Strategy5_1Cmore.toString(),
+        '1T/Cmore'  : Strategy5_1TCmore.toString(),
+        'my'        : Strategy5_my.toString(),
+        'chaos'     : Strategy_chaos.toString(),
     },
     '6': {
         '1T'        : Strategy6_1T.toString(),
@@ -872,47 +894,50 @@ const realization = {
         '1T/CmoreS' : Strategy6_1TCmoreS.toString(),
         '1TmoreT'   : Strategy6_1TmoreT.toString(),
         '1CmoreC'   : Strategy6_1CmoreC.toString(),
+        'chaos'     : Strategy_chaos.toString(),
     },
 }
 
 export let stat = {
     strategies: {
-        '4':
-            [
-                {title: '1T'            , descr: '1T @ 2Q buisness'      , prog: Strategy4_1T},
-                {title: '1C'            , descr: '1C @ 2Q buisness'      , prog: Strategy4_1C},
-                {title: '1T/C'          , descr: '1T/C @ 2Q buisness'    , prog: Strategy4_1TC},
-                {title: '1Tmore'        , descr: '1T @ 3Q buisness'      , prog: Strategy4_1Tmore},
-                {title: '1Cmore'        , descr: '1C @ 3Q buisness'      , prog: Strategy4_1Cmore},
-                {title: '1C*more'       , descr: '1C*@ 3Q buisness'      , prog: Strategy4_1CstarMore},
-                {title: '1T/Cmore'      , descr: '1T/C @ 3Q buisness'    , prog: Strategy4_1TCmore},
-                {title: 'my'            , descr: 'Co+1C @ 3Q buisness'   , prog: Strategy4_my},
-            ],
+        '4': [
+            {title: '1T'        , descr: '1T @ 2Q buisness'      , prog: Strategy4_1T},
+            {title: '1C'        , descr: '1C @ 2Q buisness'      , prog: Strategy4_1C},
+            {title: '1T/C'      , descr: '1T/C @ 2Q buisness'    , prog: Strategy4_1TC},
+            {title: '1Tmore'    , descr: '1T @ 3Q buisness'      , prog: Strategy4_1Tmore},
+            {title: '1Cmore'    , descr: '1C @ 3Q buisness'      , prog: Strategy4_1Cmore},
+            {title: '1C*more'   , descr: '1C*@ 3Q buisness'      , prog: Strategy4_1CstarMore},
+            {title: '1T/Cmore'  , descr: '1T/C @ 3Q buisness'    , prog: Strategy4_1TCmore},
+            {title: 'my'        , descr: 'Co+1C @ 3Q buisness'   , prog: Strategy4_my},
+            {title: 'chaos'     , descr: 'chaotic strategy'      , prog: Strategy_chaos},
+        ],
         '5': [
-            {title: '1T'                , descr: '1T @ 3Q comfort'      , prog: Strategy5_1T},
-            {title: '1C'                , descr: '1C @ 3Q comfort'      , prog: Strategy5_1C},
-            {title: '1T/C'              , descr: '1T/C @ 3Q comfort'    , prog: Strategy5_1TC},
-            {title: '1Tmore'            , descr: '1T @ 4Q comfort'      , prog: Strategy5_1Tmore},
-            {title: '1Cmore'            , descr: '1C @ 4Q comfort'      , prog: Strategy5_1Cmore},
-            {title: '1T/Cmore'          , descr: '1T/C @ 4Q comfort'    , prog: Strategy5_1TCmore},
-            {title: 'my'                , descr: 'Co+1C @ 4Q comfort'   , prog: Strategy5_my},
+            {title: '1T'        , descr: '1T @ 3Q comfort'      , prog: Strategy5_1T},
+            {title: '1C'        , descr: '1C @ 3Q comfort'      , prog: Strategy5_1C},
+            {title: '1T/C'      , descr: '1T/C @ 3Q comfort'    , prog: Strategy5_1TC},
+            {title: '1Tmore'    , descr: '1T @ 4Q comfort'      , prog: Strategy5_1Tmore},
+            {title: '1Cmore'    , descr: '1C @ 4Q comfort'      , prog: Strategy5_1Cmore},
+            {title: '1T/Cmore'  , descr: '1T/C @ 4Q comfort'    , prog: Strategy5_1TCmore},
+            {title: 'my'        , descr: 'Co+1C @ 4Q comfort'   , prog: Strategy5_my},
+            {title: 'chaos'     , descr: 'chaotic strategy'      , prog: Strategy_chaos},
         ],
         '6': [
-            {title: '1T'                , descr: '1T @ 3Q economy'      , prog: Strategy6_1T},
-            {title: '1Ts'               , descr: '1T @ 3Q* economy'     , prog: Strategy6_1Ts},
-            {title: '1C'                , descr: '1C @ 3Q economy'      , prog: Strategy6_1C},
-            {title: '1T/C'              , descr: '1T/C @ 3Q economy'    , prog: Strategy6_1TC},
-            {title: '1T/Cs'             , descr: '1T/C @ 3Q* economy'   , prog: Strategy6_1TCs},
-            {title: '1T/Css'            , descr: '1T/C @ 3Q** economy'  , prog: Strategy6_1TCss},
-            {title: '1Tmore'            , descr: '1T @ 4Q economy'      , prog: Strategy6_1Tmore},
-            {title: '1TmoreS'           , descr: '1T @ 4Q* economy'     , prog: Strategy6_1TmoreS},
-            {title: '1Cmore'            , descr: '1C @ 4Q economy'      , prog: Strategy6_1Cmore},
-            {title: '1CmoreR'           , descr: '1C @ 4QR economy'     , prog: Strategy6_1CmoreR},
-            {title: '1T/Cmore'          , descr: '1T/C @ 4Q economy'    , prog: Strategy6_1TCmore},
-            {title: '1T/CmoreR'         , descr: '1T/C @ 4QR economy'   , prog: Strategy6_1TCmoreR},
-            {title: '1T/CmoreS'         , descr: '1T/C @ 4Q* economy'   , prog: Strategy6_1TCmoreS},
-            {title: '1TmoreT'           , descr: '1T @ 5Q economy'      , prog: Strategy6_1TmoreT},
-            {title: '1CmoreC'           , descr: '1C @ 5Q economy'      , prog: Strategy6_1CmoreC},
+            {title: '1T'        , descr: '1T @ 3Q economy'      , prog: Strategy6_1T},
+            {title: '1Ts'       , descr: '1T @ 3Q* economy'     , prog: Strategy6_1Ts},
+            {title: '1C'        , descr: '1C @ 3Q economy'      , prog: Strategy6_1C},
+            {title: '1T/C'      , descr: '1T/C @ 3Q economy'    , prog: Strategy6_1TC},
+            {title: '1T/Cs'     , descr: '1T/C @ 3Q* economy'   , prog: Strategy6_1TCs},
+            {title: '1T/Css'    , descr: '1T/C @ 3Q** economy'  , prog: Strategy6_1TCss},
+            {title: '1Tmore'    , descr: '1T @ 4Q economy'      , prog: Strategy6_1Tmore},
+            {title: '1TmoreS'   , descr: '1T @ 4Q* economy'     , prog: Strategy6_1TmoreS},
+            {title: '1Cmore'    , descr: '1C @ 4Q economy'      , prog: Strategy6_1Cmore},
+            {title: '1CmoreR'   , descr: '1C @ 4QR economy'     , prog: Strategy6_1CmoreR},
+            {title: '1T/Cmore'  , descr: '1T/C @ 4Q economy'    , prog: Strategy6_1TCmore},
+            {title: '1T/CmoreR' , descr: '1T/C @ 4QR economy'   , prog: Strategy6_1TCmoreR},
+            {title: '1T/CmoreS' , descr: '1T/C @ 4Q* economy'   , prog: Strategy6_1TCmoreS},
+            {title: '1TmoreT'   , descr: '1T @ 5Q economy'      , prog: Strategy6_1TmoreT},
+            {title: '1CmoreC'   , descr: '1C @ 5Q economy'      , prog: Strategy6_1CmoreC},
+            {title: 'chaos'     , descr: 'chaotic strategy'      , prog: Strategy_chaos},
         ],
     },
 
@@ -1062,7 +1087,6 @@ export default props => {
     const makeSelect = () => {
         let rows = []
         stat.strategies[NCOL].forEach ((item, ind) => {
-            // NB! rows.push (<option key = {ind} value={item.title} selected={stat.strategy === item.title}>{item.descr}</option>)
             rows.push (<option key = {ind} value={item.title}>{item.descr}</option>)
         })
         return rows
@@ -1072,7 +1096,6 @@ export default props => {
         <div className={s.main}>
             <div className={s.Select}>
                 <label>Strategy:
-                    {/*NB!<select className={s.select} onChange={(e) => {*/}
                     <select className={s.select} value={stat.strategy} onChange={(e) => {
                         stat.newStrategy(e.target.value)
                         stat.clear ()
@@ -1178,6 +1201,7 @@ export default props => {
             <div className={s.total}>Prz=0@%    : {(stat.gist[0]/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
             <div className={s.total}>Prz=1...{mainPrz-1}@%: {((stat.gist.reduce ((x,y,i) => i < mainPrz && i > 0 ? x+y:x, 0))/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
             <div className={s.total}>Prz={mainPrz}@%    : {(stat.gist[mainPrz]/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
+            <div className={s.total}>Prz>{mainPrz}@%    : {((stat.gist.reduce ((x,y,i) => i > mainPrz ? x+y:x, 0))/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
             <div className={s.total}>MaxPrz@%   : {maxPrzIndex} {(stat.gist[maxPrzIndex]/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
             <div className={s.total}>MinPrz@%   : {stat.min}, total negative: {(stat.negCount/(stat.count||1)*100).toLocaleString("ru-RU", {minimumFractionDigits: 4, maximumFractionDigits: 4})}%</div>
 
